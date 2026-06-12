@@ -613,6 +613,69 @@
         .badge-check { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--gray-700); cursor: pointer; }
         .badge-check input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
 
+        /* ========== CHECKOUT (CARRINHO) ========== */
+        .checkout-block { margin-bottom: 1rem; }
+        .checkout-block-title { font-size: 0.8125rem; font-weight: 700; color: var(--gray-700); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.375rem; }
+        .order-type-tabs { display: flex; gap: 0.5rem; }
+        .order-type-btn {
+            flex: 1; padding: 0.625rem 0.5rem; border: 2px solid var(--gray-200); border-radius: 10px;
+            background: var(--white); cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600;
+            font-size: 0.8125rem; color: var(--gray-600); transition: all 0.2s; text-align: center; line-height: 1.3;
+        }
+        .order-type-btn:hover { border-color: var(--primary); }
+        .order-type-btn.active { border-color: var(--primary); background: #fffbeb; color: var(--primary-dark); }
+        .order-type-btn .ot-icon { display: block; font-size: 1.125rem; margin-bottom: 0.125rem; }
+        .field-row { display: flex; gap: 0.5rem; }
+        .field-row > * { flex: 1; }
+        .field-row .field-narrow { flex: 0 0 38%; }
+        .cep-row { display: flex; gap: 0.5rem; }
+        .cep-row input { flex: 1; }
+        .btn-cep {
+            padding: 0 0.875rem; border: none; border-radius: 8px; background: var(--gray-700); color: white;
+            font-weight: 600; font-size: 0.8125rem; cursor: pointer; white-space: nowrap; transition: all 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .btn-cep:hover { background: var(--gray-800); }
+        .btn-cep:disabled { opacity: 0.6; cursor: wait; }
+        .payment-options { display: flex; flex-direction: column; gap: 0.5rem; }
+        .payment-option {
+            display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem;
+            border: 2px solid var(--gray-200); border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 0.875rem; color: var(--gray-700);
+        }
+        .payment-option:hover { border-color: var(--primary); }
+        .payment-option.selected { border-color: var(--primary); background: #fffbeb; }
+        .payment-option input { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
+        .pix-box { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 10px; padding: 0.75rem; margin-top: 0.5rem; }
+        .pix-key-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.375rem; }
+        .pix-key-value { flex: 1; font-family: monospace; font-size: 0.8125rem; background: white; border: 1px solid var(--gray-200); border-radius: 6px; padding: 0.5rem; word-break: break-all; }
+        .btn-copy-pix { padding: 0.5rem 0.75rem; border: none; border-radius: 6px; background: var(--success); color: white; font-weight: 600; font-size: 0.75rem; cursor: pointer; white-space: nowrap; }
+        .btn-copy-pix:hover { background: #059669; }
+        .change-box { margin-top: 0.5rem; }
+        .coupon-row { display: flex; gap: 0.5rem; }
+        .coupon-row input { flex: 1; text-transform: uppercase; }
+        .btn-coupon { padding: 0 1rem; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: 600; font-size: 0.8125rem; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+        .btn-coupon:hover { background: var(--primary-dark); }
+        .coupon-applied { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.8125rem; color: #065f46; font-weight: 600; }
+        .coupon-applied .coupon-x { background: none; border: none; color: var(--danger); cursor: pointer; font-weight: 700; font-size: 1rem; }
+        .schedule-toggle { display: flex; gap: 0.5rem; }
+        .schedule-toggle .order-type-btn { flex: 1; }
+        .checkout-hint { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.375rem; }
+        .cart-summary-row.discount { color: var(--success); font-weight: 600; }
+        .min-order-warning { background: #fef3c7; border: 1px solid #fcd34d; color: #92400e; border-radius: 8px; padding: 0.625rem 0.75rem; font-size: 0.8125rem; margin-bottom: 0.75rem; }
+
+        /* ========== ADMIN: ZONAS, PAGAMENTO E CUPONS ========== */
+        .toggle-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .toggle-row { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem; background: var(--gray-50); border-radius: 8px; font-size: 0.9375rem; color: var(--gray-700); cursor: pointer; }
+        .toggle-row input { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
+        .zone-editor-row { display: grid; grid-template-columns: 1fr 110px 36px; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+        .zone-editor-row input { padding: 0.5rem 0.625rem; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 0.8125rem; font-family: 'Poppins', sans-serif; width: 100%; }
+        .zone-editor-row input:focus { outline: none; border-color: var(--primary); }
+        .coupon-admin-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .coupon-admin-item { background: var(--gray-50); padding: 0.75rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .coupon-admin-item.coupon-off { opacity: 0.5; }
+        .coupon-code { font-weight: 700; color: var(--gray-800); font-family: monospace; font-size: 0.9375rem; }
+        .coupon-meta { font-size: 0.75rem; color: var(--gray-600); margin-top: 0.125rem; }
+        .coupon-admin-actions { display: flex; gap: 0.375rem; flex-shrink: 0; }
+
         /* ========== ANIMAÇÕES ========== */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
@@ -787,14 +850,93 @@
                 </div>
             </div>
 
+            <!-- ENTREGA E TIPOS DE PEDIDO -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">🛵 Entrega e Retirada</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Tipos de pedido aceitos</label>
+                    <div class="toggle-list">
+                        <label class="toggle-row"><input type="checkbox" id="orderTypeDelivery"> 🛵 Entrega (delivery)</label>
+                        <label class="toggle-row"><input type="checkbox" id="orderTypePickup"> 🏪 Retirada no local</label>
+                        <label class="toggle-row"><input type="checkbox" id="orderTypeDinein"> 🍽️ Consumo no local (mesa)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Pedido mínimo para entrega (R$)</label>
+                    <input type="number" class="form-input" id="minOrderValue" step="0.01" min="0" placeholder="0.00">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Use 0 para não exigir valor mínimo.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Taxa de entrega padrão (R$)</label>
+                    <input type="number" class="form-input" id="deliveryFee" step="0.01" min="0" placeholder="6.00">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Usada quando não há zonas por bairro cadastradas abaixo.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Taxa por bairro / zona (opcional)</label>
+                    <div id="zonesEditor"></div>
+                    <button type="button" class="btn-mini" id="addZoneBtn">➕ Adicionar bairro</button>
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Com zonas cadastradas, o cliente escolhe o bairro e a taxa correspondente. Sem zonas, vale a taxa padrão acima.</small>
+                </div>
+
+                <button class="btn-admin btn-success" id="saveDeliveryBtn">💾 Salvar Entrega</button>
+            </div>
+
+            <!-- PAGAMENTO -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">💳 Pagamento</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Formas de pagamento aceitas</label>
+                    <div class="toggle-list">
+                        <label class="toggle-row"><input type="checkbox" id="payPix"> 📱 PIX</label>
+                        <label class="toggle-row"><input type="checkbox" id="payCard"> 💳 Cartão na entrega (maquininha)</label>
+                        <label class="toggle-row"><input type="checkbox" id="payCash"> 💵 Dinheiro</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo de chave PIX</label>
+                    <select class="form-input" id="pixKeyType">
+                        <option value="telefone">Telefone</option>
+                        <option value="cpf">CPF</option>
+                        <option value="cnpj">CNPJ</option>
+                        <option value="email">E-mail</option>
+                        <option value="aleatoria">Chave aleatória</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Chave PIX</label>
+                    <input type="text" class="form-input" id="pixKey" placeholder="Sua chave PIX">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nome do recebedor (PIX)</label>
+                    <input type="text" class="form-input" id="pixHolder" placeholder="Nome que aparece no PIX">
+                </div>
+
+                <button class="btn-admin btn-success" id="savePaymentBtn">💾 Salvar Pagamento</button>
+            </div>
+
+            <!-- AGENDAMENTO -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">⏰ Agendamento</h3>
+                <label class="toggle-row" style="margin-bottom: 1rem;"><input type="checkbox" id="enableScheduling"> Permitir que o cliente agende o pedido para mais tarde</label>
+                <button class="btn-admin btn-success" id="saveSchedulingBtn">💾 Salvar Agendamento</button>
+            </div>
+
+            <!-- CUPONS -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">🎟️ Cupons de Desconto</h3>
+                <div class="coupon-admin-list" id="couponAdminList"></div>
+                <button class="btn-admin btn-primary-admin" id="addCouponBtn">➕ Adicionar Cupom</button>
+            </div>
+
             <!-- GERENCIAR PRODUTOS -->
             <div class="admin-section">
                 <h3 class="admin-section-title">🍕 Gerenciar Produtos</h3>
-
-                <div class="form-group">
-                    <label class="form-label">Taxa de Entrega (R$)</label>
-                    <input type="number" class="form-input" id="deliveryFee" step="0.01" min="0" placeholder="6.00">
-                </div>
 
                 <div class="alert alert-info">
                     <strong>💡 Dica:</strong> Clique em "Adicionar Produto" para criar novos itens. Os preços são sempre cadastrados em <strong>Reais (R$)</strong> e exibidos nas demais moedas pela cotação configurada na seção Moeda.
@@ -882,6 +1024,58 @@
                     </div>
                 </div>
                 <button type="submit" class="btn-admin btn-success" style="width: 100%;">💾 Salvar Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CUPOM (admin) -->
+    <div class="modal" id="couponModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="couponModalTitle">Adicionar Cupom</h3>
+                <button class="modal-close" id="couponModalClose">✕</button>
+            </div>
+            <form id="couponForm">
+                <div class="form-group">
+                    <label class="form-label">Código do cupom *</label>
+                    <input type="text" class="form-input" id="couponCode" placeholder="EX: BEMVINDO10" style="text-transform: uppercase;" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo de desconto *</label>
+                    <select class="form-input" id="couponType">
+                        <option value="percent">Percentual (%)</option>
+                        <option value="fixed">Valor fixo (R$)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Valor do desconto *</label>
+                    <input type="number" class="form-input" id="couponValue" step="0.01" min="0" required>
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Percentual: ex. 10 = 10%. Valor fixo: ex. 5 = R$ 5,00 de desconto.</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pedido mínimo (R$)</label>
+                    <input type="number" class="form-input" id="couponMinOrder" step="0.01" min="0" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Validade (opcional)</label>
+                    <input type="date" class="form-input" id="couponExpiry">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Deixe vazio para nunca expirar.</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Limite de usos (opcional)</label>
+                    <input type="number" class="form-input" id="couponMaxUses" step="1" min="0" placeholder="0">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Use 0 para usos ilimitados.</small>
+                </div>
+                <div class="form-group">
+                    <div class="form-switch">
+                        <label class="switch">
+                            <input type="checkbox" id="couponActive" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Cupom ativo</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-admin btn-success" style="width: 100%;">💾 Salvar Cupom</button>
             </form>
         </div>
     </div>
@@ -982,9 +1176,11 @@
         </div>
         <div class="cart-footer" id="cartFooter" style="display: none;">
             <div id="customerFormContainer"></div>
+            <div class="min-order-warning" id="minOrderWarning" style="display: none;"></div>
             <div class="cart-summary">
                 <div class="cart-summary-row"><span>Subtotal:</span><span id="cartSubtotal">R$ 0,00</span></div>
-                <div class="cart-summary-row"><span>Taxa de Entrega:</span><span id="cartDeliveryFee">R$ 0,00</span></div>
+                <div class="cart-summary-row discount" id="cartDiscountRow" style="display: none;"><span id="cartDiscountLabel">Desconto:</span><span id="cartDiscount">- R$ 0,00</span></div>
+                <div class="cart-summary-row"><span id="cartDeliveryLabel">Taxa de Entrega:</span><span id="cartDeliveryFee">R$ 0,00</span></div>
             </div>
             <div class="cart-total"><span>Total:</span><span id="cartTotal">R$ 0,00</span></div>
             <p id="currencyNote" style="display: none; font-size: 0.75rem; color: var(--gray-600); margin: 0.5rem 0 0;">💱 Preços exibidos em moeda estrangeira pela cotação configurada. O pedido é enviado ao restaurante em R$.</p>
@@ -1019,6 +1215,10 @@
             { id: 6, name: 'Batata Frita Premium', description: 'Batatas rústicas com queijo, bacon e cebola caramelizada', price: 24.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop', available: true, categoryId: 3, badges: ['promo'], promoPrice: 19.90 }
         ];
 
+        const defaultCoupons = [
+            { id: 1, code: 'BEMVINDO10', type: 'percent', value: 10, minOrder: 30, expiry: '', maxUses: 0, uses: 0, active: true }
+        ];
+
         const defaultSettings = {
             restaurantName: 'Sabor Express',
             subtitle: 'Delivery rápido e sabor inigualável! Peça agora e receba em até 30 minutos.',
@@ -1028,6 +1228,15 @@
             deliveryFee: 6.00,
             currencySymbol: 'R$',
             exchangeRates: { USD: 5.40, EUR: 6.20 },
+            orderTypes: { delivery: true, pickup: true, dinein: false },
+            minOrderValue: 0,
+            deliveryZones: [
+                { id: 1, name: 'Centro', fee: 5.00 },
+                { id: 2, name: 'Jardim das Flores', fee: 8.00 }
+            ],
+            pix: { keyType: 'telefone', key: '', holder: '' },
+            paymentMethods: { pix: true, card: true, cash: true },
+            enableScheduling: false,
             schedule: {
                 monday:    { enabled: true, open: '09:00', close: '22:00' },
                 tuesday:   { enabled: true, open: '09:00', close: '22:00' },
@@ -1042,8 +1251,15 @@
         // ========== VARIÁVEIS GLOBAIS ==========
         let products = [];
         let categories = [];
+        let coupons = [];
         let cart = [];
         let settings = {};
+        let editingZones = [];           // edição das zonas de entrega no admin
+        let editingCouponId = null;      // cupom em edição (null = novo)
+        // Estado do checkout (transitório, não persiste): tipo de pedido, pagamento, cupom, agendamento
+        let checkoutState = { orderType: null, payment: null, couponCode: null, scheduleMode: 'now', scheduleAt: '' };
+        // Rascunho dos campos digitados no checkout, preservado entre re-renders do formulário
+        let checkoutDraft = { name: '', phone: '', cep: '', street: '', number: '', complement: '', reference: '', zoneId: '', neighborhood: '', tableNumber: '', changeFor: '' };
         let editingProductId = null;
         let editingVariations = [];
         let editingAddonGroups = [];
@@ -1090,6 +1306,74 @@
 
         function productHasOptions(p) {
             return p.variations.length > 0 || p.addonGroups.length > 0;
+        }
+
+        // ========== HELPERS DE ENTREGA, CUPOM E TOTAIS ==========
+        const ORDER_TYPE_LABELS = { delivery: 'Entrega', pickup: 'Retirada', dinein: 'Consumo no local' };
+
+        function enabledOrderTypes() {
+            const ot = settings.orderTypes || {};
+            return ['delivery', 'pickup', 'dinein'].filter(t => ot[t]);
+        }
+
+        function enabledPaymentMethods() {
+            const pm = settings.paymentMethods || {};
+            return ['pix', 'card', 'cash'].filter(m => pm[m]);
+        }
+
+        // Taxa de entrega vigente: 0 fora de "entrega"; por zona quando há zonas; senão taxa fixa.
+        // Retorna null quando há zonas mas o cliente ainda não escolheu o bairro.
+        function currentDeliveryFee() {
+            if (checkoutState.orderType !== 'delivery') return 0;
+            const zones = settings.deliveryZones || [];
+            if (zones.length) {
+                const zone = zones.find(z => String(z.id) === String(checkoutDraft.zoneId));
+                return zone ? zone.fee : null;
+            }
+            return settings.deliveryFee || 0;
+        }
+
+        function cartSubtotalBRL() {
+            return cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+        }
+
+        function findCoupon(code) {
+            if (!code) return null;
+            return coupons.find(c => c.code.toUpperCase() === String(code).toUpperCase()) || null;
+        }
+
+        // Valida um cupom contra o subtotal atual. Retorna { ok, reason, coupon, discount }.
+        function validateCoupon(code, subtotal) {
+            const coupon = findCoupon(code);
+            if (!coupon) return { ok: false, reason: 'Cupom não encontrado.' };
+            if (!coupon.active) return { ok: false, reason: 'Este cupom está desativado.' };
+            if (coupon.expiry) {
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                const exp = new Date(coupon.expiry + 'T23:59:59');
+                if (exp < today) return { ok: false, reason: 'Este cupom está expirado.' };
+            }
+            if (coupon.maxUses > 0 && coupon.uses >= coupon.maxUses) return { ok: false, reason: 'Este cupom atingiu o limite de usos.' };
+            if (coupon.minOrder > 0 && subtotal < coupon.minOrder) {
+                return { ok: false, reason: `Pedido mínimo de R$ ${coupon.minOrder.toFixed(2).replace('.', ',')} para este cupom.` };
+            }
+            const discount = coupon.type === 'percent'
+                ? subtotal * (coupon.value / 100)
+                : Math.min(coupon.value, subtotal);
+            return { ok: true, coupon, discount };
+        }
+
+        // Totais do pedido em BRL, considerando cupom aplicado e taxa de entrega vigente
+        function computeTotals() {
+            const subtotal = cartSubtotalBRL();
+            const fee = currentDeliveryFee(); // pode ser null (bairro não escolhido)
+            let discount = 0;
+            if (checkoutState.couponCode) {
+                const res = validateCoupon(checkoutState.couponCode, subtotal);
+                if (res.ok) discount = res.discount; else checkoutState.couponCode = null;
+            }
+            const feeValue = fee || 0;
+            const total = Math.max(0, subtotal - discount) + feeValue;
+            return { subtotal, fee, feeValue, discount, total };
         }
 
         // ========== SEGURANÇA ==========
@@ -1193,6 +1477,7 @@
 
             if (Array.isArray(embedded.products)) localStorage.setItem('products', JSON.stringify(embedded.products));
             if (Array.isArray(embedded.categories)) localStorage.setItem('categories', JSON.stringify(embedded.categories));
+            if (Array.isArray(embedded.coupons)) localStorage.setItem('coupons', JSON.stringify(embedded.coupons));
             if (embedded.settings && typeof embedded.settings === 'object') localStorage.setItem('settings', JSON.stringify(embedded.settings));
             localStorage.setItem('appliedExportId', String(embedded.exportId));
         }
@@ -1206,10 +1491,12 @@
             const savedCategories = localStorage.getItem('categories');
             categories = savedCategories ? JSON.parse(savedCategories) : defaultCategories;
 
+            const savedCoupons = localStorage.getItem('coupons');
+            coupons = savedCoupons ? JSON.parse(savedCoupons) : defaultCoupons;
+
             const savedSettings = localStorage.getItem('settings');
             settings = savedSettings ? JSON.parse(savedSettings) : defaultSettings;
-            if (!settings.currencySymbol) settings.currencySymbol = 'R$';
-            if (!settings.exchangeRates) settings.exchangeRates = { USD: 5.40, EUR: 6.20 };
+            normalizeSettings();
 
             const savedCart = localStorage.getItem('cart');
             // Migra itens de carrinho salvos antes de variações/adicionais existirem
@@ -1222,14 +1509,45 @@
             });
 
             const savedCustomer = localStorage.getItem('customerData');
-            customerData = savedCustomer ? JSON.parse(savedCustomer) : null;
+            customerData = savedCustomer ? migrateCustomerData(JSON.parse(savedCustomer)) : null;
+            initCheckoutDraft();
 
             currentCurrency = settings.currencySymbol;
+        }
+
+        // Preenche campos novos de settings em lojas salvas por versões anteriores
+        function normalizeSettings() {
+            if (!settings.currencySymbol) settings.currencySymbol = 'R$';
+            if (!settings.exchangeRates) settings.exchangeRates = { USD: 5.40, EUR: 6.20 };
+            if (!settings.orderTypes) settings.orderTypes = { delivery: true, pickup: true, dinein: false };
+            if (typeof settings.minOrderValue !== 'number') settings.minOrderValue = 0;
+            if (!Array.isArray(settings.deliveryZones)) settings.deliveryZones = [];
+            if (!settings.pix) settings.pix = { keyType: 'telefone', key: '', holder: '' };
+            if (!settings.paymentMethods) settings.paymentMethods = { pix: true, card: true, cash: true };
+            if (typeof settings.enableScheduling !== 'boolean') settings.enableScheduling = false;
+        }
+
+        // Converte o customerData antigo (campo único "address") para o formato estruturado
+        function migrateCustomerData(c) {
+            if (!c) return null;
+            if (c.street !== undefined || c.cep !== undefined) return c;
+            return { name: c.name || '', phone: c.phone || '', cep: '', street: c.address || '', number: '', complement: '', reference: '', zoneId: '', neighborhood: '' };
+        }
+
+        function initCheckoutDraft() {
+            const c = customerData || {};
+            checkoutDraft = {
+                name: c.name || '', phone: c.phone || '', cep: c.cep || '',
+                street: c.street || '', number: c.number || '', complement: c.complement || '',
+                reference: c.reference || '', zoneId: c.zoneId || '', neighborhood: c.neighborhood || '',
+                tableNumber: '', changeFor: ''
+            };
         }
 
         function saveData() {
             localStorage.setItem('products', JSON.stringify(products));
             localStorage.setItem('categories', JSON.stringify(categories));
+            localStorage.setItem('coupons', JSON.stringify(coupons));
             localStorage.setItem('settings', JSON.stringify(settings));
         }
 
@@ -1237,6 +1555,7 @@
             renderMenu();
             renderProductAdminList();
             renderCategoryAdminList();
+            renderCouponAdminList();
             renderSettings();
             updateCartUI();
             updateSiteSettings();
@@ -1261,7 +1580,135 @@
                 r.checked = (r.value === symbol);
             });
 
+            // Tipos de pedido
+            document.getElementById('orderTypeDelivery').checked = !!settings.orderTypes.delivery;
+            document.getElementById('orderTypePickup').checked = !!settings.orderTypes.pickup;
+            document.getElementById('orderTypeDinein').checked = !!settings.orderTypes.dinein;
+            document.getElementById('minOrderValue').value = settings.minOrderValue || 0;
+
+            // Pagamento
+            document.getElementById('payPix').checked = !!settings.paymentMethods.pix;
+            document.getElementById('payCard').checked = !!settings.paymentMethods.card;
+            document.getElementById('payCash').checked = !!settings.paymentMethods.cash;
+            document.getElementById('pixKeyType').value = settings.pix.keyType || 'telefone';
+            document.getElementById('pixKey').value = settings.pix.key || '';
+            document.getElementById('pixHolder').value = settings.pix.holder || '';
+
+            // Agendamento
+            document.getElementById('enableScheduling').checked = !!settings.enableScheduling;
+
+            editingZones = JSON.parse(JSON.stringify(settings.deliveryZones || []));
+            renderZonesEditor();
             renderSchedule();
+        }
+
+        function renderZonesEditor() {
+            const box = document.getElementById('zonesEditor');
+            box.innerHTML = editingZones.map((z, i) => `
+                <div class="zone-editor-row">
+                    <input type="text" data-zi="${i}" data-field="name" placeholder="Bairro" value="${escapeHTML(z.name)}">
+                    <input type="number" data-zi="${i}" data-field="fee" step="0.01" min="0" placeholder="Taxa R$" value="${z.fee ?? ''}">
+                    <button type="button" class="btn-row-remove" data-remove-zone="${i}" title="Remover">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        // ========== ADMIN: CUPONS ==========
+        function renderCouponAdminList() {
+            const list = document.getElementById('couponAdminList');
+            if (coupons.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: var(--gray-600); font-size: 0.875rem;">Nenhum cupom cadastrado.</p>';
+                return;
+            }
+            list.innerHTML = coupons.map(c => {
+                const valueLabel = c.type === 'percent' ? `${c.value}% off` : `R$ ${c.value.toFixed(2).replace('.', ',')} off`;
+                const meta = [];
+                if (c.minOrder > 0) meta.push(`mín. R$ ${c.minOrder.toFixed(2).replace('.', ',')}`);
+                if (c.expiry) meta.push(`até ${c.expiry.split('-').reverse().join('/')}`);
+                meta.push(c.maxUses > 0 ? `${c.uses}/${c.maxUses} usos` : `${c.uses} usos`);
+                return `
+                <div class="coupon-admin-item ${c.active ? '' : 'coupon-off'}">
+                    <div>
+                        <span class="coupon-code">${escapeHTML(c.code)}</span> · ${valueLabel}
+                        <div class="coupon-meta">${escapeHTML(meta.join(' · '))}</div>
+                    </div>
+                    <div class="coupon-admin-actions">
+                        <button class="btn-icon btn-toggle" onclick="toggleCoupon(${c.id})" title="${c.active ? 'Desativar' : 'Ativar'}">${c.active ? '👁️' : '🚫'}</button>
+                        <button class="btn-icon btn-edit" onclick="editCoupon(${c.id})" title="Editar">✏️</button>
+                        <button class="btn-icon btn-delete" onclick="deleteCoupon(${c.id})" title="Excluir">🗑️</button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function addCoupon() {
+            editingCouponId = null;
+            document.getElementById('couponModalTitle').textContent = 'Adicionar Cupom';
+            document.getElementById('couponForm').reset();
+            document.getElementById('couponActive').checked = true;
+            document.getElementById('couponModal').classList.add('active');
+        }
+
+        function editCoupon(id) {
+            const c = coupons.find(c => c.id === id);
+            if (!c) return;
+            editingCouponId = id;
+            document.getElementById('couponModalTitle').textContent = 'Editar Cupom';
+            document.getElementById('couponCode').value = c.code;
+            document.getElementById('couponType').value = c.type;
+            document.getElementById('couponValue').value = c.value;
+            document.getElementById('couponMinOrder').value = c.minOrder || '';
+            document.getElementById('couponExpiry').value = c.expiry || '';
+            document.getElementById('couponMaxUses').value = c.maxUses || '';
+            document.getElementById('couponActive').checked = c.active;
+            document.getElementById('couponModal').classList.add('active');
+        }
+
+        function saveCoupon(e) {
+            e.preventDefault();
+            const code = document.getElementById('couponCode').value.trim().toUpperCase();
+            if (!code) { showNotification('Informe o código do cupom.', 'danger'); return; }
+            const duplicate = coupons.find(c => c.code.toUpperCase() === code && c.id !== editingCouponId);
+            if (duplicate) { showNotification('Já existe um cupom com esse código.', 'danger'); return; }
+
+            const type = document.getElementById('couponType').value;
+            const value = parseFloat(document.getElementById('couponValue').value);
+            if (!Number.isFinite(value) || value <= 0) { showNotification('Valor do desconto inválido.', 'danger'); return; }
+            if (type === 'percent' && value > 100) { showNotification('Percentual não pode passar de 100%.', 'danger'); return; }
+
+            const minOrder = parseFloat(document.getElementById('couponMinOrder').value) || 0;
+            const maxUses = parseInt(document.getElementById('couponMaxUses').value, 10) || 0;
+            const expiry = document.getElementById('couponExpiry').value || '';
+            const active = document.getElementById('couponActive').checked;
+
+            if (editingCouponId) {
+                const c = coupons.find(c => c.id === editingCouponId);
+                Object.assign(c, { code, type, value, minOrder, maxUses, expiry, active });
+            } else {
+                coupons.push({ id: Date.now(), code, type, value, minOrder, maxUses, expiry, uses: 0, active });
+            }
+            saveData();
+            renderCouponAdminList();
+            document.getElementById('couponModal').classList.remove('active');
+            showNotification('Cupom salvo com sucesso!', 'success');
+        }
+
+        function toggleCoupon(id) {
+            const c = coupons.find(c => c.id === id);
+            if (!c) return;
+            c.active = !c.active;
+            saveData();
+            renderCouponAdminList();
+            showNotification(`Cupom ${c.active ? 'ativado' : 'desativado'}!`, 'success');
+        }
+
+        function deleteCoupon(id) {
+            if (!confirm('Deseja realmente excluir este cupom?')) return;
+            coupons = coupons.filter(c => c.id !== id);
+            saveData();
+            renderCouponAdminList();
+            showNotification('Cupom excluído!', 'success');
         }
 
         function renderSchedule() {
@@ -1768,12 +2215,54 @@
                 return;
             }
 
+            const minOrderValue = parseFloat(document.getElementById('minOrderValue').value) || 0;
+            if (minOrderValue < 0) { showNotification('Pedido mínimo inválido.', 'danger'); return; }
+
+            // Zonas de entrega: ignora linhas sem nome; exige taxa válida nas demais
+            const zones = editingZones
+                .map(z => ({ id: z.id || Date.now() + Math.random(), name: String(z.name || '').trim(), fee: parseFloat(z.fee) }))
+                .filter(z => z.name !== '');
+            if (zones.some(z => !Number.isFinite(z.fee) || z.fee < 0)) {
+                showNotification('Toda zona de entrega precisa de uma taxa válida (use 0 para grátis).', 'danger');
+                return;
+            }
+
+            const orderTypes = {
+                delivery: document.getElementById('orderTypeDelivery').checked,
+                pickup: document.getElementById('orderTypePickup').checked,
+                dinein: document.getElementById('orderTypeDinein').checked
+            };
+            if (!orderTypes.delivery && !orderTypes.pickup && !orderTypes.dinein) {
+                showNotification('Ative pelo menos um tipo de pedido.', 'danger');
+                return;
+            }
+
+            const paymentMethods = {
+                pix: document.getElementById('payPix').checked,
+                card: document.getElementById('payCard').checked,
+                cash: document.getElementById('payCash').checked
+            };
+            if (!paymentMethods.pix && !paymentMethods.card && !paymentMethods.cash) {
+                showNotification('Ative pelo menos uma forma de pagamento.', 'danger');
+                return;
+            }
+
             settings.restaurantName = document.getElementById('restaurantName').value;
             settings.logoUrl = document.getElementById('logoUrl').value;
             settings.subtitle = document.getElementById('restaurantSubtitle').value;
             settings.whatsappNumber = whatsappDigits;
             settings.adminPassword = document.getElementById('adminPassword').value || 'admin123';
             settings.deliveryFee = deliveryFee;
+            settings.minOrderValue = minOrderValue;
+            settings.deliveryZones = zones;
+            settings.orderTypes = orderTypes;
+            settings.paymentMethods = paymentMethods;
+            settings.pix = {
+                keyType: document.getElementById('pixKeyType').value,
+                key: document.getElementById('pixKey').value.trim(),
+                holder: document.getElementById('pixHolder').value.trim()
+            };
+            settings.enableScheduling = document.getElementById('enableScheduling').checked;
 
             const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             settings.schedule = {};
@@ -1785,8 +2274,13 @@
                 };
             });
 
+            editingZones = JSON.parse(JSON.stringify(zones));
             saveData();
+            renderZonesEditor();
             updateSiteSettings();
+            // Reconstrói o checkout aberto para refletir mudanças de tipo de pedido/pagamento/zonas
+            if (cart.length) { captureCheckoutInputs(); renderCheckoutForm(); }
+            updateCartUI();
             showNotification('Configurações salvas com sucesso!', 'success');
         }
 
@@ -2001,8 +2495,6 @@
 
         function updateCartUI() {
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const subtotalBRL = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-            const deliveryBRL = settings.deliveryFee || 0;
 
             cartCount.textContent = totalItems;
             cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
@@ -2037,122 +2529,424 @@
                 }).join('');
 
                 cartFooter.style.display = 'block';
-                renderCustomerForm();
+                ensureCheckoutForm();
             }
 
-            cartSubtotal.textContent = formatPrice(subtotalBRL);
-            cartDeliveryFee.textContent = formatPrice(deliveryBRL);
-            cartTotal.textContent = formatPrice(subtotalBRL + deliveryBRL);
+            updateCartSummary();
+        }
+
+        // Atualiza apenas os números do resumo (sem reconstruir o formulário, preservando o que o cliente digitou)
+        function updateCartSummary() {
+            if (cart.length === 0) return;
+            const { subtotal, fee, feeValue, discount, total } = computeTotals();
+            cartSubtotal.textContent = formatPrice(subtotal);
+
+            const discRow = document.getElementById('cartDiscountRow');
+            if (discount > 0) {
+                discRow.style.display = 'flex';
+                const c = findCoupon(checkoutState.couponCode);
+                document.getElementById('cartDiscountLabel').textContent = `Desconto (${c ? c.code : 'cupom'}):`;
+                document.getElementById('cartDiscount').textContent = '- ' + formatPrice(discount);
+            } else {
+                discRow.style.display = 'none';
+            }
+
+            const feeLabel = document.getElementById('cartDeliveryLabel');
+            if (checkoutState.orderType === 'delivery') {
+                feeLabel.textContent = 'Taxa de Entrega:';
+                cartDeliveryFee.textContent = fee === null ? 'escolha o bairro' : formatPrice(feeValue);
+            } else if (checkoutState.orderType === 'pickup') {
+                feeLabel.textContent = 'Retirada:';
+                cartDeliveryFee.textContent = 'Grátis';
+            } else {
+                feeLabel.textContent = 'Mesa:';
+                cartDeliveryFee.textContent = '—';
+            }
+
+            cartTotal.textContent = formatPrice(total);
+
+            const warn = document.getElementById('minOrderWarning');
+            const min = settings.minOrderValue || 0;
+            if (checkoutState.orderType === 'delivery' && min > 0 && subtotal < min) {
+                warn.style.display = 'block';
+                warn.textContent = `⚠️ Pedido mínimo para entrega: ${formatPrice(min)}. Faltam ${formatPrice(min - subtotal)}.`;
+            } else {
+                warn.style.display = 'none';
+            }
 
             document.getElementById('currencyNote').style.display = currentCurrency === 'R$' ? 'none' : 'block';
-
+            updateChangeHint();
             updateCheckoutButton();
         }
 
-        // ========== FORMULÁRIO DO CLIENTE ==========
-        function renderCustomerForm() {
-            if (customerData) {
-                customerFormContainer.innerHTML = `
-                    <div class="saved-customer">
-                        <div class="saved-customer-header">
-                            <div class="saved-customer-title">✅ Dados de Entrega</div>
-                            <button class="btn-edit-customer" onclick="editCustomerData()">Editar</button>
-                        </div>
-                        <div class="saved-customer-info">
-                            <strong>${escapeHTML(customerData.name)}</strong><br>
-                            ${escapeHTML(customerData.address)}<br>
-                            📱 ${escapeHTML(customerData.phone)}
-                        </div>
-                    </div>
-                `;
+        // ========== CHECKOUT DO CLIENTE ==========
+        function brl(v) { return 'R$ ' + (Number(v) || 0).toFixed(2).replace('.', ','); }
+
+        // Renderiza o formulário só na primeira vez (preserva o que o cliente já digitou)
+        function ensureCheckoutForm() {
+            if (!customerFormContainer.querySelector('.checkout-form-root')) renderCheckoutForm();
+        }
+
+        // Lê os campos atuais para o rascunho, antes de reconstruir o formulário
+        function captureCheckoutInputs() {
+            const g = id => document.getElementById(id);
+            const set = (id, key) => { if (g(id)) checkoutDraft[key] = g(id).value; };
+            set('coName', 'name'); set('coPhone', 'phone'); set('coCep', 'cep');
+            set('coStreet', 'street'); set('coNumber', 'number'); set('coComplement', 'complement');
+            set('coReference', 'reference'); set('coZone', 'zoneId'); set('coNeighborhood', 'neighborhood');
+            set('coTable', 'tableNumber'); set('coChange', 'changeFor');
+        }
+
+        // Reconstrói o formulário a partir de checkoutDraft/checkoutState.
+        // Os chamadores devem chamar captureCheckoutInputs() ANTES, para não perder o que o cliente digitou.
+        function renderCheckoutForm() {
+            const types = enabledOrderTypes();
+            if (!types.includes(checkoutState.orderType)) checkoutState.orderType = types[0] || 'delivery';
+            const pms = enabledPaymentMethods();
+            if (!pms.includes(checkoutState.payment)) checkoutState.payment = pms[0] || null;
+
+            const ot = checkoutState.orderType;
+            const zones = settings.deliveryZones || [];
+            const d = checkoutDraft;
+            let html = '<div class="checkout-form-root">';
+
+            // Tipo de pedido (só quando há mais de uma opção)
+            if (types.length > 1) {
+                const icons = { delivery: '🛵', pickup: '🏪', dinein: '🍽️' };
+                const labels = { delivery: 'Entrega', pickup: 'Retirada', dinein: 'Mesa' };
+                html += `<div class="checkout-block"><div class="checkout-block-title">Tipo de pedido</div><div class="order-type-tabs">`;
+                types.forEach(t => {
+                    html += `<button type="button" class="order-type-btn ${ot === t ? 'active' : ''}" onclick="setOrderType('${t}')"><span class="ot-icon">${icons[t]}</span>${labels[t]}</button>`;
+                });
+                html += `</div></div>`;
+            }
+
+            // Identificação
+            html += `<div class="checkout-block"><div class="checkout-block-title">📋 Seus dados</div>`;
+            html += `<input type="text" class="form-input-small" id="coName" placeholder="Nome completo *" value="${escapeHTML(d.name)}">`;
+            html += `<input type="tel" class="form-input-small" id="coPhone" placeholder="Telefone (ex: 21999999999) *" value="${escapeHTML(d.phone)}">`;
+            html += `</div>`;
+
+            // Específico por tipo de pedido
+            if (ot === 'delivery') {
+                html += `<div class="checkout-block"><div class="checkout-block-title">📍 Endereço de entrega</div>`;
+                html += `<div class="cep-row"><input type="text" class="form-input-small" id="coCep" placeholder="CEP" value="${escapeHTML(d.cep)}" style="margin-bottom:0;"><button type="button" class="btn-cep" id="btnCep" onclick="lookupCEP()">Buscar</button></div>`;
+                html += `<input type="text" class="form-input-small" id="coStreet" placeholder="Rua / Logradouro *" value="${escapeHTML(d.street)}" style="margin-top:0.5rem;">`;
+                html += `<div class="field-row"><input type="text" class="form-input-small field-narrow" id="coNumber" placeholder="Nº *" value="${escapeHTML(d.number)}"><input type="text" class="form-input-small" id="coComplement" placeholder="Complemento" value="${escapeHTML(d.complement)}"></div>`;
+                html += `<input type="text" class="form-input-small" id="coReference" placeholder="Ponto de referência" value="${escapeHTML(d.reference)}">`;
+                if (zones.length) {
+                    html += `<select class="form-input-small" id="coZone" onchange="onZoneChange()"><option value="">Selecione o bairro *</option>`;
+                    zones.forEach(z => {
+                        html += `<option value="${z.id}" ${String(d.zoneId) === String(z.id) ? 'selected' : ''}>${escapeHTML(z.name)} — ${formatPrice(z.fee)}</option>`;
+                    });
+                    html += `</select>`;
+                } else {
+                    html += `<input type="text" class="form-input-small" id="coNeighborhood" placeholder="Bairro" value="${escapeHTML(d.neighborhood)}">`;
+                }
+                html += `</div>`;
+            } else if (ot === 'dinein') {
+                html += `<div class="checkout-block"><div class="checkout-block-title">🍽️ Mesa</div><input type="text" class="form-input-small" id="coTable" placeholder="Número da mesa *" value="${escapeHTML(d.tableNumber)}"></div>`;
             } else {
-                customerFormContainer.innerHTML = `
-                    <div class="customer-form">
-                        <div class="customer-form-title">📋 Dados para Entrega</div>
-                        <form id="customerDataForm" onsubmit="saveCustomerData(event)">
-                            <input type="text" class="form-input-small" id="customerName" placeholder="Nome completo *" required>
-                            <input type="text" class="form-input-small" id="customerAddress" placeholder="Endereço completo *" required>
-                            <input type="tel" class="form-input-small" id="customerPhone" placeholder="Telefone (ex: 21999999999) *" required>
-                            <button type="submit" class="btn-admin btn-success" style="width: 100%;">💾 Salvar Dados</button>
-                        </form>
-                    </div>
-                `;
+                html += `<div class="checkout-block"><div class="checkout-hint">🏪 Você retira o pedido no balcão. Avisaremos quando estiver pronto.</div></div>`;
+            }
+
+            // Agendamento
+            if (settings.enableScheduling) {
+                html += `<div class="checkout-block"><div class="checkout-block-title">⏰ Quando</div><div class="schedule-toggle">
+                    <button type="button" class="order-type-btn ${checkoutState.scheduleMode === 'now' ? 'active' : ''}" onclick="setScheduleMode('now')">Assim que possível</button>
+                    <button type="button" class="order-type-btn ${checkoutState.scheduleMode === 'later' ? 'active' : ''}" onclick="setScheduleMode('later')">Agendar</button>
+                </div>`;
+                if (checkoutState.scheduleMode === 'later') {
+                    html += `<input type="datetime-local" class="form-input-small" id="coScheduleAt" value="${escapeHTML(checkoutState.scheduleAt)}" style="margin-top:0.5rem;" onchange="onScheduleAtChange()">`;
+                }
+                html += `</div>`;
+            }
+
+            // Pagamento
+            html += `<div class="checkout-block"><div class="checkout-block-title">💳 Pagamento</div><div class="payment-options">`;
+            const payLabels = { pix: '📱 PIX', card: '💳 Cartão na entrega', cash: '💵 Dinheiro' };
+            pms.forEach(m => {
+                html += `<label class="payment-option ${checkoutState.payment === m ? 'selected' : ''}"><input type="radio" name="coPayment" value="${m}" ${checkoutState.payment === m ? 'checked' : ''} onchange="setPayment('${m}')"><span>${payLabels[m]}</span></label>`;
+            });
+            html += `</div>`;
+            if (checkoutState.payment === 'pix') {
+                const pix = settings.pix || {};
+                if (pix.key) {
+                    html += `<div class="pix-box"><strong>Pague via PIX</strong> (${escapeHTML(pix.keyType)})${pix.holder ? ` — ${escapeHTML(pix.holder)}` : ''}<div class="pix-key-row"><span class="pix-key-value" id="pixKeyValue">${escapeHTML(pix.key)}</span><button type="button" class="btn-copy-pix" onclick="copyPixKey()">Copiar</button></div><div class="checkout-hint">Envie o comprovante no WhatsApp após finalizar.</div></div>`;
+                } else {
+                    html += `<div class="pix-box"><div class="checkout-hint">A chave PIX será enviada pelo restaurante no WhatsApp.</div></div>`;
+                }
+            }
+            if (checkoutState.payment === 'cash') {
+                html += `<div class="change-box"><input type="number" class="form-input-small" id="coChange" placeholder="Troco para quanto? (opcional)" step="0.01" min="0" value="${escapeHTML(d.changeFor)}" oninput="onChangeForInput()" style="margin-bottom:0.25rem;"><div class="checkout-hint" id="changeHint"></div></div>`;
+            }
+            html += `</div>`;
+
+            // Cupom
+            html += `<div class="checkout-block"><div class="checkout-block-title">🎟️ Cupom</div>`;
+            const applied = checkoutState.couponCode ? findCoupon(checkoutState.couponCode) : null;
+            if (applied) {
+                html += `<div class="coupon-applied"><span>🎟️ ${escapeHTML(applied.code)} aplicado</span><button type="button" class="coupon-x" onclick="removeCoupon()">✕</button></div>`;
+            } else {
+                html += `<div class="coupon-row"><input type="text" class="form-input-small" id="coCoupon" placeholder="Código do cupom" style="margin-bottom:0;"><button type="button" class="btn-coupon" onclick="applyCouponFromInput()">Aplicar</button></div>`;
+            }
+            html += `</div>`;
+
+            html += '</div>';
+            customerFormContainer.innerHTML = html;
+            updateChangeHint();
+        }
+
+        function setOrderType(type) {
+            captureCheckoutInputs();
+            checkoutState.orderType = type;
+            renderCheckoutForm();
+            updateCartSummary();
+        }
+
+        function setPayment(method) {
+            captureCheckoutInputs();
+            checkoutState.payment = method;
+            renderCheckoutForm();
+            updateCartSummary();
+        }
+
+        function setScheduleMode(mode) {
+            captureCheckoutInputs();
+            checkoutState.scheduleMode = mode;
+            renderCheckoutForm();
+        }
+
+        function onScheduleAtChange() {
+            const el = document.getElementById('coScheduleAt');
+            if (el) checkoutState.scheduleAt = el.value;
+        }
+
+        function onZoneChange() {
+            captureCheckoutInputs();
+            updateCartSummary();
+        }
+
+        function onChangeForInput() {
+            captureCheckoutInputs();
+            updateChangeHint();
+        }
+
+        function updateChangeHint() {
+            const hint = document.getElementById('changeHint');
+            if (!hint) return;
+            const { total } = computeTotals();
+            const changeFor = parseFloat(checkoutDraft.changeFor);
+            if (!Number.isFinite(changeFor) || changeFor <= 0) { hint.textContent = 'Sem troco ou não informado.'; return; }
+            if (changeFor < total) { hint.textContent = `⚠️ Valor menor que o total (${brl(total)}).`; return; }
+            hint.textContent = `Troco: ${brl(changeFor - total)} (levaremos troco para ${brl(changeFor)}).`;
+        }
+
+        // Consulta o CEP na API pública ViaCEP e preenche rua/bairro
+        async function lookupCEP() {
+            captureCheckoutInputs();
+            const cep = (checkoutDraft.cep || '').replace(/\D/g, '');
+            if (cep.length !== 8) { showNotification('CEP inválido: digite os 8 dígitos.', 'danger'); return; }
+            const btn = document.getElementById('btnCep');
+            if (btn) { btn.disabled = true; btn.textContent = '...'; }
+            try {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await res.json();
+                if (data.erro) { showNotification('CEP não encontrado.', 'danger'); return; }
+                checkoutDraft.cep = cep;
+                if (data.logradouro) checkoutDraft.street = data.logradouro;
+                const bairro = data.bairro || '';
+                const zones = settings.deliveryZones || [];
+                if (zones.length) {
+                    const match = zones.find(z => normalizeText(z.name) === normalizeText(bairro));
+                    if (match) {
+                        checkoutDraft.zoneId = String(match.id);
+                    } else {
+                        checkoutDraft.zoneId = '';
+                        showNotification(`Não temos taxa para o bairro "${bairro}". Escolha seu bairro na lista.`, 'danger');
+                    }
+                } else if (bairro) {
+                    checkoutDraft.neighborhood = bairro;
+                }
+                renderCheckoutForm();
+                updateCartSummary();
+                const num = document.getElementById('coNumber');
+                if (num) num.focus();
+            } catch (e) {
+                showNotification('Não foi possível consultar o CEP agora. Preencha o endereço manualmente.', 'danger');
+            } finally {
+                const b = document.getElementById('btnCep');
+                if (b) { b.disabled = false; b.textContent = 'Buscar'; }
             }
         }
 
-        function saveCustomerData(event) {
-            event.preventDefault();
-            const phoneDigits = document.getElementById('customerPhone').value.replace(/\D/g, '');
-            if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-                showNotification('Telefone inválido: use DDD + número, só dígitos (ex: 21999999999).', 'danger');
-                return;
-            }
-            customerData = {
-                name: document.getElementById('customerName').value,
-                address: document.getElementById('customerAddress').value,
-                phone: phoneDigits
-            };
-            localStorage.setItem('customerData', JSON.stringify(customerData));
-            renderCustomerForm();
-            updateCheckoutButton();
-            showNotification('Dados salvos com sucesso!', 'success');
+        function applyCouponFromInput() {
+            captureCheckoutInputs();
+            const input = document.getElementById('coCoupon');
+            const code = input ? input.value.trim() : '';
+            if (!code) { showNotification('Digite um código de cupom.', 'danger'); return; }
+            const res = validateCoupon(code, cartSubtotalBRL());
+            if (!res.ok) { showNotification(res.reason, 'danger'); return; }
+            checkoutState.couponCode = res.coupon.code;
+            renderCheckoutForm();
+            updateCartSummary();
+            showNotification(`Cupom ${res.coupon.code} aplicado!`, 'success');
         }
 
-        function editCustomerData() {
-            customerData = null;
-            localStorage.removeItem('customerData');
-            renderCustomerForm();
-            updateCheckoutButton();
+        function removeCoupon() {
+            captureCheckoutInputs();
+            checkoutState.couponCode = null;
+            renderCheckoutForm();
+            updateCartSummary();
+        }
+
+        function copyPixKey() {
+            const key = (settings.pix && settings.pix.key) || '';
+            if (!key) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(key).then(
+                    () => showNotification('Chave PIX copiada!', 'success'),
+                    () => showNotification('Não foi possível copiar. Copie manualmente.', 'danger')
+                );
+            } else {
+                showNotification('Copie a chave manualmente.', 'danger');
+            }
+        }
+
+        // Verifica se o pedido pode ser finalizado (bloqueios "duros"); validações de campo ficam no checkout()
+        function checkoutReady() {
+            if (cart.length === 0) return { ok: false, reason: 'Carrinho vazio' };
+            const { subtotal, fee } = computeTotals();
+            if (checkoutState.orderType === 'delivery') {
+                if ((settings.deliveryZones || []).length && fee === null) return { ok: false, reason: 'Escolha o bairro' };
+                const min = settings.minOrderValue || 0;
+                if (min > 0 && subtotal < min) return { ok: false, reason: 'Pedido abaixo do mínimo' };
+            }
+            return { ok: true };
         }
 
         function updateCheckoutButton() {
-            const hasCustomerData = customerData !== null;
-            btnCheckout.disabled = !hasCustomerData;
-            if (!hasCustomerData) {
-                btnCheckout.innerHTML = '📋 Preencha os dados acima';
-                btnCheckout.style.background = 'var(--gray-300)';
-            } else {
-                btnCheckout.innerHTML = '💬 Finalizar no WhatsApp';
-                btnCheckout.style.background = 'var(--whatsapp)';
-            }
+            const r = checkoutReady();
+            btnCheckout.disabled = !r.ok;
+            btnCheckout.style.background = r.ok ? 'var(--whatsapp)' : 'var(--gray-300)';
+            btnCheckout.innerHTML = r.ok ? '💬 Finalizar no WhatsApp' : `📋 ${r.reason}`;
         }
 
         function checkout() {
-            if (cart.length === 0) { alert('Seu carrinho está vazio!'); return; }
-            if (!customerData) { alert('Por favor, preencha seus dados de entrega!'); return; }
+            captureCheckoutInputs();
+            const ready = checkoutReady();
+            if (!ready.ok) { showNotification(ready.reason + '.', 'danger'); return; }
 
-            const subtotalBRL = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
-            const deliveryBRL = settings.deliveryFee || 0;
-            const totalBRL = subtotalBRL + deliveryBRL;
+            const d = checkoutDraft;
+            const ot = checkoutState.orderType;
+            const payment = checkoutState.payment;
 
-            // Mensagem sempre em BRL para o restaurante, com nota de moeda do cliente
-            let message = `*🍕 Novo Pedido - ${settings.restaurantName}*\n\n`;
-            message += `*📋 DADOS DO CLIENTE*\n`;
-            message += `Nome: ${customerData.name}\n`;
-            message += `Endereço: ${customerData.address}\n`;
-            message += `Telefone: ${customerData.phone}\n\n`;
+            // Validação dos campos
+            const name = d.name.trim();
+            if (!name) { showNotification('Informe seu nome.', 'danger'); return; }
+            const phone = d.phone.replace(/\D/g, '');
+            if (phone.length < 10 || phone.length > 15) { showNotification('Telefone inválido: DDD + número (ex: 21999999999).', 'danger'); return; }
 
-            message += `*🛒 PEDIDO*\n`;
-            cart.forEach(item => {
-                message += `${item.quantity}x ${item.name}${item.variationName ? ` (${item.variationName})` : ''}\n`;
-                item.addons.forEach(a => {
-                    message += `   + ${a.name} (R$ ${a.price.toFixed(2).replace('.', ',')})\n`;
-                });
-                if (item.note) message += `   Obs: ${item.note}\n`;
-                message += `   R$ ${item.unitPrice.toFixed(2).replace('.', ',')} cada — Subtotal: R$ ${(item.unitPrice * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
-            });
+            let zone = null;
+            if (ot === 'delivery') {
+                if (!d.street.trim()) { showNotification('Informe a rua do endereço.', 'danger'); return; }
+                if (!d.number.trim()) { showNotification('Informe o número do endereço.', 'danger'); return; }
+                const zones = settings.deliveryZones || [];
+                if (zones.length) {
+                    zone = zones.find(z => String(z.id) === String(d.zoneId));
+                    if (!zone) { showNotification('Selecione seu bairro.', 'danger'); return; }
+                }
+            }
+            if (ot === 'dinein' && !d.tableNumber.trim()) { showNotification('Informe o número da mesa.', 'danger'); return; }
 
-            message += `Subtotal: R$ ${subtotalBRL.toFixed(2).replace('.', ',')}\n`;
-            message += `Taxa de Entrega: R$ ${deliveryBRL.toFixed(2).replace('.', ',')}\n`;
-            message += `*💰 TOTAL: R$ ${totalBRL.toFixed(2).replace('.', ',')}*\n`;
-
-            if (currentCurrency !== 'R$') {
-                message += `_(Cliente visualizou os preços em ${currentCurrency} pela cotação configurada)_\n`;
+            // Agendamento
+            let scheduleText = '';
+            if (settings.enableScheduling && checkoutState.scheduleMode === 'later') {
+                if (!checkoutState.scheduleAt) { showNotification('Escolha a data e hora do agendamento.', 'danger'); return; }
+                const when = new Date(checkoutState.scheduleAt);
+                if (isNaN(when.getTime()) || when < new Date()) { showNotification('Agende para um horário no futuro.', 'danger'); return; }
+                if (!isStoreOpenAt(when)) { showNotification('O horário agendado está fora do funcionamento da loja.', 'danger'); return; }
+                scheduleText = when.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
             }
 
-            message += '\nAguardo confirmação! 😊';
+            const totals = computeTotals();
+            const appliedCoupon = checkoutState.couponCode ? findCoupon(checkoutState.couponCode) : null;
 
-            const whatsappURL = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`;
+            // Persiste os dados do cliente para a próxima compra
+            customerData = {
+                name, phone, cep: d.cep, street: d.street, number: d.number,
+                complement: d.complement, reference: d.reference,
+                zoneId: d.zoneId, neighborhood: zone ? zone.name : d.neighborhood
+            };
+            localStorage.setItem('customerData', JSON.stringify(customerData));
+
+            // ===== Mensagem do WhatsApp (sempre em R$) em seções =====
+            let m = `*🍕 Novo Pedido - ${settings.restaurantName}*\n\n`;
+
+            m += `*📋 CLIENTE*\n`;
+            m += `Nome: ${name}\n`;
+            m += `Telefone: ${phone}\n\n`;
+
+            m += `*🧾 TIPO DE PEDIDO*\n`;
+            if (ot === 'delivery') {
+                m += `🛵 Entrega\n`;
+                m += `Endereço: ${d.street}, ${d.number}${d.complement ? ' - ' + d.complement : ''}\n`;
+                if (zone) m += `Bairro: ${zone.name}\n`;
+                else if (d.neighborhood) m += `Bairro: ${d.neighborhood}\n`;
+                if (d.cep) m += `CEP: ${d.cep}\n`;
+                if (d.reference) m += `Referência: ${d.reference}\n`;
+            } else if (ot === 'pickup') {
+                m += `🏪 Retirada no local\n`;
+            } else {
+                m += `🍽️ Consumo no local — Mesa ${d.tableNumber}\n`;
+            }
+            if (scheduleText) m += `⏰ Agendado para: ${scheduleText}\n`;
+            m += `\n`;
+
+            m += `*🛒 ITENS*\n`;
+            cart.forEach(item => {
+                m += `${item.quantity}x ${item.name}${item.variationName ? ` (${item.variationName})` : ''}\n`;
+                item.addons.forEach(a => { m += `   + ${a.name} (${brl(a.price)})\n`; });
+                if (item.note) m += `   Obs: ${item.note}\n`;
+                m += `   ${brl(item.unitPrice)} cada — Subtotal: ${brl(item.unitPrice * item.quantity)}\n\n`;
+            });
+
+            m += `*💳 PAGAMENTO*\n`;
+            if (payment === 'pix') {
+                m += `📱 PIX\n`;
+                if (settings.pix && settings.pix.key) {
+                    m += `Chave (${settings.pix.keyType}): ${settings.pix.key}\n`;
+                    if (settings.pix.holder) m += `Recebedor: ${settings.pix.holder}\n`;
+                }
+            } else if (payment === 'card') {
+                m += `💳 Cartão na entrega (maquininha)\n`;
+            } else {
+                m += `💵 Dinheiro\n`;
+                const cf = parseFloat(d.changeFor);
+                if (Number.isFinite(cf) && cf > 0 && cf >= totals.total) {
+                    m += `Troco para: ${brl(cf)} (levar ${brl(cf - totals.total)} de troco)\n`;
+                } else {
+                    m += `Sem troco\n`;
+                }
+            }
+            m += `\n`;
+
+            m += `*💰 RESUMO*\n`;
+            m += `Subtotal: ${brl(totals.subtotal)}\n`;
+            if (totals.discount > 0 && appliedCoupon) m += `Desconto (${appliedCoupon.code}): -${brl(totals.discount)}\n`;
+            if (ot === 'delivery') m += `Taxa de entrega: ${brl(totals.feeValue)}\n`;
+            m += `*TOTAL: ${brl(totals.total)}*\n`;
+            if (currentCurrency !== 'R$') m += `_(Cliente visualizou os preços em ${currentCurrency} pela cotação configurada)_\n`;
+            m += `\nAguardo confirmação! 😊`;
+
+            // Contabiliza o uso do cupom
+            if (appliedCoupon) {
+                appliedCoupon.uses = (appliedCoupon.uses || 0) + 1;
+                saveData();
+                renderCouponAdminList();
+            }
+
+            const whatsappURL = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(m)}`;
             window.open(whatsappURL, '_blank');
         }
 
@@ -2281,6 +3075,33 @@
                 renderAddonGroupsEditor();
             });
 
+            // Entrega / Pagamento / Agendamento — qualquer botão salva todas as configurações
+            document.getElementById('saveDeliveryBtn').addEventListener('click', saveSettings);
+            document.getElementById('savePaymentBtn').addEventListener('click', saveSettings);
+            document.getElementById('saveSchedulingBtn').addEventListener('click', saveSettings);
+
+            // Editor de zonas de entrega (admin)
+            const zonesEditor = document.getElementById('zonesEditor');
+            zonesEditor.addEventListener('input', (e) => {
+                const i = parseInt(e.target.dataset.zi, 10);
+                if (!Number.isNaN(i) && editingZones[i]) editingZones[i][e.target.dataset.field] = e.target.value;
+            });
+            zonesEditor.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-remove-zone]');
+                if (!btn) return;
+                editingZones.splice(parseInt(btn.dataset.removeZone, 10), 1);
+                renderZonesEditor();
+            });
+            document.getElementById('addZoneBtn').addEventListener('click', () => {
+                editingZones.push({ id: Date.now(), name: '', fee: '' });
+                renderZonesEditor();
+            });
+
+            // Cupons (admin)
+            document.getElementById('addCouponBtn').addEventListener('click', addCoupon);
+            document.getElementById('couponModalClose').addEventListener('click', () => document.getElementById('couponModal').classList.remove('active'));
+            document.getElementById('couponForm').addEventListener('submit', saveCoupon);
+
             setInterval(updateStoreStatus, 60000);
         }
 
@@ -2295,6 +3116,7 @@
                 exportedAt: new Date().toISOString(),
                 products: products,
                 categories: categories,
+                coupons: coupons,
                 settings: settings
             };
 
