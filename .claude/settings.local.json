@@ -4,7 +4,8 @@
       "PowerShell(git init)",
       "PowerShell(git config user.name \"obrunofast\")",
       "PowerShell(git config user.email \"obrunofast@users.noreply.github.com\")",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "mcp__Claude_Preview__preview_start"
     ]
   }
 }

@@ -23,6 +23,7 @@
             --gray-200: #e5e7eb;
             --gray-300: #d1d5db;
             --gray-400: #9ca3af;
+            --gray-500: #6b7280;
             --gray-600: #4b5563;
             --gray-700: #374151;
             --gray-800: #1f2937;
@@ -267,6 +268,7 @@
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; }
         .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
         .alert-info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
         /* ========== HEADER ========== */
         .header {
@@ -649,6 +651,20 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Cotação do Dólar (1 USD em R$)</label>
+                    <input type="number" class="form-input" id="rateUSD" step="0.01" min="0.01" placeholder="5.40">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Cotação do Euro (1 EUR em R$)</label>
+                    <input type="number" class="form-input" id="rateEUR" step="0.01" min="0.01" placeholder="6.20">
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>💡 Como funciona:</strong> os preços são cadastrados em <strong>R$</strong> e exibidos na moeda escolhida usando a cotação acima. O pedido enviado por WhatsApp sai <strong>sempre em R$</strong>.
+                </div>
+
                 <div style="margin-top: 1rem;">
                     <button class="btn-admin btn-success" id="saveCurrency">💾 Aplicar Moeda</button>
                 </div>
@@ -664,7 +680,7 @@
                 </div>
 
                 <div class="alert alert-info">
-                    <strong>💡 Dica:</strong> Clique em "Adicionar Produto" para criar novos itens. Os preços são sempre cadastrados em <strong>Reais (R$)</strong> e convertidos automaticamente para as demais moedas.
+                    <strong>💡 Dica:</strong> Clique em "Adicionar Produto" para criar novos itens. Os preços são sempre cadastrados em <strong>Reais (R$)</strong> e exibidos nas demais moedas pela cotação configurada na seção Moeda.
                 </div>
 
                 <button class="btn-admin btn-primary-admin" id="addProductBtn" style="margin-bottom: 1.5rem;">➕ Adicionar Novo Produto</button>
@@ -703,7 +719,7 @@
                 <div class="form-group">
                     <label class="form-label">Preço em R$ (Reais) *</label>
                     <input type="number" class="form-input" id="productPrice" step="0.01" min="0" required>
-                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Sempre em Reais — conversão automática para USD/EUR</small>
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Sempre em Reais — a exibição em USD/EUR usa a cotação configurada na seção Moeda</small>
                 </div>
                 <div class="form-group">
                     <label class="form-label">URL da Imagem *</label>
@@ -798,12 +814,16 @@
                 <div class="cart-summary-row"><span>Taxa de Entrega:</span><span id="cartDeliveryFee">R$ 0,00</span></div>
             </div>
             <div class="cart-total"><span>Total:</span><span id="cartTotal">R$ 0,00</span></div>
+            <p id="currencyNote" style="display: none; font-size: 0.75rem; color: var(--gray-600); margin: 0.5rem 0 0;">💱 Preços exibidos em moeda estrangeira pela cotação configurada. O pedido é enviado ao restaurante em R$.</p>
             <div class="cart-actions">
                 <button class="btn-checkout" id="btnCheckout">💬 Finalizar no WhatsApp</button>
                 <button class="btn-clear" id="btnClear">Limpar Carrinho</button>
             </div>
         </div>
     </aside>
+
+    <!-- DADOS EMBUTIDOS: preenchido pela exportação para a loja abrir configurada em qualquer máquina -->
+    <script type="application/json" id="embeddedData">null</script>
 
     <script>
         // ========== DADOS INICIAIS ==========
@@ -824,6 +844,7 @@
             adminPassword: 'admin123',
             deliveryFee: 6.00,
             currencySymbol: 'R$',
+            exchangeRates: { USD: 5.40, EUR: 6.20 },
             schedule: {
                 monday:    { enabled: true, open: '09:00', close: '22:00' },
                 tuesday:   { enabled: true, open: '09:00', close: '22:00' },
@@ -843,15 +864,44 @@
         let customerData = null;
         let currentCurrency = 'R$'; // símbolo da moeda ativa
 
+        // ========== SEGURANÇA ==========
+        // Escapa conteúdo dinâmico antes de inserir via innerHTML (anti-XSS)
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         // ========== MOEDA ==========
+        // Preços são sempre armazenados em BRL; a exibição converte pela cotação configurada
+        function convertFromBRL(priceBRL) {
+            if (currentCurrency === 'R$') return priceBRL;
+            const rates = settings.exchangeRates || {};
+            const rate = currentCurrency === '$' ? rates.USD : rates.EUR;
+            if (!Number.isFinite(rate) || rate <= 0) return priceBRL;
+            return priceBRL / rate;
+        }
+
         function formatPrice(price) {
-            return `${currentCurrency} ${price.toFixed(2).replace('.', ',')}`;
+            return `${currentCurrency} ${convertFromBRL(price).toFixed(2).replace('.', ',')}`;
         }
 
         function applyCurrency() {
             const selected = document.querySelector('input[name="activeCurrency"]:checked');
             if (!selected) return;
+
+            const rateUSD = parseFloat(document.getElementById('rateUSD').value);
+            const rateEUR = parseFloat(document.getElementById('rateEUR').value);
+            if (!Number.isFinite(rateUSD) || rateUSD <= 0 || !Number.isFinite(rateEUR) || rateEUR <= 0) {
+                showNotification('Cotação inválida: informe quantos reais vale 1 dólar e 1 euro (maior que zero).', 'danger');
+                return;
+            }
+
             settings.currencySymbol = selected.value;
+            settings.exchangeRates = { USD: rateUSD, EUR: rateEUR };
             currentCurrency = selected.value;
             saveData();
             renderProducts();
@@ -900,13 +950,33 @@
             attachEventListeners();
         }
 
+        // Aplica os dados embutidos por uma exportação (uma única vez por export),
+        // preservando edições locais feitas depois da primeira abertura
+        function applyEmbeddedData() {
+            const el = document.getElementById('embeddedData');
+            if (!el) return;
+            let embedded = null;
+            try { embedded = JSON.parse(el.textContent); } catch (e) { return; }
+            if (!embedded || typeof embedded !== 'object' || !embedded.exportId) return;
+
+            const applied = localStorage.getItem('appliedExportId');
+            if (String(embedded.exportId) === applied) return;
+
+            if (Array.isArray(embedded.products)) localStorage.setItem('products', JSON.stringify(embedded.products));
+            if (embedded.settings && typeof embedded.settings === 'object') localStorage.setItem('settings', JSON.stringify(embedded.settings));
+            localStorage.setItem('appliedExportId', String(embedded.exportId));
+        }
+
         function loadData() {
+            applyEmbeddedData();
+
             const savedProducts = localStorage.getItem('products');
             products = savedProducts ? JSON.parse(savedProducts) : defaultProducts;
 
             const savedSettings = localStorage.getItem('settings');
             settings = savedSettings ? JSON.parse(savedSettings) : defaultSettings;
             if (!settings.currencySymbol) settings.currencySymbol = 'R$';
+            if (!settings.exchangeRates) settings.exchangeRates = { USD: 5.40, EUR: 6.20 };
 
             const savedCart = localStorage.getItem('cart');
             cart = savedCart ? JSON.parse(savedCart) : [];
@@ -938,6 +1008,10 @@
             document.getElementById('whatsappNumber').value = settings.whatsappNumber;
             document.getElementById('adminPassword').value = settings.adminPassword || 'admin123';
             document.getElementById('deliveryFee').value = settings.deliveryFee || 6.00;
+
+            const rates = settings.exchangeRates || { USD: 5.40, EUR: 6.20 };
+            document.getElementById('rateUSD').value = rates.USD;
+            document.getElementById('rateEUR').value = rates.EUR;
 
             // Marcar radio da moeda ativa
             const symbol = settings.currencySymbol || 'R$';
@@ -981,7 +1055,7 @@
 
             const logoIcon = document.getElementById('logoIcon');
             if (settings.logoUrl && settings.logoUrl.trim() !== '') {
-                logoIcon.innerHTML = `<img src="${settings.logoUrl}" alt="${settings.restaurantName}">`;
+                logoIcon.innerHTML = `<img src="${escapeHTML(settings.logoUrl)}" alt="${escapeHTML(settings.restaurantName)}">`;
                 logoIcon.style.background = 'white';
             } else {
                 logoIcon.innerHTML = '🍕';
@@ -999,27 +1073,42 @@
             const featuredProduct = products.find(p => p.available);
             if (featuredProduct) {
                 document.getElementById('heroCard').innerHTML = `
-                    <img src="${featuredProduct.image}" alt="${featuredProduct.name}">
-                    <h3>${featuredProduct.name}</h3>
-                    <p>${featuredProduct.description}</p>
+                    <img src="${escapeHTML(featuredProduct.image)}" alt="${escapeHTML(featuredProduct.name)}">
+                    <h3>${escapeHTML(featuredProduct.name)}</h3>
+                    <p>${escapeHTML(featuredProduct.description)}</p>
                     <div class="hero-card-price">${formatPrice(featuredProduct.price)}</div>
                 `;
             }
         }
 
-        function updateStoreStatus() {
-            const now = new Date();
-            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-            const currentDay = dayNames[now.getDay()];
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            const todaySchedule = settings.schedule?.[currentDay];
+        function parseTimeToMinutes(timeStr) {
+            const [hour, min] = String(timeStr || '0:0').split(':').map(Number);
+            return (hour || 0) * 60 + (min || 0);
+        }
 
-            let isOpen = false;
-            if (todaySchedule && todaySchedule.enabled) {
-                const [openHour, openMin] = todaySchedule.open.split(':').map(Number);
-                const [closeHour, closeMin] = todaySchedule.close.split(':').map(Number);
-                isOpen = currentTime >= (openHour * 60 + openMin) && currentTime <= (closeHour * 60 + closeMin);
+        // Avalia um dia: janela normal (09:00–22:00) ou atravessando a meia-noite (18:00–02:00)
+        function isWithinSchedule(daySchedule, minutes, checkingPreviousDay) {
+            if (!daySchedule || !daySchedule.enabled) return false;
+            const open = parseTimeToMinutes(daySchedule.open);
+            const close = parseTimeToMinutes(daySchedule.close);
+            if (open === close) return false;
+            if (close > open) {
+                return !checkingPreviousDay && minutes >= open && minutes <= close;
             }
+            // Janela que vira a noite: hoje vale a parte até 23:59; na madrugada vale a sobra do dia anterior
+            return checkingPreviousDay ? minutes <= close : minutes >= open;
+        }
+
+        function isStoreOpenAt(date) {
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const minutes = date.getHours() * 60 + date.getMinutes();
+            const today = settings.schedule?.[dayNames[date.getDay()]];
+            const yesterday = settings.schedule?.[dayNames[(date.getDay() + 6) % 7]];
+            return isWithinSchedule(today, minutes, false) || isWithinSchedule(yesterday, minutes, true);
+        }
+
+        function updateStoreStatus() {
+            const isOpen = isStoreOpenAt(new Date());
 
             const statusBadge = document.getElementById('statusBadge');
             const statusText = document.getElementById('statusText');
@@ -1035,11 +1124,11 @@
             }
             productsGrid.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" class="product-image">
                     ${!product.available ? '<span class="product-badge">Esgotado</span>' : ''}
                     <div class="product-info">
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description}</p>
+                        <h3 class="product-name">${escapeHTML(product.name)}</h3>
+                        <p class="product-description">${escapeHTML(product.description)}</p>
                         <div class="product-footer">
                             <span class="product-price">${formatPrice(product.price)}</span>
                             <button class="btn-add-cart" onclick="addToCart(${product.id})" ${!product.available ? 'disabled' : ''}>
@@ -1060,8 +1149,8 @@
             productAdminList.innerHTML = products.map(product => `
                 <div class="product-admin-item ${!product.available ? 'product-unavailable' : ''}">
                     <div class="product-admin-info">
-                        <h4>${product.name}</h4>
-                        <p>${product.description.substring(0, 50)}...</p>
+                        <h4>${escapeHTML(product.name)}</h4>
+                        <p>${escapeHTML(product.description.substring(0, 50))}...</p>
                         <div class="product-admin-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
                     </div>
                     <div class="product-admin-actions">
@@ -1100,11 +1189,16 @@
 
         function saveProduct(e) {
             e.preventDefault();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            if (!Number.isFinite(price) || price < 0) {
+                showNotification('Preço inválido: informe um valor em reais maior ou igual a zero.', 'danger');
+                return;
+            }
             const productData = {
                 id: editingProductId || Date.now(),
                 name: document.getElementById('productName').value,
                 description: document.getElementById('productDescription').value,
-                price: parseFloat(document.getElementById('productPrice').value),
+                price: price,
                 image: document.getElementById('productImage').value,
                 available: document.getElementById('productAvailable').checked
             };
@@ -1139,12 +1233,24 @@
 
         // ========== SALVAR CONFIGURAÇÕES ==========
         function saveSettings() {
+            const whatsappDigits = document.getElementById('whatsappNumber').value.replace(/\D/g, '');
+            if (whatsappDigits.length < 10 || whatsappDigits.length > 15) {
+                showNotification('WhatsApp inválido: use DDI + DDD + número, só dígitos (ex: 5521999999999).', 'danger');
+                return;
+            }
+
+            const deliveryFee = parseFloat(document.getElementById('deliveryFee').value);
+            if (!Number.isFinite(deliveryFee) || deliveryFee < 0) {
+                showNotification('Taxa de entrega inválida: informe um valor maior ou igual a zero.', 'danger');
+                return;
+            }
+
             settings.restaurantName = document.getElementById('restaurantName').value;
             settings.logoUrl = document.getElementById('logoUrl').value;
             settings.subtitle = document.getElementById('restaurantSubtitle').value;
-            settings.whatsappNumber = document.getElementById('whatsappNumber').value;
+            settings.whatsappNumber = whatsappDigits;
             settings.adminPassword = document.getElementById('adminPassword').value || 'admin123';
-            settings.deliveryFee = parseFloat(document.getElementById('deliveryFee').value) || 6.00;
+            settings.deliveryFee = deliveryFee;
 
             const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             settings.schedule = {};
@@ -1166,7 +1272,8 @@
             const notification = document.createElement('div');
             notification.className = `alert alert-${type}`;
             notification.style.cssText = 'position: fixed; top: 100px; right: 20px; z-index: 9999; min-width: 300px; animation: fadeInUp 0.5s;';
-            notification.innerHTML = `<strong>✓</strong> ${message}`;
+            const icon = type === 'danger' ? '⚠️' : '✓';
+            notification.innerHTML = `<strong>${icon}</strong> ${message}`;
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
@@ -1228,9 +1335,9 @@
             } else {
                 cartItems.innerHTML = cart.map(item => `
                     <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" class="cart-item-image">
                         <div class="cart-item-info">
-                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-name">${escapeHTML(item.name)}</div>
                             <div class="cart-item-price">${formatPrice(item.price)}</div>
                             <div class="cart-item-controls">
                                 <button class="cart-item-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
@@ -1251,6 +1358,8 @@
             cartDeliveryFee.textContent = formatPrice(deliveryBRL);
             cartTotal.textContent = formatPrice(subtotalBRL + deliveryBRL);
 
+            document.getElementById('currencyNote').style.display = currentCurrency === 'R$' ? 'none' : 'block';
+
             updateCheckoutButton();
         }
 
@@ -1264,9 +1373,9 @@
                             <button class="btn-edit-customer" onclick="editCustomerData()">Editar</button>
                         </div>
                         <div class="saved-customer-info">
-                            <strong>${customerData.name}</strong><br>
-                            ${customerData.address}<br>
-                            📱 ${customerData.phone}
+                            <strong>${escapeHTML(customerData.name)}</strong><br>
+                            ${escapeHTML(customerData.address)}<br>
+                            📱 ${escapeHTML(customerData.phone)}
                         </div>
                     </div>
                 `;
@@ -1287,10 +1396,15 @@
 
         function saveCustomerData(event) {
             event.preventDefault();
+            const phoneDigits = document.getElementById('customerPhone').value.replace(/\D/g, '');
+            if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+                showNotification('Telefone inválido: use DDD + número, só dígitos (ex: 21999999999).', 'danger');
+                return;
+            }
             customerData = {
                 name: document.getElementById('customerName').value,
                 address: document.getElementById('customerAddress').value,
-                phone: document.getElementById('customerPhone').value
+                phone: phoneDigits
             };
             localStorage.setItem('customerData', JSON.stringify(customerData));
             renderCustomerForm();
@@ -1342,6 +1456,10 @@
             message += `Subtotal: R$ ${subtotalBRL.toFixed(2).replace('.', ',')}\n`;
             message += `Taxa de Entrega: R$ ${deliveryBRL.toFixed(2).replace('.', ',')}\n`;
             message += `*💰 TOTAL: R$ ${totalBRL.toFixed(2).replace('.', ',')}*\n`;
+
+            if (currentCurrency !== 'R$') {
+                message += `_(Cliente visualizou os preços em ${currentCurrency} pela cotação configurada)_\n`;
+            }
 
             message += '\nAguardo confirmação! 😊';
 
@@ -1413,9 +1531,32 @@
         function closeCart() { cartSidebar.classList.remove('active'); cartOverlay.classList.remove('active'); }
 
         // ========== EXPORTAR HTML ==========
+        // Gera o HTML com os dados atuais EMBUTIDOS, para a loja abrir já configurada em qualquer máquina
+        function buildExportHTML() {
+            const snapshot = {
+                exportId: Date.now(),
+                exportedAt: new Date().toISOString(),
+                products: products,
+                settings: settings
+            };
+
+            const clone = document.documentElement.cloneNode(true);
+
+            // Remove estados transitórios da interface (painéis e modais abertos no momento do export)
+            clone.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+            const fab = clone.querySelector('#adminFab');
+            if (fab) fab.classList.remove('visible');
+            const hint = clone.querySelector('#adminHint');
+            if (hint) hint.classList.remove('show');
+
+            const dataEl = clone.querySelector('#embeddedData');
+            if (dataEl) dataEl.textContent = JSON.stringify(snapshot).replace(/</g, '\\u003c');
+
+            return '<!DOCTYPE html>\n' + clone.outerHTML;
+        }
+
         function exportHTML() {
-            const fullHtml = document.documentElement.outerHTML;
-            const blob = new Blob([fullHtml], { type: 'text/html' });
+            const blob = new Blob([buildExportHTML()], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
