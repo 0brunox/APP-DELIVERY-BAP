@@ -5,7 +5,8 @@
       "PowerShell(git config user.name \"obrunofast\")",
       "PowerShell(git config user.email \"obrunofast@users.noreply.github.com\")",
       "PowerShell(git add -A)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(git add -A; git commit -F \"$env:TEMP\\\\commit-etapa5.txt\"; Remove-Item \"$env:TEMP\\\\commit-etapa5.txt\"; git log --oneline)"
     ]
   }
 }

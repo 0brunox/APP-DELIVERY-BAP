@@ -798,6 +798,90 @@
             font-size: 0.625rem; display: none; align-items: center; justify-content: center; padding: 0 4px;
         }
 
+        /* ========== ABAS DO ADMIN ========== */
+        .admin-tabs {
+            display: flex; gap: 0.25rem; position: sticky; top: 0; z-index: 5;
+            background: var(--white); padding: 0.5rem 0 0.75rem; margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-200); overflow-x: auto;
+        }
+        .admin-tab {
+            flex: 0 0 auto; padding: 0.5rem 0.875rem; border: none; background: none; cursor: pointer;
+            font-family: var(--font); font-weight: 600; font-size: 0.8125rem; color: var(--gray-500);
+            border-radius: 8px; transition: all 0.2s; white-space: nowrap; position: relative;
+        }
+        .admin-tab:hover { background: var(--gray-50); color: var(--gray-700); }
+        .admin-tab.active { background: var(--primary); color: #fff; }
+        .tab-badge {
+            background: var(--danger); color: #fff; border-radius: 9px; font-size: 0.6875rem;
+            padding: 0 5px; min-width: 17px; height: 17px; display: inline-flex; align-items: center; justify-content: center; margin-left: 0.25rem;
+        }
+        .admin-tab.active .tab-badge { background: rgba(255,255,255,0.3); }
+        .admin-tab-panel { display: none; }
+        .admin-tab-panel.active { display: block; }
+
+        /* ========== PEDIDOS (ADMIN) ========== */
+        .orders-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .orders-filter { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+        .order-filter-btn {
+            padding: 0.375rem 0.75rem; border: 2px solid var(--gray-200); background: var(--white); border-radius: 50px;
+            font-size: 0.75rem; font-weight: 600; color: var(--gray-600); cursor: pointer; font-family: var(--font); transition: all 0.2s;
+        }
+        .order-filter-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+        .order-card { background: var(--gray-50); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; border-left: 5px solid var(--gray-300); }
+        .order-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .order-num { font-weight: 700; color: var(--gray-800); font-size: 1.0625rem; }
+        .order-time { font-size: 0.75rem; color: var(--gray-500); }
+        .order-status-pill { padding: 0.25rem 0.625rem; border-radius: 50px; font-size: 0.6875rem; font-weight: 700; color: #fff; white-space: nowrap; }
+        .order-type-tag { display: inline-block; font-size: 0.6875rem; font-weight: 600; color: var(--gray-600); background: var(--gray-100); padding: 0.125rem 0.5rem; border-radius: 50px; margin-bottom: 0.5rem; }
+        .order-customer { font-size: 0.8125rem; color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.5; }
+        .order-items { font-size: 0.8125rem; color: var(--gray-600); margin-bottom: 0.5rem; }
+        .order-items li { margin-left: 1rem; }
+        .order-total-line { font-weight: 700; color: var(--gray-800); margin-bottom: 0.625rem; }
+        .order-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .order-actions button { padding: 0.5rem 0.75rem; border: none; border-radius: 8px; font-weight: 600; font-size: 0.75rem; cursor: pointer; font-family: var(--font); transition: all 0.2s; }
+        .btn-advance { background: var(--success); color: #fff; }
+        .btn-advance:hover { background: #059669; }
+        .btn-print { background: var(--gray-700); color: #fff; }
+        .btn-cancel-order { background: var(--white); color: var(--danger); border: 1px solid var(--danger) !important; }
+        .btn-wa-order { background: var(--whatsapp); color: #fff; }
+        .orders-empty { text-align: center; color: var(--gray-500); padding: 2.5rem 1rem; }
+        .orders-empty-icon { font-size: 3rem; opacity: 0.4; margin-bottom: 0.5rem; }
+
+        /* ========== RELATÓRIOS ========== */
+        .report-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+        .report-card { background: var(--gray-50); border-radius: 12px; padding: 1rem; text-align: center; }
+        .report-card-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .report-card-label { font-size: 0.75rem; color: var(--gray-600); margin-top: 0.25rem; }
+        .report-section { margin-bottom: 1.75rem; }
+        .report-section-title { font-weight: 600; color: var(--gray-800); margin-bottom: 0.75rem; font-size: 0.9375rem; }
+        .bar-row { display: grid; grid-template-columns: 70px 1fr 56px; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; font-size: 0.75rem; color: var(--gray-600); }
+        .bar-track { background: var(--gray-100); border-radius: 50px; height: 16px; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 50px; min-width: 2px; transition: width 0.5s; }
+        .bar-value { text-align: right; font-weight: 600; color: var(--gray-700); }
+
+        /* ========== WIZARD DE PRIMEIRA CONFIGURAÇÃO ========== */
+        .wizard-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 4000; align-items: center; justify-content: center; padding: 1rem; }
+        .wizard-overlay.active { display: flex; }
+        .wizard-card { background: var(--white); border-radius: 16px; width: 100%; max-width: 460px; max-height: 92vh; overflow-y: auto; padding: 2rem; }
+        .wizard-progress { display: flex; gap: 0.375rem; margin-bottom: 1.5rem; }
+        .wizard-dot { flex: 1; height: 5px; border-radius: 50px; background: var(--gray-200); transition: background 0.3s; }
+        .wizard-dot.active { background: var(--primary); }
+        .wizard-step-title { font-size: 1.375rem; font-weight: 700; color: var(--gray-800); margin-bottom: 0.375rem; }
+        .wizard-step-sub { color: var(--gray-600); font-size: 0.875rem; margin-bottom: 1.25rem; }
+        .wizard-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .wizard-actions button { flex: 1; padding: 0.875rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+        .wizard-skip { background: none; border: none; color: var(--gray-500); font-size: 0.8125rem; cursor: pointer; margin-top: 1rem; width: 100%; font-family: var(--font); }
+
+        /* ========== MEUS PEDIDOS (CLIENTE) ========== */
+        .myorder-card { background: var(--gray-50); border-radius: 12px; padding: 1rem; margin-bottom: 0.875rem; }
+        .myorder-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .myorder-timeline { display: flex; align-items: center; gap: 0; margin: 0.75rem 0; }
+        .myorder-step { flex: 1; text-align: center; font-size: 0.625rem; color: var(--gray-400); position: relative; }
+        .myorder-step .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--gray-200); margin: 0 auto 0.25rem; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; }
+        .myorder-step.done .dot { background: var(--success); color: #fff; }
+        .myorder-step.done { color: var(--gray-700); font-weight: 600; }
+        .myorder-step.cancelled .dot { background: var(--danger); color: #fff; }
+
         /* ========== ANIMAÇÕES ========== */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
@@ -831,6 +915,24 @@
         }
 
         html { scroll-behavior: smooth; }
+
+        /* ========== COMANDA IMPRIMÍVEL (80mm) ========== */
+        #printArea { position: fixed; left: -9999px; top: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                left: 0; top: 0; width: 80mm; padding: 3mm;
+                font-family: 'Courier New', Courier, monospace; color: #000; font-size: 12px; line-height: 1.4;
+            }
+            #printArea h2 { font-size: 15px; text-align: center; margin-bottom: 2px; }
+            #printArea .pa-center { text-align: center; }
+            #printArea .pa-line { border-top: 1px dashed #000; margin: 4px 0; }
+            #printArea .pa-row { display: flex; justify-content: space-between; gap: 6px; }
+            #printArea .pa-strong { font-weight: bold; }
+            #printArea .pa-item { margin: 2px 0; }
+            #printArea .pa-sub { padding-left: 8px; font-size: 11px; }
+        }
     </style>
 </head>
 <body>
@@ -872,8 +974,41 @@
         </div>
 
         <div class="admin-content">
+            <!-- BARRA DE ABAS -->
+            <div class="admin-tabs" id="adminTabs">
+                <button class="admin-tab active" data-tab="pedidos">📦 Pedidos <span class="tab-badge" id="ordersTabBadge" style="display:none;">0</span></button>
+                <button class="admin-tab" data-tab="cardapio">🍔 Cardápio</button>
+                <button class="admin-tab" data-tab="config">⚙️ Config</button>
+                <button class="admin-tab" data-tab="aparencia">🎨 Aparência</button>
+                <button class="admin-tab" data-tab="relatorios">📊 Relatórios</button>
+            </div>
+
+            <!-- PAINEL: PEDIDOS -->
+            <div class="admin-tab-panel" data-panel="pedidos">
+                <div class="orders-toolbar">
+                    <div class="orders-filter" id="ordersFilter"></div>
+                    <button class="btn-mini" id="clearOldOrdersBtn" title="Arquivar pedidos concluídos/cancelados">🧹 Limpar finalizados</button>
+                </div>
+                <div id="ordersList"></div>
+            </div>
+
+            <!-- PAINEL: CARDÁPIO (seções movidas via JS) -->
+            <div class="admin-tab-panel" data-panel="cardapio"></div>
+
+            <!-- PAINEL: CONFIGURAÇÕES (seções movidas via JS) -->
+            <div class="admin-tab-panel" data-panel="config"></div>
+
+            <!-- PAINEL: APARÊNCIA (seção movida via JS) -->
+            <div class="admin-tab-panel" data-panel="aparencia"></div>
+
+            <!-- PAINEL: RELATÓRIOS -->
+            <div class="admin-tab-panel" data-panel="relatorios">
+                <div id="reportsContent"></div>
+            </div>
+
+            <!-- ===== SEÇÕES (distribuídas nas abas por setupAdminTabs) ===== -->
             <!-- CONFIGURAÇÕES GERAIS -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">🏪 Configurações Gerais</h3>
 
                 <div class="form-group">
@@ -912,7 +1047,7 @@
             </div>
 
             <!-- MOEDA -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">💱 Moeda</h3>
 
                 <div class="form-group">
@@ -965,7 +1100,7 @@
             </div>
 
             <!-- APARÊNCIA / TEMA -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="aparencia">
                 <h3 class="admin-section-title">🎨 Aparência</h3>
                 <div class="alert alert-info">
                     <strong>💡 Preview ao vivo:</strong> as mudanças aparecem na hora no site. Clique em "Salvar Tema" para mantê-las.
@@ -1009,7 +1144,7 @@
             </div>
 
             <!-- CATEGORIAS -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="cardapio">
                 <h3 class="admin-section-title">📂 Categorias</h3>
                 <div class="alert alert-info">
                     <strong>💡 Dica:</strong> use as setas para definir a ordem no cardápio. Desativar uma categoria esconde os produtos dela; ao excluir, os produtos vão para "Outros".
@@ -1022,7 +1157,7 @@
             </div>
 
             <!-- ENTREGA E TIPOS DE PEDIDO -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">🛵 Entrega e Retirada</h3>
 
                 <div class="form-group">
@@ -1057,7 +1192,7 @@
             </div>
 
             <!-- PAGAMENTO -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">💳 Pagamento</h3>
 
                 <div class="form-group">
@@ -1092,21 +1227,21 @@
             </div>
 
             <!-- AGENDAMENTO -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">⏰ Agendamento</h3>
                 <label class="toggle-row" style="margin-bottom: 1rem;"><input type="checkbox" id="enableScheduling"> Permitir que o cliente agende o pedido para mais tarde</label>
                 <button class="btn-admin btn-success" id="saveSchedulingBtn">💾 Salvar Agendamento</button>
             </div>
 
             <!-- CUPONS -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="config">
                 <h3 class="admin-section-title">🎟️ Cupons de Desconto</h3>
                 <div class="coupon-admin-list" id="couponAdminList"></div>
                 <button class="btn-admin btn-primary-admin" id="addCouponBtn">➕ Adicionar Cupom</button>
             </div>
 
             <!-- GERENCIAR PRODUTOS -->
-            <div class="admin-section">
+            <div class="admin-section" data-admin-tab="cardapio">
                 <h3 class="admin-section-title">🍕 Gerenciar Produtos</h3>
 
                 <div class="alert alert-info">
@@ -1119,12 +1254,19 @@
             </div>
 
             <!-- EXPORTAR HTML -->
-            <div class="admin-section">
-                <h3 class="admin-section-title">📥 Exportar Site</h3>
+            <div class="admin-section" data-admin-tab="config">
+                <h3 class="admin-section-title">📥 Exportar e Backup</h3>
                 <div class="alert alert-success">
-                    <strong>✅ Exportação:</strong> Baixe o arquivo HTML completo com todas as suas alterações (produtos, configurações, câmbio, etc).
+                    <strong>✅ Exportar site (HTML):</strong> baixa o arquivo do site com todas as alterações, pronto para hospedar ou compartilhar.
                 </div>
-                <button class="btn-admin btn-success" id="exportHtmlBtn" style="width: 100%;">📥 Baixar HTML Atualizado</button>
+                <button class="btn-admin btn-success" id="exportHtmlBtn" style="width: 100%; margin-bottom: 1.5rem;">📥 Baixar HTML Atualizado</button>
+
+                <div class="alert alert-info">
+                    <strong>💾 Backup completo (JSON):</strong> salva produtos, categorias, cupons, zonas, tema, configurações e pedidos num arquivo. Use para migrar de máquina ou restaurar a loja inteira.
+                </div>
+                <button class="btn-admin btn-primary-admin" id="exportBackupBtn" style="width: 100%; margin-bottom: 0.75rem;">⬇️ Exportar Backup (JSON)</button>
+                <label class="btn-admin btn-success" style="width: 100%; cursor: pointer; justify-content: center;" for="importBackupInput">⬆️ Importar Backup (JSON)</label>
+                <input type="file" id="importBackupInput" accept="application/json,.json" style="display: none;">
             </div>
         </div>
     </aside>
@@ -1287,6 +1429,7 @@
             </nav>
 
             <div class="header-actions">
+                <button class="theme-toggle" id="myOrdersBtn" aria-label="Meus pedidos" title="Meus pedidos">📦</button>
                 <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro" title="Alternar tema">🌙</button>
                 <button class="cart-btn" id="cartBtn" aria-label="Abrir carrinho">
                     🛒
@@ -1363,6 +1506,28 @@
         </div>
     </aside>
 
+    <!-- ÁREA DE IMPRESSÃO DA COMANDA -->
+    <div id="printArea"></div>
+
+    <!-- MODAL MEUS PEDIDOS (CLIENTE) -->
+    <div class="modal" id="myOrdersModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">📦 Meus Pedidos</h3>
+                <button class="modal-close" id="myOrdersClose" aria-label="Fechar">✕</button>
+            </div>
+            <div id="myOrdersBody"></div>
+        </div>
+    </div>
+
+    <!-- WIZARD DE PRIMEIRA CONFIGURAÇÃO -->
+    <div class="wizard-overlay" id="wizardOverlay">
+        <div class="wizard-card">
+            <div class="wizard-progress" id="wizardProgress"></div>
+            <div id="wizardStep"></div>
+        </div>
+    </div>
+
     <!-- BOTTOM NAV (MOBILE) -->
     <nav class="bottom-nav" id="bottomNav" aria-label="Navegação rápida">
         <div class="bottom-nav-inner">
@@ -1435,8 +1600,35 @@
         let products = [];
         let categories = [];
         let coupons = [];
+        let orders = [];
+        let orderCounter = 0;
         let cart = [];
         let settings = {};
+        let isFirstRun = false;          // primeira abertura sem dados salvos (dispara o wizard)
+        let knownOrderCount = 0;         // para detectar pedidos novos vindos de outra aba
+
+        // Fluxo de status do pedido (cancelado fica fora do fluxo linear)
+        const ORDER_FLOW = ['received', 'preparing', 'ready', 'completed'];
+        const ORDER_STATUS = {
+            received:  { label: 'Recebido', color: '#3b82f6', icon: '🆕' },
+            preparing: { label: 'Em preparo', color: '#f59e0b', icon: '👨‍🍳' },
+            ready:     { label: 'Pronto', color: '#8b5cf6', icon: '✅', deliveryLabel: 'Saiu para entrega', deliveryIcon: '🛵' },
+            completed: { label: 'Concluído', color: '#10b981', icon: '🎉', deliveryLabel: 'Entregue' },
+            cancelled: { label: 'Cancelado', color: '#ef4444', icon: '❌' }
+        };
+        function orderStatusLabel(status, orderType) {
+            const s = ORDER_STATUS[status];
+            if (!s) return status;
+            if (orderType === 'delivery' && status === 'ready') return s.deliveryLabel;
+            if (orderType === 'delivery' && status === 'completed') return s.deliveryLabel;
+            return s.label;
+        }
+        function orderStatusIcon(status, orderType) {
+            const s = ORDER_STATUS[status];
+            if (!s) return '';
+            if (orderType === 'delivery' && status === 'ready') return s.deliveryIcon;
+            return s.icon;
+        }
         let editingZones = [];           // edição das zonas de entrega no admin
         let editingCouponId = null;      // cupom em edição (null = novo)
         // Estado do checkout (transitório, não persiste): tipo de pedido, pagamento, cupom, agendamento
@@ -1837,15 +2029,440 @@
             navigator.serviceWorker.register('sw.js').catch(() => { /* offline indisponível neste ambiente */ });
         }
 
+        // ========== ABAS DO PAINEL ADMIN ==========
+        function setupAdminTabs() {
+            document.querySelectorAll('.admin-section[data-admin-tab]').forEach(sec => {
+                const panel = document.querySelector(`.admin-tab-panel[data-panel="${sec.dataset.adminTab}"]`);
+                if (panel) panel.appendChild(sec);
+            });
+            document.getElementById('adminTabs').addEventListener('click', (e) => {
+                const tab = e.target.closest('.admin-tab');
+                if (tab) switchAdminTab(tab.dataset.tab);
+            });
+            switchAdminTab('pedidos');
+        }
+
+        function switchAdminTab(name) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+            document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+            if (name === 'pedidos') renderOrders();
+            if (name === 'relatorios') renderReports();
+        }
+
+        // ========== ABA PEDIDOS ==========
+        let ordersFilter = 'active';
+        const ORDER_FILTERS = [
+            { id: 'active', label: 'Ativos' },
+            { id: 'all', label: 'Todos' },
+            { id: 'completed', label: 'Concluídos' },
+            { id: 'cancelled', label: 'Cancelados' }
+        ];
+
+        function renderOrdersFilter() {
+            const box = document.getElementById('ordersFilter');
+            if (!box) return;
+            box.innerHTML = ORDER_FILTERS.map(f =>
+                `<button class="order-filter-btn ${ordersFilter === f.id ? 'active' : ''}" onclick="setOrdersFilter('${f.id}')">${f.label}</button>`
+            ).join('');
+        }
+
+        function setOrdersFilter(id) { ordersFilter = id; renderOrders(); }
+
+        function formatOrderTime(iso) {
+            const d = new Date(iso);
+            return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function orderCardHTML(o) {
+            const st = ORDER_STATUS[o.status];
+            const typeLabel = { delivery: '🛵 Entrega', pickup: '🏪 Retirada', dinein: `🍽️ Mesa ${escapeHTML(o.customer.tableNumber || '')}` }[o.orderType];
+            const itemsHTML = o.items.map(i => {
+                const extras = [i.variationName, ...i.addons.map(a => a.name)].filter(Boolean).join(', ');
+                return `<li>${i.quantity}x ${escapeHTML(i.name)}${extras ? ` <span style="color:var(--gray-500)">(${escapeHTML(extras)})</span>` : ''}${i.note ? ` — <em>${escapeHTML(i.note)}</em>` : ''}</li>`;
+            }).join('');
+
+            let addr = '';
+            if (o.orderType === 'delivery') {
+                addr = `${escapeHTML(o.customer.street)}, ${escapeHTML(o.customer.number)}${o.customer.complement ? ' - ' + escapeHTML(o.customer.complement) : ''}${o.customer.neighborhood ? ' · ' + escapeHTML(o.customer.neighborhood) : ''}`;
+            }
+
+            const isFinal = o.status === 'completed' || o.status === 'cancelled';
+            const nextStatus = ORDER_FLOW[ORDER_FLOW.indexOf(o.status) + 1];
+            const advanceLabel = nextStatus ? `→ ${orderStatusLabel(nextStatus, o.orderType)}` : '';
+
+            return `
+            <div class="order-card" style="border-left-color:${st.color}">
+                <div class="order-card-head">
+                    <div>
+                        <span class="order-num">Pedido #${o.number}</span>
+                        <div class="order-time">${formatOrderTime(o.createdAt)}${o.scheduleAt ? ` · ⏰ ${escapeHTML(o.scheduleAt)}` : ''}</div>
+                    </div>
+                    <span class="order-status-pill" style="background:${st.color}">${orderStatusIcon(o.status, o.orderType)} ${orderStatusLabel(o.status, o.orderType)}</span>
+                </div>
+                <span class="order-type-tag">${typeLabel}</span>
+                <div class="order-customer"><strong>${escapeHTML(o.customer.name)}</strong> · 📱 ${escapeHTML(o.customer.phone)}${addr ? `<br>📍 ${addr}` : ''}</div>
+                <ul class="order-items">${itemsHTML}</ul>
+                <div class="order-customer">💳 ${({ pix: 'PIX', card: 'Cartão na entrega', cash: 'Dinheiro' })[o.payment]}${o.changeFor ? ` (troco p/ ${brl(o.changeFor)})` : ''}${o.coupon ? ` · 🎟️ ${escapeHTML(o.coupon.code)}` : ''}</div>
+                <div class="order-total-line">Total: ${brl(o.total)}</div>
+                <div class="order-actions">
+                    ${!isFinal && nextStatus ? `<button class="btn-advance" onclick="advanceOrder(${o.number})">${advanceLabel}</button>` : ''}
+                    <button class="btn-print" onclick="printOrder(${o.number})">🖨️ Comanda</button>
+                    <button class="btn-wa-order" onclick="messageCustomer(${o.number})">💬 Cliente</button>
+                    ${!isFinal ? `<button class="btn-cancel-order" onclick="cancelOrder(${o.number})">Cancelar</button>` : ''}
+                </div>
+            </div>`;
+        }
+
+        function renderOrders() {
+            const list = document.getElementById('ordersList');
+            if (!list) return;
+            renderOrdersFilter();
+            let shown = [...orders].sort((a, b) => b.number - a.number);
+            if (ordersFilter === 'active') shown = shown.filter(o => o.status !== 'completed' && o.status !== 'cancelled');
+            else if (ordersFilter !== 'all') shown = shown.filter(o => o.status === ordersFilter);
+
+            if (shown.length === 0) {
+                list.innerHTML = `<div class="orders-empty"><div class="orders-empty-icon">📭</div><p>Nenhum pedido${ordersFilter === 'active' ? ' ativo' : ''} por aqui ainda.</p></div>`;
+                return;
+            }
+            list.innerHTML = shown.map(orderCardHTML).join('');
+        }
+
+        function updateOrdersBadge() {
+            const active = orders.filter(o => o.status !== 'completed' && o.status !== 'cancelled').length;
+            const badge = document.getElementById('ordersTabBadge');
+            if (badge) { badge.textContent = active; badge.style.display = active > 0 ? 'inline-flex' : 'none'; }
+        }
+
+        function advanceOrder(number) {
+            const o = orders.find(o => o.number === number);
+            if (!o) return;
+            const next = ORDER_FLOW[ORDER_FLOW.indexOf(o.status) + 1];
+            if (!next) return;
+            o.status = next;
+            saveOrders();
+            renderOrders();
+            updateOrdersBadge();
+            showNotification(`Pedido #${number}: ${orderStatusLabel(next, o.orderType)}`, 'success');
+        }
+
+        function cancelOrder(number) {
+            if (!confirm(`Cancelar o pedido #${number}?`)) return;
+            const o = orders.find(o => o.number === number);
+            if (!o) return;
+            o.status = 'cancelled';
+            saveOrders();
+            renderOrders();
+            updateOrdersBadge();
+            showNotification(`Pedido #${number} cancelado.`, 'danger');
+        }
+
+        function clearFinishedOrders() {
+            const finished = orders.filter(o => o.status === 'completed' || o.status === 'cancelled').length;
+            if (finished === 0) { showNotification('Não há pedidos finalizados para limpar.', 'danger'); return; }
+            if (!confirm(`Arquivar ${finished} pedido(s) concluído(s)/cancelado(s)? Eles somem da lista mas permanecem nos relatórios da sessão.`)) return;
+            orders = orders.filter(o => o.status !== 'completed' && o.status !== 'cancelled');
+            knownOrderCount = orders.length;
+            saveOrders();
+            renderOrders();
+            updateOrdersBadge();
+        }
+
+        function messageCustomer(number) {
+            const o = orders.find(o => o.number === number);
+            if (!o) return;
+            const msg = `Olá ${o.customer.name}! Sobre seu pedido #${o.number} no ${settings.restaurantName}: `;
+            window.open(`https://wa.me/55${o.customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ========== COMANDA IMPRIMÍVEL ==========
+        function printOrder(number) {
+            const o = orders.find(o => o.number === number);
+            if (!o) return;
+            const typeLabel = { delivery: 'ENTREGA', pickup: 'RETIRADA', dinein: 'MESA ' + (o.customer.tableNumber || '') }[o.orderType];
+            let html = `<h2>${escapeHTML(settings.restaurantName)}</h2>`;
+            html += `<div class="pa-center">Pedido #${o.number} — ${typeLabel}</div>`;
+            html += `<div class="pa-center">${formatOrderTime(o.createdAt)}</div>`;
+            if (o.scheduleAt) html += `<div class="pa-center pa-strong">Agendado: ${escapeHTML(o.scheduleAt)}</div>`;
+            html += `<div class="pa-line"></div>`;
+            html += `<div><span class="pa-strong">Cliente:</span> ${escapeHTML(o.customer.name)}</div>`;
+            html += `<div>Tel: ${escapeHTML(o.customer.phone)}</div>`;
+            if (o.orderType === 'delivery') {
+                html += `<div>End: ${escapeHTML(o.customer.street)}, ${escapeHTML(o.customer.number)}${o.customer.complement ? ' - ' + escapeHTML(o.customer.complement) : ''}</div>`;
+                if (o.customer.neighborhood) html += `<div>Bairro: ${escapeHTML(o.customer.neighborhood)}</div>`;
+                if (o.customer.reference) html += `<div>Ref: ${escapeHTML(o.customer.reference)}</div>`;
+            }
+            html += `<div class="pa-line"></div>`;
+            o.items.forEach(i => {
+                html += `<div class="pa-item"><div class="pa-row"><span>${i.quantity}x ${escapeHTML(i.name)}</span><span>${brl(i.unitPrice * i.quantity)}</span></div>`;
+                if (i.variationName) html += `<div class="pa-sub">- ${escapeHTML(i.variationName)}</div>`;
+                i.addons.forEach(a => { html += `<div class="pa-sub">+ ${escapeHTML(a.name)}</div>`; });
+                if (i.note) html += `<div class="pa-sub">Obs: ${escapeHTML(i.note)}</div>`;
+                html += `</div>`;
+            });
+            html += `<div class="pa-line"></div>`;
+            html += `<div class="pa-row"><span>Subtotal</span><span>${brl(o.subtotal)}</span></div>`;
+            if (o.discount > 0) html += `<div class="pa-row"><span>Desconto${o.coupon ? ' ' + escapeHTML(o.coupon.code) : ''}</span><span>-${brl(o.discount)}</span></div>`;
+            if (o.orderType === 'delivery') html += `<div class="pa-row"><span>Entrega</span><span>${brl(o.deliveryFee)}</span></div>`;
+            html += `<div class="pa-row pa-strong"><span>TOTAL</span><span>${brl(o.total)}</span></div>`;
+            html += `<div class="pa-row"><span>Pagamento</span><span>${({ pix: 'PIX', card: 'Cartao', cash: 'Dinheiro' })[o.payment]}</span></div>`;
+            if (o.changeFor) html += `<div class="pa-row"><span>Troco para</span><span>${brl(o.changeFor)}</span></div>`;
+            html += `<div class="pa-line"></div>`;
+            html += `<div class="pa-center">Obrigado pela preferencia!</div>`;
+            document.getElementById('printArea').innerHTML = html;
+            window.print();
+        }
+
+        // ========== RELATÓRIOS ==========
+        function renderReports() {
+            const box = document.getElementById('reportsContent');
+            if (!box) return;
+            const valid = orders.filter(o => o.status !== 'cancelled');
+            const revenue = valid.reduce((s, o) => s + o.total, 0);
+            const avg = valid.length ? revenue / valid.length : 0;
+
+            // Vendas por dia (últimos 7 dias)
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
+                days.push({ date: d, label: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''), total: 0 });
+            }
+            valid.forEach(o => {
+                const od = new Date(o.createdAt); od.setHours(0, 0, 0, 0);
+                const day = days.find(d => d.date.getTime() === od.getTime());
+                if (day) day.total += o.total;
+            });
+            const maxDay = Math.max(1, ...days.map(d => d.total));
+
+            // Itens mais vendidos
+            const itemMap = {};
+            valid.forEach(o => o.items.forEach(i => { itemMap[i.name] = (itemMap[i.name] || 0) + i.quantity; }));
+            const topItems = Object.entries(itemMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const maxItem = Math.max(1, ...topItems.map(t => t[1]));
+
+            let html = `<div class="report-cards">
+                <div class="report-card"><div class="report-card-value">${valid.length}</div><div class="report-card-label">Pedidos</div></div>
+                <div class="report-card"><div class="report-card-value">${brl(revenue)}</div><div class="report-card-label">Faturamento</div></div>
+                <div class="report-card"><div class="report-card-value">${brl(avg)}</div><div class="report-card-label">Ticket médio</div></div>
+            </div>`;
+
+            if (valid.length === 0) {
+                html += `<div class="orders-empty"><div class="orders-empty-icon">📊</div><p>Sem dados ainda. Os relatórios aparecem após o primeiro pedido.</p></div>`;
+                box.innerHTML = html;
+                return;
+            }
+
+            html += `<div class="report-section"><div class="report-section-title">📅 Vendas nos últimos 7 dias</div>`;
+            days.forEach(d => {
+                html += `<div class="bar-row"><span>${d.label}</span><div class="bar-track"><div class="bar-fill" style="width:${(d.total / maxDay * 100).toFixed(1)}%"></div></div><span class="bar-value">${brl(d.total)}</span></div>`;
+            });
+            html += `</div>`;
+
+            html += `<div class="report-section"><div class="report-section-title">🏆 Itens mais vendidos</div>`;
+            topItems.forEach(([name, qty]) => {
+                html += `<div class="bar-row"><span title="${escapeHTML(name)}" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHTML(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${(qty / maxItem * 100).toFixed(1)}%"></div></div><span class="bar-value">${qty}x</span></div>`;
+            });
+            html += `</div>`;
+
+            box.innerHTML = html;
+        }
+
+        // ========== BACKUP (JSON) ==========
+        function exportBackup() {
+            const data = { type: 'sabor-express-backup', version: 1, exportedAt: new Date().toISOString(),
+                products, categories, coupons, orders, orderCounter, settings };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${(settings.restaurantName || 'loja').toLowerCase().replace(/\s+/g, '-')}-backup.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            showNotification('Backup JSON exportado!', 'success');
+        }
+
+        function importBackup(file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                let data;
+                try { data = JSON.parse(reader.result); } catch (e) { showNotification('Arquivo inválido (não é JSON).', 'danger'); return; }
+                if (!data || !Array.isArray(data.products) || typeof data.settings !== 'object') {
+                    showNotification('Backup inválido: estrutura não reconhecida.', 'danger'); return;
+                }
+                if (!confirm('Importar este backup substitui TODOS os dados atuais (produtos, configurações, pedidos). Continuar?')) return;
+                products = data.products.map(ensureProductShape);
+                categories = Array.isArray(data.categories) ? data.categories : [];
+                coupons = Array.isArray(data.coupons) ? data.coupons : [];
+                orders = Array.isArray(data.orders) ? data.orders : [];
+                orderCounter = Number.isFinite(data.orderCounter) ? data.orderCounter : orders.reduce((m, o) => Math.max(m, o.number || 0), 0);
+                settings = data.settings;
+                normalizeSettings();
+                currentCurrency = settings.currencySymbol;
+                knownOrderCount = orders.length;
+                saveData(); saveOrders();
+                applyTheme(settings.theme);
+                renderAll();
+                updatePWA();
+                showNotification('Backup importado com sucesso! ✅', 'success');
+            };
+            reader.readAsText(file);
+        }
+
+        // ========== MEUS PEDIDOS (CLIENTE) ==========
+        function openMyOrders() {
+            const phone = (customerData && customerData.phone) || localStorage.getItem('lastCustomerPhone') || '';
+            const body = document.getElementById('myOrdersBody');
+            const mine = phone ? orders.filter(o => o.customer.phone === phone).sort((a, b) => b.number - a.number) : [];
+
+            if (mine.length === 0) {
+                body.innerHTML = `<div class="orders-empty"><div class="orders-empty-icon">🛍️</div><p>Você ainda não fez pedidos neste dispositivo.</p></div>`;
+            } else {
+                body.innerHTML = mine.map(o => {
+                    const cancelled = o.status === 'cancelled';
+                    const stepIdx = ORDER_FLOW.indexOf(o.status);
+                    const timeline = cancelled
+                        ? `<div class="myorder-step cancelled"><div class="dot">✕</div>Cancelado</div>`
+                        : ORDER_FLOW.map((s, i) => `<div class="myorder-step ${i <= stepIdx ? 'done' : ''}"><div class="dot">${i <= stepIdx ? '✓' : ''}</div>${orderStatusLabel(s, o.orderType)}</div>`).join('');
+                    return `
+                    <div class="myorder-card">
+                        <div class="myorder-head">
+                            <strong>Pedido #${o.number}</strong>
+                            <span class="order-time">${formatOrderTime(o.createdAt)}</span>
+                        </div>
+                        <div class="myorder-timeline">${timeline}</div>
+                        <div class="order-total-line">Total: ${brl(o.total)}</div>
+                        <button class="btn-mini" onclick="repeatOrder(${o.number})">🔁 Repetir pedido</button>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('myOrdersModal').classList.add('active');
+        }
+
+        function repeatOrder(number) {
+            const o = orders.find(o => o.number === number);
+            if (!o) return;
+            cart = o.items.map(i => ({
+                lineId: ++cartLineSeq,
+                signature: JSON.stringify([i.name, i.variationName || '', i.addons.map(a => a.name).sort(), (i.note || '').trim()]),
+                productId: null, name: i.name, image: (products.find(p => p.name === i.name) || {}).image || '',
+                variationName: i.variationName || null, addons: i.addons, note: i.note || '',
+                unitPrice: i.unitPrice, quantity: i.quantity
+            }));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+            document.getElementById('myOrdersModal').classList.remove('active');
+            cartSidebar.classList.add('active');
+            cartOverlay.classList.add('active');
+            showNotification('Itens adicionados ao carrinho!', 'success');
+        }
+
+        // ========== WIZARD DE PRIMEIRA CONFIGURAÇÃO ==========
+        let wizardStep = 0;
+        const wizardData = { name: '', whatsapp: '', logo: '', color: '#f59e0b', prodName: '', prodPrice: '', prodImage: '' };
+
+        function startWizard() {
+            wizardStep = 0;
+            wizardData.name = settings.restaurantName || '';
+            wizardData.whatsapp = settings.whatsappNumber || '';
+            wizardData.color = (settings.theme && settings.theme.primary) || '#f59e0b';
+            document.getElementById('wizardOverlay').classList.add('active');
+            renderWizardStep();
+        }
+
+        function renderWizardStep() {
+            const steps = [
+                { title: '👋 Bem-vindo!', sub: 'Vamos configurar sua loja em 1 minuto. Qual o nome do restaurante?',
+                  field: `<input type="text" class="form-input" id="wzName" placeholder="Ex: Sabor Express" value="${escapeHTML(wizardData.name)}">` },
+                { title: '📱 WhatsApp', sub: 'Para onde enviamos os pedidos? (DDI + DDD + número)',
+                  field: `<input type="tel" class="form-input" id="wzWhats" placeholder="5521999999999" value="${escapeHTML(wizardData.whatsapp)}">` },
+                { title: '🖼️ Logo (opcional)', sub: 'Cole a URL de uma imagem ou deixe vazio para usar o emoji padrão.',
+                  field: `<input type="url" class="form-input" id="wzLogo" placeholder="https://..." value="${escapeHTML(wizardData.logo)}">` },
+                { title: '🎨 Cor da marca', sub: 'Escolha a cor principal da sua loja.',
+                  field: `<div class="color-input-row"><input type="color" id="wzColor" value="${wizardData.color}"><input type="text" class="form-input" id="wzColorHex" value="${wizardData.color}"></div>` },
+                { title: '🍔 Primeiro produto', sub: 'Cadastre um item para começar (você adiciona o resto depois).',
+                  field: `<input type="text" class="form-input" id="wzProdName" placeholder="Nome do produto" value="${escapeHTML(wizardData.prodName)}" style="margin-bottom:0.5rem;">
+                          <input type="number" class="form-input" id="wzProdPrice" placeholder="Preço em R$" step="0.01" min="0" value="${escapeHTML(wizardData.prodPrice)}" style="margin-bottom:0.5rem;">
+                          <input type="url" class="form-input" id="wzProdImage" placeholder="URL da imagem (opcional)" value="${escapeHTML(wizardData.prodImage)}">` }
+            ];
+            const s = steps[wizardStep];
+            document.getElementById('wizardProgress').innerHTML = steps.map((_, i) => `<div class="wizard-dot ${i <= wizardStep ? 'active' : ''}"></div>`).join('');
+            document.getElementById('wizardStep').innerHTML = `
+                <div class="wizard-step-title">${s.title}</div>
+                <div class="wizard-step-sub">${s.sub}</div>
+                ${s.field}
+                <div class="wizard-actions">
+                    ${wizardStep > 0 ? '<button class="btn-password-cancel" onclick="wizardBack()">Voltar</button>' : ''}
+                    <button class="btn-success" style="color:#fff" onclick="wizardNext()">${wizardStep === steps.length - 1 ? '✅ Concluir' : 'Próximo →'}</button>
+                </div>
+                <button class="wizard-skip" onclick="closeWizard()">Pular configuração</button>`;
+            // sincroniza color picker com hex
+            if (wizardStep === 3) {
+                const c = document.getElementById('wzColor'), h = document.getElementById('wzColorHex');
+                c.addEventListener('input', () => { h.value = c.value; wizardData.color = c.value; });
+                h.addEventListener('input', () => { if (/^#[a-f\d]{6}$/i.test(h.value)) { c.value = h.value; wizardData.color = h.value; } });
+            }
+        }
+
+        function captureWizardStep() {
+            const g = id => document.getElementById(id);
+            if (wizardStep === 0 && g('wzName')) wizardData.name = g('wzName').value.trim();
+            if (wizardStep === 1 && g('wzWhats')) wizardData.whatsapp = g('wzWhats').value.replace(/\D/g, '');
+            if (wizardStep === 2 && g('wzLogo')) wizardData.logo = g('wzLogo').value.trim();
+            if (wizardStep === 3 && g('wzColorHex')) wizardData.color = g('wzColorHex').value;
+            if (wizardStep === 4) {
+                if (g('wzProdName')) wizardData.prodName = g('wzProdName').value.trim();
+                if (g('wzProdPrice')) wizardData.prodPrice = g('wzProdPrice').value;
+                if (g('wzProdImage')) wizardData.prodImage = g('wzProdImage').value.trim();
+            }
+        }
+
+        function wizardNext() {
+            captureWizardStep();
+            if (wizardStep === 0 && !wizardData.name) { showNotification('Digite o nome do restaurante.', 'danger'); return; }
+            if (wizardStep === 1) {
+                if (wizardData.whatsapp.length < 10 || wizardData.whatsapp.length > 15) { showNotification('WhatsApp inválido (DDI+DDD+número).', 'danger'); return; }
+            }
+            if (wizardStep < 4) { wizardStep++; renderWizardStep(); return; }
+            finishWizard();
+        }
+
+        function wizardBack() { captureWizardStep(); if (wizardStep > 0) { wizardStep--; renderWizardStep(); } }
+
+        function finishWizard() {
+            settings.restaurantName = wizardData.name;
+            settings.whatsappNumber = wizardData.whatsapp;
+            settings.logoUrl = wizardData.logo;
+            settings.theme = { ...(settings.theme || {}), primary: wizardData.color, secondary: settings.theme?.secondary || '#fbbf24', font: settings.theme?.font || 'Poppins', heroBanner: settings.theme?.heroBanner || '' };
+
+            const price = parseFloat(wizardData.prodPrice);
+            if (wizardData.prodName && Number.isFinite(price) && price >= 0) {
+                products = [ensureProductShape({
+                    id: Date.now(), name: wizardData.prodName, description: 'Delicioso!', price,
+                    image: wizardData.prodImage || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
+                    available: true, categoryId: null
+                })];
+            }
+            saveData();
+            applyTheme(settings.theme);
+            renderAll();
+            updatePWA();
+            closeWizard();
+            showNotification('Loja configurada! 🎉 Use Ctrl+Shift+A para o painel.', 'success');
+        }
+
+        function closeWizard() { document.getElementById('wizardOverlay').classList.remove('active'); }
+
         // ========== INICIALIZAÇÃO ==========
         function init() {
             loadData();
             applyTheme(settings.theme);
             initThemeMode();
             renderAll();
+            setupAdminTabs();
             attachEventListeners();
+            updateOrdersBadge();
             updatePWA();
             registerServiceWorker();
+            if (isFirstRun) startWizard();
         }
 
         // Aplica os dados embutidos por uma exportação (uma única vez por export),
@@ -1863,12 +2480,16 @@
             if (Array.isArray(embedded.products)) localStorage.setItem('products', JSON.stringify(embedded.products));
             if (Array.isArray(embedded.categories)) localStorage.setItem('categories', JSON.stringify(embedded.categories));
             if (Array.isArray(embedded.coupons)) localStorage.setItem('coupons', JSON.stringify(embedded.coupons));
+            if (Array.isArray(embedded.orders)) localStorage.setItem('orders', JSON.stringify(embedded.orders));
+            if (Number.isFinite(embedded.orderCounter)) localStorage.setItem('orderCounter', String(embedded.orderCounter));
             if (embedded.settings && typeof embedded.settings === 'object') localStorage.setItem('settings', JSON.stringify(embedded.settings));
             localStorage.setItem('appliedExportId', String(embedded.exportId));
         }
 
         function loadData() {
+            isFirstRun = !localStorage.getItem('settings');
             applyEmbeddedData();
+            if (localStorage.getItem('settings')) isFirstRun = false; // dados embutidos contam como configurados
 
             const savedProducts = localStorage.getItem('products');
             products = (savedProducts ? JSON.parse(savedProducts) : defaultProducts).map(ensureProductShape);
@@ -1878,6 +2499,11 @@
 
             const savedCoupons = localStorage.getItem('coupons');
             coupons = savedCoupons ? JSON.parse(savedCoupons) : defaultCoupons;
+
+            const savedOrders = localStorage.getItem('orders');
+            orders = savedOrders ? JSON.parse(savedOrders) : [];
+            knownOrderCount = orders.length;
+            orderCounter = parseInt(localStorage.getItem('orderCounter'), 10) || orders.reduce((m, o) => Math.max(m, o.number || 0), 0);
 
             const savedSettings = localStorage.getItem('settings');
             settings = savedSettings ? JSON.parse(savedSettings) : defaultSettings;
@@ -1938,12 +2564,20 @@
             localStorage.setItem('settings', JSON.stringify(settings));
         }
 
+        // Salva pedidos separadamente — dispara o evento 'storage' que alerta outras abas
+        function saveOrders() {
+            localStorage.setItem('orders', JSON.stringify(orders));
+            localStorage.setItem('orderCounter', String(orderCounter));
+        }
+
         function renderAll() {
             renderMenu();
             renderProductAdminList();
             renderCategoryAdminList();
             renderCouponAdminList();
             renderSettings();
+            renderOrders();
+            updateOrdersBadge();
             updateCartUI();
             updateSiteSettings();
         }
@@ -3230,6 +3864,63 @@
             btnCheckout.innerHTML = r.ok ? '💬 Finalizar no WhatsApp' : `📋 ${r.reason}`;
         }
 
+        // ========== PEDIDOS ==========
+        // Registra o pedido (snapshot completo) no localStorage e alerta o painel
+        function createOrder(ctx) {
+            orderCounter++;
+            const d = ctx.d;
+            const order = {
+                number: orderCounter,
+                createdAt: new Date().toISOString(),
+                status: 'received',
+                orderType: ctx.ot,
+                customer: {
+                    name: d.name.trim(),
+                    phone: d.phone.replace(/\D/g, ''),
+                    street: d.street, number: d.number, complement: d.complement,
+                    reference: d.reference, cep: d.cep,
+                    neighborhood: ctx.zone ? ctx.zone.name : d.neighborhood,
+                    tableNumber: d.tableNumber
+                },
+                items: cart.map(i => ({
+                    name: i.name, variationName: i.variationName,
+                    addons: i.addons.map(a => ({ name: a.name, price: a.price })),
+                    note: i.note, unitPrice: i.unitPrice, quantity: i.quantity
+                })),
+                payment: ctx.payment,
+                changeFor: ctx.payment === 'cash' ? (parseFloat(d.changeFor) || null) : null,
+                coupon: ctx.appliedCoupon ? { code: ctx.appliedCoupon.code, discount: ctx.totals.discount } : null,
+                scheduleAt: ctx.scheduleText || null,
+                subtotal: ctx.totals.subtotal,
+                deliveryFee: ctx.ot === 'delivery' ? ctx.totals.feeValue : 0,
+                discount: ctx.totals.discount,
+                total: ctx.totals.total
+            };
+            orders.push(order);
+            knownOrderCount = orders.length;
+            saveOrders();
+            renderOrders();
+            updateOrdersBadge();
+            return order;
+        }
+
+        // Beep curto para avisar pedido novo (WebAudio, sem arquivo externo)
+        function playBeep() {
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                const ctx = new Ctx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.type = 'sine'; osc.frequency.value = 880;
+                gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.45);
+            } catch (e) { /* áudio indisponível */ }
+        }
+
         function checkout() {
             captureCheckoutInputs();
             const ready = checkoutReady();
@@ -3337,6 +4028,9 @@
             if (currentCurrency !== 'R$') m += `_(Cliente visualizou os preços em ${currentCurrency} pela cotação configurada)_\n`;
             m += `\nAguardo confirmação! 😊`;
 
+            // Registra o pedido no painel (antes de abrir o WhatsApp)
+            createOrder({ ot, payment, d, zone, totals, appliedCoupon, scheduleText });
+
             // Contabiliza o uso do cupom
             if (appliedCoupon) {
                 appliedCoupon.uses = (appliedCoupon.uses || 0) + 1;
@@ -3344,8 +4038,13 @@
                 renderCouponAdminList();
             }
 
+            // Limpa o cupom aplicado da sessão e guarda o telefone para "Meus pedidos"
+            checkoutState.couponCode = null;
+            localStorage.setItem('lastCustomerPhone', d.phone.replace(/\D/g, ''));
+
             const whatsappURL = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(m)}`;
             window.open(whatsappURL, '_blank');
+            showNotification(`Pedido #${orderCounter} registrado! Finalize no WhatsApp.`, 'success');
         }
 
         // ========== EVENTOS ==========
@@ -3503,6 +4202,21 @@
             // Modo claro/escuro
             document.getElementById('themeToggle').addEventListener('click', toggleThemeMode);
 
+            // Meus pedidos (cliente)
+            document.getElementById('myOrdersBtn').addEventListener('click', openMyOrders);
+            document.getElementById('myOrdersClose').addEventListener('click', () => document.getElementById('myOrdersModal').classList.remove('active'));
+            document.getElementById('myOrdersModal').addEventListener('click', (e) => { if (e.target.id === 'myOrdersModal') e.currentTarget.classList.remove('active'); });
+
+            // Pedidos (admin)
+            document.getElementById('clearOldOrdersBtn').addEventListener('click', clearFinishedOrders);
+
+            // Backup JSON
+            document.getElementById('exportBackupBtn').addEventListener('click', exportBackup);
+            document.getElementById('importBackupInput').addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) importBackup(e.target.files[0]);
+                e.target.value = '';
+            });
+
             // Editor de tema (preview ao vivo)
             const tPrimary = document.getElementById('themePrimary');
             const tPrimaryHex = document.getElementById('themePrimaryHex');
@@ -3522,6 +4236,24 @@
             });
             document.getElementById('saveThemeBtn').addEventListener('click', saveTheme);
             document.getElementById('resetThemeBtn').addEventListener('click', resetTheme);
+
+            // Pedidos chegando de OUTRA aba do mesmo navegador (realtime na mesma máquina)
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'orders') {
+                    const incoming = e.newValue ? JSON.parse(e.newValue) : [];
+                    const grew = incoming.length > orders.length;
+                    orders = incoming;
+                    if (grew) {
+                        playBeep();
+                        showNotification('🔔 Novo pedido recebido!', 'success');
+                    }
+                    knownOrderCount = orders.length;
+                    renderOrders();
+                    updateOrdersBadge();
+                } else if (e.key === 'orderCounter') {
+                    orderCounter = parseInt(e.newValue, 10) || orderCounter;
+                }
+            });
 
             // Bottom navigation (mobile)
             document.getElementById('bottomNav').addEventListener('click', (e) => {
@@ -3556,6 +4288,8 @@
                 products: products,
                 categories: categories,
                 coupons: coupons,
+                orders: orders,
+                orderCounter: orderCounter,
                 settings: settings
             };
 
