@@ -509,6 +509,110 @@
         .btn-clear { width: 100%; padding: 0.875rem; background: var(--white); color: var(--danger); border: 2px solid var(--danger); border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-clear:hover { background: var(--danger); color: var(--white); }
 
+        /* ========== TOOLBAR DO CARDÁPIO (busca + categorias) ========== */
+        .menu-toolbar { position: sticky; top: 70px; z-index: 900; background: var(--gray-50); padding: 0.75rem 0 1rem; margin-bottom: 1.5rem; }
+        .menu-search {
+            width: 100%; max-width: 420px; display: block; margin: 0 auto 1rem;
+            padding: 0.75rem 1.25rem; border: 2px solid var(--gray-200); border-radius: 50px;
+            font-size: 0.9375rem; font-family: 'Poppins', sans-serif; transition: all 0.3s; background: var(--white);
+        }
+        .menu-search:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1); }
+        .category-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+        .category-chip {
+            padding: 0.5rem 1.25rem; border: 2px solid var(--gray-200); border-radius: 50px;
+            background: var(--white); color: var(--gray-600); font-weight: 600; font-size: 0.875rem;
+            cursor: pointer; transition: all 0.25s; font-family: 'Poppins', sans-serif;
+        }
+        .category-chip:hover { border-color: var(--primary); color: var(--primary); }
+        .category-chip.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+        .menu-category-title {
+            grid-column: 1 / -1; font-size: 1.5rem; font-weight: 700; color: var(--gray-800);
+            margin-top: 1rem; padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+
+        /* ========== BADGES E PREÇOS DO CARDÁPIO ========== */
+        .product-badges { position: absolute; top: 1rem; left: 1rem; display: flex; flex-direction: column; gap: 0.375rem; align-items: flex-start; }
+        .badge-tag { padding: 0.25rem 0.625rem; border-radius: 50px; font-size: 0.6875rem; font-weight: 600; color: var(--white); box-shadow: var(--shadow-sm); }
+        .price-original { font-size: 0.8125rem; color: var(--gray-400); text-decoration: line-through; font-weight: 500; display: block; line-height: 1.2; }
+        .price-from { font-size: 0.6875rem; color: var(--gray-500); font-weight: 500; display: block; line-height: 1.2; }
+
+        /* ========== MODAL DE DETALHES DO PRODUTO ========== */
+        .detail-content { padding: 0; overflow: hidden; position: relative; max-width: 560px; display: flex; flex-direction: column; }
+        .detail-close {
+            position: absolute; top: 0.75rem; right: 0.75rem; width: 36px; height: 36px;
+            border: none; border-radius: 50%; background: rgba(0, 0, 0, 0.55); color: white;
+            font-size: 1.125rem; cursor: pointer; z-index: 2; transition: all 0.2s;
+        }
+        .detail-close:hover { background: rgba(0, 0, 0, 0.8); }
+        .detail-image { width: 100%; height: 230px; object-fit: cover; display: block; }
+        .detail-body { padding: 1.25rem 1.75rem; overflow-y: auto; flex: 1; }
+        .product-badges-inline { display: flex; gap: 0.375rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .detail-name { font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 0.375rem; }
+        .detail-description { color: var(--gray-600); font-size: 0.9375rem; margin-bottom: 1.25rem; }
+        .option-group { margin-bottom: 1.25rem; }
+        .option-group-title { font-weight: 600; color: var(--gray-800); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .option-group-hint { font-size: 0.75rem; color: var(--gray-500); font-weight: 500; }
+        .option-row {
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem;
+            border: 2px solid var(--gray-200); border-radius: 10px; margin-top: 0.5rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .option-row:hover { border-color: var(--primary); }
+        .option-row.selected { border-color: var(--primary); background: #fffbeb; }
+        .option-row.disabled { opacity: 0.45; cursor: not-allowed; }
+        .option-row input { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+        .option-label { flex: 1; font-size: 0.9375rem; color: var(--gray-700); }
+        .option-price { font-weight: 600; color: var(--primary); font-size: 0.875rem; white-space: nowrap; }
+        .detail-note {
+            width: 100%; padding: 0.75rem; border: 2px solid var(--gray-200); border-radius: 10px;
+            font-family: 'Poppins', sans-serif; font-size: 0.875rem; resize: vertical; min-height: 70px; margin-top: 0.5rem;
+        }
+        .detail-note:focus { outline: none; border-color: var(--primary); }
+        .detail-footer { display: flex; gap: 1rem; padding: 1rem 1.75rem 1.25rem; border-top: 1px solid var(--gray-200); align-items: center; background: var(--white); flex-wrap: wrap; }
+        .qty-stepper { display: flex; align-items: center; gap: 0.75rem; border: 2px solid var(--gray-200); border-radius: 50px; padding: 0.375rem 0.75rem; }
+        .qty-btn { width: 28px; height: 28px; border: none; background: var(--gray-100); border-radius: 50%; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .qty-btn:hover { background: var(--primary); color: white; }
+        .qty-value { font-weight: 700; min-width: 24px; text-align: center; }
+        .btn-detail-add {
+            flex: 1; min-width: 180px; padding: 0.875rem 1rem; background: var(--primary); color: white;
+            border: none; border-radius: 50px; font-weight: 600; font-size: 0.9375rem;
+            cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif;
+        }
+        .btn-detail-add:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        /* ========== META DOS ITENS NO CARRINHO ========== */
+        .cart-item-meta { font-size: 0.75rem; color: var(--gray-600); margin-top: 0.125rem; line-height: 1.5; }
+        .cart-item-note { font-style: italic; color: var(--gray-500); }
+
+        /* ========== ADMIN: CATEGORIAS E EDITORES ========== */
+        .category-admin-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .category-admin-item { background: var(--gray-50); padding: 0.625rem 0.75rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; }
+        .category-admin-item.category-inactive { opacity: 0.5; }
+        .category-admin-name { flex: 1; font-weight: 600; color: var(--gray-800); font-size: 0.9375rem; }
+        .btn-move { background: var(--gray-200); color: var(--gray-700); font-size: 0.75rem; }
+        .btn-move:disabled { opacity: 0.3; cursor: not-allowed; }
+        .category-add-row { display: flex; gap: 0.5rem; align-items: stretch; }
+        .category-add-row .form-input { flex: 1; }
+        .btn-mini {
+            padding: 0.5rem 0.875rem; border: 2px dashed var(--gray-300); background: none; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600; color: var(--gray-600); cursor: pointer;
+            transition: all 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .btn-mini:hover { border-color: var(--primary); color: var(--primary); }
+        .editor-row { display: grid; grid-template-columns: 1fr 110px 36px; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+        .editor-row input, .addon-group-head input {
+            padding: 0.5rem 0.625rem; border: 2px solid var(--gray-200); border-radius: 8px;
+            font-size: 0.8125rem; font-family: 'Poppins', sans-serif; width: 100%;
+        }
+        .editor-row input:focus, .addon-group-head input:focus { outline: none; border-color: var(--primary); }
+        .btn-row-remove { width: 32px; height: 32px; border: none; border-radius: 8px; background: #fee2e2; color: var(--danger); cursor: pointer; font-size: 0.875rem; }
+        .btn-row-remove:hover { background: #fecaca; }
+        .addon-group-block { border: 2px solid var(--gray-200); border-radius: 10px; padding: 0.875rem; margin-bottom: 0.875rem; }
+        .addon-group-head { display: grid; grid-template-columns: 1fr 64px 64px 36px; gap: 0.5rem; margin-bottom: 0.625rem; align-items: center; }
+        .badge-checks { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .badge-check { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--gray-700); cursor: pointer; }
+        .badge-check input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+
         /* ========== ANIMAÇÕES ========== */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
@@ -670,6 +774,19 @@
                 </div>
             </div>
 
+            <!-- CATEGORIAS -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">📂 Categorias</h3>
+                <div class="alert alert-info">
+                    <strong>💡 Dica:</strong> use as setas para definir a ordem no cardápio. Desativar uma categoria esconde os produtos dela; ao excluir, os produtos vão para "Outros".
+                </div>
+                <div class="category-admin-list" id="categoryAdminList"></div>
+                <div class="category-add-row">
+                    <input type="text" class="form-input" id="newCategoryName" placeholder="Nova categoria (ex: Bebidas)">
+                    <button class="btn-admin btn-primary-admin" id="addCategoryBtn">➕ Adicionar</button>
+                </div>
+            </div>
+
             <!-- GERENCIAR PRODUTOS -->
             <div class="admin-section">
                 <h3 class="admin-section-title">🍕 Gerenciar Produtos</h3>
@@ -717,13 +834,43 @@
                     <textarea class="form-input form-textarea" id="productDescription" required></textarea>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-input" id="productCategory"></select>
+                </div>
+                <div class="form-group">
                     <label class="form-label">Preço em R$ (Reais) *</label>
                     <input type="number" class="form-input" id="productPrice" step="0.01" min="0" required>
                     <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Sempre em Reais — a exibição em USD/EUR usa a cotação configurada na seção Moeda</small>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Preço promocional em R$ (opcional)</label>
+                    <input type="number" class="form-input" id="productPromoPrice" step="0.01" min="0">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Se preenchido, o cardápio mostra "de R$ X por R$ Y". Ignorado quando há variações de tamanho.</small>
+                </div>
+                <div class="form-group">
                     <label class="form-label">URL da Imagem *</label>
                     <input type="url" class="form-input" id="productImage" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Selos no cardápio</label>
+                    <div class="badge-checks">
+                        <label class="badge-check"><input type="checkbox" id="badge-novo"> Novo</label>
+                        <label class="badge-check"><input type="checkbox" id="badge-maisvendido"> Mais vendido</label>
+                        <label class="badge-check"><input type="checkbox" id="badge-promo"> Promoção</label>
+                        <label class="badge-check"><input type="checkbox" id="badge-vegetariano"> Vegetariano</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Variações de tamanho (opcional)</label>
+                    <div id="variationsEditor"></div>
+                    <button type="button" class="btn-mini" id="addVariationBtn">➕ Adicionar variação</button>
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Com variações, o cliente escolhe um tamanho e o preço dele substitui o preço base.</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grupos de adicionais (opcional)</label>
+                    <div id="addonGroupsEditor"></div>
+                    <button type="button" class="btn-mini" id="addAddonGroupBtn">➕ Adicionar grupo de adicionais</button>
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Ex: grupo "Extras" com mínimo 0 e máximo 3 opções. Máximo 0 = sem limite.</small>
                 </div>
                 <div class="form-group">
                     <div class="form-switch">
@@ -736,6 +883,28 @@
                 </div>
                 <button type="submit" class="btn-admin btn-success" style="width: 100%;">💾 Salvar Produto</button>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL DETALHE DO PRODUTO (cliente) -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content detail-content">
+            <button class="detail-close" id="detailClose" aria-label="Fechar">✕</button>
+            <img class="detail-image" id="detailImage" src="" alt="">
+            <div class="detail-body">
+                <div class="product-badges-inline" id="detailBadges"></div>
+                <h3 class="detail-name" id="detailName"></h3>
+                <p class="detail-description" id="detailDescription"></p>
+                <div id="detailOptions"></div>
+            </div>
+            <div class="detail-footer">
+                <div class="qty-stepper">
+                    <button type="button" class="qty-btn" id="detailQtyMinus">−</button>
+                    <span class="qty-value" id="detailQtyValue">1</span>
+                    <button type="button" class="qty-btn" id="detailQtyPlus">+</button>
+                </div>
+                <button type="button" class="btn-detail-add" id="detailAddBtn">Adicionar</button>
+            </div>
         </div>
     </div>
 
@@ -785,6 +954,10 @@
         <div class="menu-container">
             <h2 class="section-title">Nosso Cardápio</h2>
             <p class="section-subtitle" id="menuSubtitle">Escolha seus pratos favoritos</p>
+            <div class="menu-toolbar">
+                <input type="search" class="menu-search" id="menuSearch" placeholder="🔍 Buscar no cardápio..." autocomplete="off">
+                <div class="category-chips" id="categoryChips"></div>
+            </div>
             <div class="products-grid" id="productsGrid"></div>
         </div>
     </section>
@@ -827,13 +1000,23 @@
 
     <script>
         // ========== DADOS INICIAIS ==========
+        const defaultCategories = [
+            { id: 1, name: 'Pizzas', order: 0, active: true },
+            { id: 2, name: 'Hambúrgueres', order: 1, active: true },
+            { id: 3, name: 'Acompanhamentos', order: 2, active: true }
+        ];
+
         const defaultProducts = [
-            { id: 1, name: 'Pizza Margherita', description: 'Molho de tomate, mussarela, manjericão fresco e azeite', price: 42.90, image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop', available: true },
-            { id: 2, name: 'Pizza Calabresa', description: 'Calabresa fatiada, cebola, mussarela e azeitonas', price: 45.90, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop', available: true },
-            { id: 3, name: 'Pizza Portuguesa', description: 'Presunto, ovos, cebola, azeitonas e mussarela', price: 48.90, image: 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=400&h=300&fit=crop', available: true },
-            { id: 4, name: 'Pizza Quatro Queijos', description: 'Mussarela, provolone, gorgonzola e parmesão', price: 52.90, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop', available: true },
-            { id: 5, name: 'Hambúrguer Artesanal', description: 'Blend 180g, queijo cheddar, bacon e molho especial', price: 32.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop', available: true },
-            { id: 6, name: 'Batata Frita Premium', description: 'Batatas rústicas com queijo, bacon e cebola caramelizada', price: 24.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop', available: true }
+            { id: 1, name: 'Pizza Margherita', description: 'Molho de tomate, mussarela, manjericão fresco e azeite', price: 42.90, image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop', available: true, categoryId: 1, badges: ['vegetariano'],
+              variations: [{ name: 'Pequena (4 fatias)', price: 35.90 }, { name: 'Média (6 fatias)', price: 42.90 }, { name: 'Grande (8 fatias)', price: 49.90 }],
+              addonGroups: [{ name: 'Extras', min: 0, max: 3, options: [{ name: 'Borda de catupiry', price: 8.00 }, { name: 'Bacon', price: 5.00 }, { name: 'Cheddar extra', price: 4.00 }] }] },
+            { id: 2, name: 'Pizza Calabresa', description: 'Calabresa fatiada, cebola, mussarela e azeitonas', price: 45.90, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop', available: true, categoryId: 1, badges: ['novo'],
+              addonGroups: [{ name: 'Extras', min: 0, max: 3, options: [{ name: 'Borda de catupiry', price: 8.00 }, { name: 'Bacon', price: 5.00 }, { name: 'Cheddar extra', price: 4.00 }] }] },
+            { id: 3, name: 'Pizza Portuguesa', description: 'Presunto, ovos, cebola, azeitonas e mussarela', price: 48.90, image: 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=400&h=300&fit=crop', available: true, categoryId: 1 },
+            { id: 4, name: 'Pizza Quatro Queijos', description: 'Mussarela, provolone, gorgonzola e parmesão', price: 52.90, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop', available: true, categoryId: 1 },
+            { id: 5, name: 'Hambúrguer Artesanal', description: 'Blend 180g, queijo cheddar, bacon e molho especial', price: 32.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop', available: true, categoryId: 2, badges: ['maisvendido'],
+              addonGroups: [{ name: 'Adicionais', min: 0, max: 5, options: [{ name: 'Bacon extra', price: 4.50 }, { name: 'Ovo', price: 2.50 }, { name: 'Cheddar', price: 3.00 }] }] },
+            { id: 6, name: 'Batata Frita Premium', description: 'Batatas rústicas com queijo, bacon e cebola caramelizada', price: 24.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop', available: true, categoryId: 3, badges: ['promo'], promoPrice: 19.90 }
         ];
 
         const defaultSettings = {
@@ -858,11 +1041,56 @@
 
         // ========== VARIÁVEIS GLOBAIS ==========
         let products = [];
+        let categories = [];
         let cart = [];
         let settings = {};
         let editingProductId = null;
+        let editingVariations = [];
+        let editingAddonGroups = [];
         let customerData = null;
         let currentCurrency = 'R$'; // símbolo da moeda ativa
+        let selectedCategoryId = 'all';
+        let searchTerm = '';
+        let detailProduct = null;
+        let detailQty = 1;
+        let cartLineSeq = Date.now();
+
+        const BADGE_TYPES = {
+            novo: { label: 'Novo', color: '#3b82f6' },
+            maisvendido: { label: 'Mais vendido', color: '#8b5cf6' },
+            promo: { label: 'Promoção', color: '#ef4444' },
+            vegetariano: { label: 'Vegetariano', color: '#10b981' }
+        };
+
+        // ========== HELPERS DE PRODUTO ==========
+        // Garante o formato novo em produtos salvos por versões antigas
+        function ensureProductShape(p) {
+            return {
+                ...p,
+                categoryId: p.categoryId ?? null,
+                badges: Array.isArray(p.badges) ? p.badges : [],
+                promoPrice: Number.isFinite(p.promoPrice) ? p.promoPrice : null,
+                variations: Array.isArray(p.variations) ? p.variations : [],
+                addonGroups: Array.isArray(p.addonGroups) ? p.addonGroups : []
+            };
+        }
+
+        function productHasPromo(p) {
+            return Number.isFinite(p.promoPrice) && p.promoPrice > 0 && p.promoPrice < p.price && p.variations.length === 0;
+        }
+
+        // Preço base efetivo (considera promoção); variações têm preço próprio
+        function productBasePrice(p) {
+            return productHasPromo(p) ? p.promoPrice : p.price;
+        }
+
+        function productMinPrice(p) {
+            return p.variations.length ? Math.min(...p.variations.map(v => v.price)) : productBasePrice(p);
+        }
+
+        function productHasOptions(p) {
+            return p.variations.length > 0 || p.addonGroups.length > 0;
+        }
 
         // ========== SEGURANÇA ==========
         // Escapa conteúdo dinâmico antes de inserir via innerHTML (anti-XSS)
@@ -904,7 +1132,7 @@
             settings.exchangeRates = { USD: rateUSD, EUR: rateEUR };
             currentCurrency = selected.value;
             saveData();
-            renderProducts();
+            renderMenu();
             updateCartUI();
             updateSiteSettings();
             showNotification(`Moeda alterada para ${selected.value}`, 'success');
@@ -924,6 +1152,7 @@
         const exportHtmlBtn = document.getElementById('exportHtmlBtn');
         const scheduleGrid = document.getElementById('scheduleGrid');
         const productModal = document.getElementById('productModal');
+        const detailModal = document.getElementById('detailModal');
         const productForm = document.getElementById('productForm');
         const modalClose = document.getElementById('modalClose');
         const addProductBtn = document.getElementById('addProductBtn');
@@ -963,6 +1192,7 @@
             if (String(embedded.exportId) === applied) return;
 
             if (Array.isArray(embedded.products)) localStorage.setItem('products', JSON.stringify(embedded.products));
+            if (Array.isArray(embedded.categories)) localStorage.setItem('categories', JSON.stringify(embedded.categories));
             if (embedded.settings && typeof embedded.settings === 'object') localStorage.setItem('settings', JSON.stringify(embedded.settings));
             localStorage.setItem('appliedExportId', String(embedded.exportId));
         }
@@ -971,7 +1201,10 @@
             applyEmbeddedData();
 
             const savedProducts = localStorage.getItem('products');
-            products = savedProducts ? JSON.parse(savedProducts) : defaultProducts;
+            products = (savedProducts ? JSON.parse(savedProducts) : defaultProducts).map(ensureProductShape);
+
+            const savedCategories = localStorage.getItem('categories');
+            categories = savedCategories ? JSON.parse(savedCategories) : defaultCategories;
 
             const savedSettings = localStorage.getItem('settings');
             settings = savedSettings ? JSON.parse(savedSettings) : defaultSettings;
@@ -979,7 +1212,14 @@
             if (!settings.exchangeRates) settings.exchangeRates = { USD: 5.40, EUR: 6.20 };
 
             const savedCart = localStorage.getItem('cart');
-            cart = savedCart ? JSON.parse(savedCart) : [];
+            // Migra itens de carrinho salvos antes de variações/adicionais existirem
+            cart = (savedCart ? JSON.parse(savedCart) : []).map(item => item.lineId ? item : {
+                lineId: ++cartLineSeq,
+                signature: JSON.stringify([item.id, '', [], '']),
+                productId: item.id, name: item.name, image: item.image,
+                variationName: null, addons: [], note: '',
+                unitPrice: item.price, quantity: item.quantity
+            });
 
             const savedCustomer = localStorage.getItem('customerData');
             customerData = savedCustomer ? JSON.parse(savedCustomer) : null;
@@ -989,12 +1229,14 @@
 
         function saveData() {
             localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('categories', JSON.stringify(categories));
             localStorage.setItem('settings', JSON.stringify(settings));
         }
 
         function renderAll() {
-            renderProducts();
+            renderMenu();
             renderProductAdminList();
+            renderCategoryAdminList();
             renderSettings();
             updateCartUI();
             updateSiteSettings();
@@ -1076,7 +1318,7 @@
                     <img src="${escapeHTML(featuredProduct.image)}" alt="${escapeHTML(featuredProduct.name)}">
                     <h3>${escapeHTML(featuredProduct.name)}</h3>
                     <p>${escapeHTML(featuredProduct.description)}</p>
-                    <div class="hero-card-price">${formatPrice(featuredProduct.price)}</div>
+                    <div class="hero-card-price">${featuredProduct.variations.length ? 'A partir de ' : ''}${formatPrice(productMinPrice(featuredProduct))}</div>
                 `;
             }
         }
@@ -1116,28 +1358,181 @@
             statusText.textContent = isOpen ? 'Aberto Agora' : 'Fechado';
         }
 
-        // ========== PRODUTOS ==========
-        function renderProducts() {
-            if (products.length === 0) {
-                productsGrid.innerHTML = '<p style="text-align: center; color: var(--gray-600); grid-column: 1/-1;">Nenhum produto cadastrado ainda.</p>';
-                return;
+        // ========== CARDÁPIO (CATEGORIAS + BUSCA + PRODUTOS) ==========
+        // Remove acentos para busca (faixa U+0300–U+036F de marcas combinantes)
+        const COMBINING_MARKS = new RegExp('[' + String.fromCharCode(768) + '-' + String.fromCharCode(879) + ']', 'g');
+        function normalizeText(s) {
+            return String(s).toLowerCase().normalize('NFD').replace(COMBINING_MARKS, '');
+        }
+
+        // Agrupa produtos por categoria ativa; sem categoria (ou categoria excluída) vai para "Outros"
+        function getMenuGroups(applySearch) {
+            const term = applySearch && searchTerm.trim() ? normalizeText(searchTerm) : '';
+            const matches = (p) => !term || normalizeText(p.name).includes(term) || normalizeText(p.description).includes(term);
+            const sortedCats = [...categories].sort((a, b) => a.order - b.order);
+            const knownIds = new Set(categories.map(c => c.id));
+
+            const groups = sortedCats.filter(c => c.active).map(cat => ({
+                id: cat.id, name: cat.name,
+                items: products.filter(p => p.categoryId === cat.id && matches(p))
+            }));
+            const others = products.filter(p => (p.categoryId == null || !knownIds.has(p.categoryId)) && matches(p));
+            if (others.length) groups.push({ id: 'others', name: 'Outros', items: others });
+            return groups.filter(g => g.items.length > 0);
+        }
+
+        function renderCategoryChips() {
+            const container = document.getElementById('categoryChips');
+            const groups = getMenuGroups(false);
+            if (groups.length <= 1) { container.innerHTML = ''; return; }
+            const chips = [{ id: 'all', name: 'Todos' }, ...groups.map(g => ({ id: g.id, name: g.name }))];
+            container.innerHTML = chips.map(c => `
+                <button class="category-chip ${String(selectedCategoryId) === String(c.id) ? 'active' : ''}" onclick="selectCategory('${c.id}')">${escapeHTML(c.name)}</button>
+            `).join('');
+        }
+
+        function selectCategory(id) {
+            selectedCategoryId = String(id);
+            searchTerm = '';
+            document.getElementById('menuSearch').value = '';
+            renderMenu();
+        }
+
+        function productCardHTML(product) {
+            const badges = product.badges.filter(b => BADGE_TYPES[b]);
+            const badgesHTML = badges.length
+                ? `<div class="product-badges">${badges.map(b => `<span class="badge-tag" style="background:${BADGE_TYPES[b].color}">${BADGE_TYPES[b].label}</span>`).join('')}</div>`
+                : '';
+
+            let priceHTML;
+            if (product.variations.length) {
+                priceHTML = `<span class="product-price"><span class="price-from">A partir de</span>${formatPrice(productMinPrice(product))}</span>`;
+            } else if (productHasPromo(product)) {
+                priceHTML = `<span class="product-price"><span class="price-original">${formatPrice(product.price)}</span>${formatPrice(product.promoPrice)}</span>`;
+            } else {
+                priceHTML = `<span class="product-price">${formatPrice(product.price)}</span>`;
             }
-            productsGrid.innerHTML = products.map(product => `
-                <div class="product-card">
+
+            const btnLabel = product.available ? (productHasOptions(product) ? 'Escolher' : '+ Adicionar') : 'Indisponível';
+            return `
+                <div class="product-card" onclick="openProductDetail(${product.id})" style="cursor: pointer;">
                     <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" class="product-image">
+                    ${badgesHTML}
                     ${!product.available ? '<span class="product-badge">Esgotado</span>' : ''}
                     <div class="product-info">
                         <h3 class="product-name">${escapeHTML(product.name)}</h3>
                         <p class="product-description">${escapeHTML(product.description)}</p>
                         <div class="product-footer">
-                            <span class="product-price">${formatPrice(product.price)}</span>
-                            <button class="btn-add-cart" onclick="addToCart(${product.id})" ${!product.available ? 'disabled' : ''}>
-                                ${product.available ? '+ Adicionar' : 'Indisponível'}
+                            ${priceHTML}
+                            <button class="btn-add-cart" onclick="event.stopPropagation(); quickAdd(${product.id})" ${!product.available ? 'disabled' : ''}>
+                                ${btnLabel}
                             </button>
                         </div>
                     </div>
                 </div>
+            `;
+        }
+
+        function renderProducts() {
+            if (products.length === 0) {
+                productsGrid.innerHTML = '<p style="text-align: center; color: var(--gray-600); grid-column: 1/-1;">Nenhum produto cadastrado ainda.</p>';
+                return;
+            }
+
+            const searching = searchTerm.trim() !== '';
+            let groups = getMenuGroups(true);
+            if (!searching && selectedCategoryId !== 'all') {
+                groups = groups.filter(g => String(g.id) === selectedCategoryId);
+            }
+
+            if (groups.length === 0) {
+                productsGrid.innerHTML = `<p style="text-align: center; color: var(--gray-600); grid-column: 1/-1;">Nenhum produto encontrado${searching ? ` para "${escapeHTML(searchTerm)}"` : ''}.</p>`;
+                return;
+            }
+
+            const hideHeader = groups.length === 1 && groups[0].id === 'others';
+            productsGrid.innerHTML = groups.map(g => `
+                ${hideHeader ? '' : `<h3 class="menu-category-title">${escapeHTML(g.name)}</h3>`}
+                ${g.items.map(productCardHTML).join('')}
             `).join('');
+        }
+
+        function renderMenu() {
+            renderCategoryChips();
+            renderProducts();
+        }
+
+        // ========== ADMIN: CATEGORIAS ==========
+        function renderCategoryAdminList() {
+            const list = document.getElementById('categoryAdminList');
+            const sorted = [...categories].sort((a, b) => a.order - b.order);
+            if (sorted.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: var(--gray-600); font-size: 0.875rem;">Nenhuma categoria. Os produtos aparecem sem agrupamento.</p>';
+                return;
+            }
+            list.innerHTML = sorted.map((cat, idx) => `
+                <div class="category-admin-item ${cat.active ? '' : 'category-inactive'}">
+                    <button class="btn-icon btn-move" onclick="moveCategory(${cat.id}, -1)" ${idx === 0 ? 'disabled' : ''} title="Subir">▲</button>
+                    <button class="btn-icon btn-move" onclick="moveCategory(${cat.id}, 1)" ${idx === sorted.length - 1 ? 'disabled' : ''} title="Descer">▼</button>
+                    <span class="category-admin-name">${escapeHTML(cat.name)}</span>
+                    <button class="btn-icon btn-toggle" onclick="toggleCategory(${cat.id})" title="${cat.active ? 'Desativar' : 'Ativar'}">${cat.active ? '👁️' : '🚫'}</button>
+                    <button class="btn-icon btn-edit" onclick="renameCategory(${cat.id})" title="Renomear">✏️</button>
+                    <button class="btn-icon btn-delete" onclick="deleteCategory(${cat.id})" title="Excluir">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function addCategory() {
+            const input = document.getElementById('newCategoryName');
+            const name = input.value.trim();
+            if (!name) { showNotification('Digite o nome da nova categoria.', 'danger'); return; }
+            const nextOrder = categories.length ? Math.max(...categories.map(c => c.order)) + 1 : 0;
+            categories.push({ id: Date.now(), name: name, order: nextOrder, active: true });
+            input.value = '';
+            saveData();
+            renderAll();
+            showNotification('Categoria adicionada!', 'success');
+        }
+
+        function renameCategory(id) {
+            const cat = categories.find(c => c.id === id);
+            if (!cat) return;
+            const name = prompt('Novo nome da categoria:', cat.name);
+            if (!name || !name.trim()) return;
+            cat.name = name.trim();
+            saveData();
+            renderAll();
+        }
+
+        function toggleCategory(id) {
+            const cat = categories.find(c => c.id === id);
+            if (!cat) return;
+            cat.active = !cat.active;
+            if (!cat.active && String(cat.id) === selectedCategoryId) selectedCategoryId = 'all';
+            saveData();
+            renderAll();
+            showNotification(`Categoria ${cat.active ? 'ativada' : 'desativada'}!`, 'success');
+        }
+
+        function deleteCategory(id) {
+            const count = products.filter(p => p.categoryId === id).length;
+            if (!confirm(`Deseja excluir esta categoria?${count ? ` ${count} produto(s) passarão para "Outros".` : ''}`)) return;
+            categories = categories.filter(c => c.id !== id);
+            if (String(id) === selectedCategoryId) selectedCategoryId = 'all';
+            saveData();
+            renderAll();
+            showNotification('Categoria excluída!', 'success');
+        }
+
+        function moveCategory(id, dir) {
+            const sorted = [...categories].sort((a, b) => a.order - b.order);
+            const idx = sorted.findIndex(c => c.id === id);
+            const target = idx + dir;
+            if (idx < 0 || target < 0 || target >= sorted.length) return;
+            [sorted[idx], sorted[target]] = [sorted[target], sorted[idx]];
+            sorted.forEach((c, i) => { c.order = i; });
+            saveData();
+            renderAll();
         }
 
         function renderProductAdminList() {
@@ -1146,12 +1541,23 @@
                 return;
             }
             // Admin sempre mostra em BRL
-            productAdminList.innerHTML = products.map(product => `
+            const fmtBRL = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
+            productAdminList.innerHTML = products.map(product => {
+                const cat = categories.find(c => c.id === product.categoryId);
+                let priceInfo;
+                if (product.variations.length) {
+                    priceInfo = `a partir de ${fmtBRL(productMinPrice(product))} · ${product.variations.length} tamanho(s)`;
+                } else if (productHasPromo(product)) {
+                    priceInfo = `de ${fmtBRL(product.price)} por ${fmtBRL(product.promoPrice)}`;
+                } else {
+                    priceInfo = fmtBRL(product.price);
+                }
+                return `
                 <div class="product-admin-item ${!product.available ? 'product-unavailable' : ''}">
                     <div class="product-admin-info">
                         <h4>${escapeHTML(product.name)}</h4>
-                        <p>${escapeHTML(product.description.substring(0, 50))}...</p>
-                        <div class="product-admin-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                        <p>📂 ${cat ? escapeHTML(cat.name) : 'Outros'}${product.addonGroups.length ? ` · ${product.addonGroups.length} grupo(s) de adicionais` : ''}</p>
+                        <div class="product-admin-price">${priceInfo}</div>
                     </div>
                     <div class="product-admin-actions">
                         <button class="btn-icon btn-toggle" onclick="toggleProductAvailability(${product.id})" title="${product.available ? 'Desabilitar' : 'Habilitar'}">
@@ -1161,15 +1567,69 @@
                         <button class="btn-icon btn-delete" onclick="deleteProduct(${product.id})" title="Excluir">🗑️</button>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // ========== GERENCIAR PRODUTOS ==========
+        function renderCategoryOptions(selectedId) {
+            const select = document.getElementById('productCategory');
+            const sorted = [...categories].sort((a, b) => a.order - b.order);
+            select.innerHTML = '<option value="">Sem categoria (Outros)</option>' + sorted.map(c =>
+                `<option value="${c.id}" ${c.id === selectedId ? 'selected' : ''}>${escapeHTML(c.name)}</option>`
+            ).join('');
+        }
+
+        function renderVariationsEditor() {
+            const box = document.getElementById('variationsEditor');
+            box.innerHTML = editingVariations.map((v, i) => `
+                <div class="editor-row">
+                    <input type="text" data-vi="${i}" data-field="name" placeholder="Nome (ex: Grande)" value="${escapeHTML(v.name)}">
+                    <input type="number" data-vi="${i}" data-field="price" step="0.01" min="0" placeholder="Preço R$" value="${v.price ?? ''}">
+                    <button type="button" class="btn-row-remove" data-remove-variation="${i}" title="Remover">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function renderAddonGroupsEditor() {
+            const box = document.getElementById('addonGroupsEditor');
+            box.innerHTML = editingAddonGroups.map((g, gi) => `
+                <div class="addon-group-block">
+                    <div class="addon-group-head">
+                        <input type="text" data-gi="${gi}" data-field="name" placeholder="Nome do grupo (ex: Extras)" value="${escapeHTML(g.name)}">
+                        <input type="number" data-gi="${gi}" data-field="min" min="0" step="1" placeholder="Mín" value="${g.min ?? 0}" title="Mínimo de escolhas">
+                        <input type="number" data-gi="${gi}" data-field="max" min="0" step="1" placeholder="Máx" value="${g.max ?? 0}" title="Máximo de escolhas (0 = sem limite)">
+                        <button type="button" class="btn-row-remove" data-remove-group="${gi}" title="Remover grupo">🗑️</button>
+                    </div>
+                    ${(g.options || []).map((o, oi) => `
+                    <div class="editor-row">
+                        <input type="text" data-gi="${gi}" data-oi="${oi}" data-field="name" placeholder="Opção (ex: Bacon)" value="${escapeHTML(o.name)}">
+                        <input type="number" data-gi="${gi}" data-oi="${oi}" data-field="price" step="0.01" min="0" placeholder="+ R$" value="${o.price ?? ''}">
+                        <button type="button" class="btn-row-remove" data-remove-option="${gi}:${oi}" title="Remover opção">🗑️</button>
+                    </div>
+                    `).join('')}
+                    <button type="button" class="btn-mini" data-add-option="${gi}">➕ Opção</button>
+                </div>
+            `).join('');
+        }
+
+        function setBadgeChecks(badges) {
+            Object.keys(BADGE_TYPES).forEach(b => {
+                document.getElementById(`badge-${b}`).checked = badges.includes(b);
+            });
+        }
+
         function addProduct() {
             editingProductId = null;
             document.getElementById('modalTitle').textContent = 'Adicionar Produto';
             productForm.reset();
             document.getElementById('productAvailable').checked = true;
+            renderCategoryOptions(null);
+            setBadgeChecks([]);
+            editingVariations = [];
+            editingAddonGroups = [];
+            renderVariationsEditor();
+            renderAddonGroupsEditor();
             productModal.classList.add('active');
         }
 
@@ -1182,8 +1642,15 @@
             document.getElementById('productName').value = product.name;
             document.getElementById('productDescription').value = product.description;
             document.getElementById('productPrice').value = product.price;
+            document.getElementById('productPromoPrice').value = product.promoPrice ?? '';
             document.getElementById('productImage').value = product.image;
             document.getElementById('productAvailable').checked = product.available;
+            renderCategoryOptions(product.categoryId);
+            setBadgeChecks(product.badges);
+            editingVariations = JSON.parse(JSON.stringify(product.variations));
+            editingAddonGroups = JSON.parse(JSON.stringify(product.addonGroups));
+            renderVariationsEditor();
+            renderAddonGroupsEditor();
             productModal.classList.add('active');
         }
 
@@ -1194,14 +1661,70 @@
                 showNotification('Preço inválido: informe um valor em reais maior ou igual a zero.', 'danger');
                 return;
             }
-            const productData = {
+
+            const promoRaw = document.getElementById('productPromoPrice').value;
+            let promoPrice = null;
+            if (promoRaw !== '') {
+                promoPrice = parseFloat(promoRaw);
+                if (!Number.isFinite(promoPrice) || promoPrice <= 0) {
+                    showNotification('Preço promocional inválido.', 'danger');
+                    return;
+                }
+                if (promoPrice >= price) {
+                    showNotification('O preço promocional deve ser menor que o preço normal.', 'danger');
+                    return;
+                }
+            }
+
+            const variations = editingVariations
+                .map(v => ({ name: String(v.name || '').trim(), price: parseFloat(v.price) }))
+                .filter(v => v.name !== '');
+            if (variations.some(v => !Number.isFinite(v.price) || v.price < 0)) {
+                showNotification('Toda variação precisa de um preço válido em reais.', 'danger');
+                return;
+            }
+
+            const addonGroups = editingAddonGroups
+                .map(g => ({
+                    name: String(g.name || '').trim() || 'Adicionais',
+                    min: Math.max(0, parseInt(g.min, 10) || 0),
+                    max: Math.max(0, parseInt(g.max, 10) || 0),
+                    options: (g.options || [])
+                        .map(o => ({ name: String(o.name || '').trim(), price: parseFloat(o.price) || 0 }))
+                        .filter(o => o.name !== '')
+                }))
+                .filter(g => g.options.length > 0);
+            for (const g of addonGroups) {
+                if (g.options.some(o => !Number.isFinite(o.price) || o.price < 0)) {
+                    showNotification(`No grupo "${g.name}", toda opção precisa de preço válido (use 0 para grátis).`, 'danger');
+                    return;
+                }
+                if (g.max > 0 && g.min > g.max) {
+                    showNotification(`No grupo "${g.name}", o mínimo não pode ser maior que o máximo.`, 'danger');
+                    return;
+                }
+                if (g.min > g.options.length) {
+                    showNotification(`No grupo "${g.name}", o mínimo é maior que o número de opções.`, 'danger');
+                    return;
+                }
+            }
+
+            const categoryValue = document.getElementById('productCategory').value;
+            const badges = Object.keys(BADGE_TYPES).filter(b => document.getElementById(`badge-${b}`).checked);
+
+            const productData = ensureProductShape({
                 id: editingProductId || Date.now(),
                 name: document.getElementById('productName').value,
                 description: document.getElementById('productDescription').value,
                 price: price,
+                promoPrice: promoPrice,
                 image: document.getElementById('productImage').value,
-                available: document.getElementById('productAvailable').checked
-            };
+                available: document.getElementById('productAvailable').checked,
+                categoryId: categoryValue === '' ? null : parseInt(categoryValue, 10),
+                badges: badges,
+                variations: variations,
+                addonGroups: addonGroups
+            });
             if (editingProductId) {
                 const index = products.findIndex(p => p.id === editingProductId);
                 products[index] = productData;
@@ -1278,16 +1801,171 @@
             setTimeout(() => notification.remove(), 3000);
         }
 
+        // ========== DETALHE DO PRODUTO (CLIENTE) ==========
+        function openProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            if (!product.available) { showNotification('Este produto está esgotado no momento.', 'danger'); return; }
+            detailProduct = product;
+            detailQty = 1;
+
+            document.getElementById('detailImage').src = product.image;
+            document.getElementById('detailImage').alt = product.name;
+            document.getElementById('detailName').textContent = product.name;
+            document.getElementById('detailDescription').textContent = product.description;
+            const badges = product.badges.filter(b => BADGE_TYPES[b]);
+            document.getElementById('detailBadges').innerHTML = badges.map(b =>
+                `<span class="badge-tag" style="background:${BADGE_TYPES[b].color}">${BADGE_TYPES[b].label}</span>`
+            ).join('');
+
+            let html = '';
+            if (product.variations.length) {
+                html += `<div class="option-group" id="variationGroup">
+                    <div class="option-group-title">Escolha o tamanho <span class="option-group-hint">obrigatório</span></div>
+                    ${product.variations.map((v, i) => `
+                        <label class="option-row ${i === 0 ? 'selected' : ''}">
+                            <input type="radio" name="detailVariation" value="${i}" ${i === 0 ? 'checked' : ''}>
+                            <span class="option-label">${escapeHTML(v.name)}</span>
+                            <span class="option-price">${formatPrice(v.price)}</span>
+                        </label>
+                    `).join('')}
+                </div>`;
+            }
+            product.addonGroups.forEach((group, gi) => {
+                const hints = [];
+                if (group.min > 0) hints.push(`mín. ${group.min}`);
+                if (group.max > 0) hints.push(`máx. ${group.max}`);
+                html += `<div class="option-group addon-group" data-gi="${gi}" data-min="${group.min || 0}" data-max="${group.max || 0}">
+                    <div class="option-group-title">${escapeHTML(group.name)} <span class="option-group-hint">${hints.join(' · ') || 'opcional'}</span></div>
+                    ${group.options.map((o, oi) => `
+                        <label class="option-row">
+                            <input type="checkbox" data-gi="${gi}" data-oi="${oi}">
+                            <span class="option-label">${escapeHTML(o.name)}</span>
+                            <span class="option-price">+ ${formatPrice(o.price)}</span>
+                        </label>
+                    `).join('')}
+                </div>`;
+            });
+            html += `<div class="option-group">
+                <div class="option-group-title">Observações <span class="option-group-hint">opcional</span></div>
+                <textarea class="detail-note" id="detailNote" placeholder="Ex: sem cebola, ponto da carne, cortar em 8..." maxlength="200"></textarea>
+            </div>`;
+            document.getElementById('detailOptions').innerHTML = html;
+            document.getElementById('detailQtyValue').textContent = '1';
+            updateDetailPrice();
+            detailModal.classList.add('active');
+        }
+
+        function closeDetailModal() {
+            detailModal.classList.remove('active');
+            detailProduct = null;
+        }
+
+        function getDetailSelection() {
+            const p = detailProduct;
+            let variationName = null;
+            if (p.variations.length) {
+                const checked = document.querySelector('input[name="detailVariation"]:checked');
+                const idx = checked ? parseInt(checked.value, 10) : 0;
+                variationName = (p.variations[idx] || p.variations[0]).name;
+            }
+            const addons = [];
+            document.querySelectorAll('#detailOptions .addon-group input[type="checkbox"]:checked').forEach(box => {
+                const group = p.addonGroups[parseInt(box.dataset.gi, 10)];
+                const option = group && group.options[parseInt(box.dataset.oi, 10)];
+                if (option) addons.push({ name: option.name, price: option.price });
+            });
+            const noteEl = document.getElementById('detailNote');
+            return { variationName, addons, note: noteEl ? noteEl.value : '' };
+        }
+
+        function detailUnitPrice() {
+            const p = detailProduct;
+            const { variationName, addons } = getDetailSelection();
+            const variation = variationName ? p.variations.find(v => v.name === variationName) : null;
+            const base = variation ? variation.price : productBasePrice(p);
+            return base + addons.reduce((sum, a) => sum + a.price, 0);
+        }
+
+        function updateDetailPrice() {
+            if (!detailProduct) return;
+            document.getElementById('detailAddBtn').textContent = `Adicionar ${detailQty}x — ${formatPrice(detailUnitPrice() * detailQty)}`;
+        }
+
+        function changeDetailQty(delta) {
+            detailQty = Math.max(1, detailQty + delta);
+            document.getElementById('detailQtyValue').textContent = detailQty;
+            updateDetailPrice();
+        }
+
+        function handleDetailOptionChange(e) {
+            const input = e.target;
+            if (input.name === 'detailVariation') {
+                document.querySelectorAll('#variationGroup .option-row').forEach(r => r.classList.remove('selected'));
+                input.closest('.option-row').classList.add('selected');
+            }
+            if (input.type === 'checkbox') {
+                input.closest('.option-row').classList.toggle('selected', input.checked);
+                const groupEl = input.closest('.addon-group');
+                const max = parseInt(groupEl.dataset.max, 10);
+                if (max > 0) {
+                    const boxes = [...groupEl.querySelectorAll('input[type="checkbox"]')];
+                    const checkedCount = boxes.filter(b => b.checked).length;
+                    boxes.forEach(b => {
+                        const lock = !b.checked && checkedCount >= max;
+                        b.disabled = lock;
+                        b.closest('.option-row').classList.toggle('disabled', lock);
+                    });
+                }
+            }
+            updateDetailPrice();
+        }
+
+        function confirmDetailAdd() {
+            const p = detailProduct;
+            if (!p) return;
+            for (let gi = 0; gi < p.addonGroups.length; gi++) {
+                const group = p.addonGroups[gi];
+                if ((group.min || 0) > 0) {
+                    const count = document.querySelectorAll(`#detailOptions .addon-group[data-gi="${gi}"] input:checked`).length;
+                    if (count < group.min) {
+                        showNotification(`Escolha pelo menos ${group.min} opção(ões) em "${group.name}".`, 'danger');
+                        return;
+                    }
+                }
+            }
+            const { variationName, addons, note } = getDetailSelection();
+            addCartLine(p, variationName, addons, note, detailQty);
+            closeDetailModal();
+            showNotification('Adicionado ao carrinho!', 'success');
+        }
+
         // ========== CARRINHO ==========
-        function addToCart(productId) {
+        // Adição direta pelo card; produtos com opções abrem o modal de detalhes
+        function quickAdd(productId) {
             const product = products.find(p => p.id === productId);
             if (!product || !product.available) return;
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) {
-                existingItem.quantity++;
+            if (productHasOptions(product)) { openProductDetail(productId); return; }
+            addCartLine(product, null, [], '', 1);
+        }
+
+        function addCartLine(product, variationName, addons, note, quantity) {
+            const variation = variationName ? product.variations.find(v => v.name === variationName) : null;
+            const base = variation ? variation.price : productBasePrice(product);
+            // Preços do carrinho sempre em BRL
+            const unitPrice = base + addons.reduce((sum, a) => sum + a.price, 0);
+            const signature = JSON.stringify([product.id, variationName || '', addons.map(a => a.name).sort(), note.trim()]);
+
+            const existing = cart.find(item => item.signature === signature);
+            if (existing) {
+                existing.quantity += quantity;
             } else {
-                // Carrinho sempre armazena preços em BRL
-                cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 });
+                cart.push({
+                    lineId: ++cartLineSeq, signature,
+                    productId: product.id, name: product.name, image: product.image,
+                    variationName: variationName || null, addons, note: note.trim(),
+                    unitPrice, quantity
+                });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartUI();
@@ -1295,20 +1973,20 @@
             setTimeout(() => { cartCount.style.animation = 'bounce 0.5s'; }, 10);
         }
 
-        function updateQuantity(productId, delta) {
-            const item = cart.find(item => item.id === productId);
+        function updateQuantity(lineId, delta) {
+            const item = cart.find(item => item.lineId === lineId);
             if (!item) return;
             item.quantity += delta;
             if (item.quantity <= 0) {
-                removeFromCart(productId);
+                removeFromCart(lineId);
             } else {
                 localStorage.setItem('cart', JSON.stringify(cart));
                 updateCartUI();
             }
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
+        function removeFromCart(lineId) {
+            cart = cart.filter(item => item.lineId !== lineId);
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartUI();
         }
@@ -1323,7 +2001,7 @@
 
         function updateCartUI() {
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const subtotalBRL = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const subtotalBRL = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
             const deliveryBRL = settings.deliveryFee || 0;
 
             cartCount.textContent = totalItems;
@@ -1333,22 +2011,30 @@
                 cartItems.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Seu carrinho está vazio</p></div>`;
                 cartFooter.style.display = 'none';
             } else {
-                cartItems.innerHTML = cart.map(item => `
+                cartItems.innerHTML = cart.map(item => {
+                    const metaParts = [];
+                    if (item.variationName) metaParts.push(escapeHTML(item.variationName));
+                    item.addons.forEach(a => metaParts.push(`+ ${escapeHTML(a.name)}`));
+                    const metaHTML = metaParts.length ? `<div class="cart-item-meta">${metaParts.join('<br>')}</div>` : '';
+                    const noteHTML = item.note ? `<div class="cart-item-meta cart-item-note">Obs: ${escapeHTML(item.note)}</div>` : '';
+                    return `
                     <div class="cart-item">
                         <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" class="cart-item-image">
                         <div class="cart-item-info">
                             <div class="cart-item-name">${escapeHTML(item.name)}</div>
-                            <div class="cart-item-price">${formatPrice(item.price)}</div>
+                            ${metaHTML}${noteHTML}
+                            <div class="cart-item-price">${formatPrice(item.unitPrice)}</div>
                             <div class="cart-item-controls">
-                                <button class="cart-item-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                                <button class="cart-item-btn" onclick="updateQuantity(${item.lineId}, -1)">−</button>
                                 <span class="cart-item-quantity">${item.quantity}</span>
-                                <button class="cart-item-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                                <button class="cart-item-remove" onclick="removeFromCart(${item.id})">🗑️</button>
+                                <button class="cart-item-btn" onclick="updateQuantity(${item.lineId}, 1)">+</button>
+                                <button class="cart-item-remove" onclick="removeFromCart(${item.lineId})">🗑️</button>
                             </div>
                         </div>
-                        <div class="cart-item-total">${formatPrice(item.price * item.quantity)}</div>
+                        <div class="cart-item-total">${formatPrice(item.unitPrice * item.quantity)}</div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
 
                 cartFooter.style.display = 'block';
                 renderCustomerForm();
@@ -1435,7 +2121,7 @@
             if (cart.length === 0) { alert('Seu carrinho está vazio!'); return; }
             if (!customerData) { alert('Por favor, preencha seus dados de entrega!'); return; }
 
-            const subtotalBRL = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const subtotalBRL = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
             const deliveryBRL = settings.deliveryFee || 0;
             const totalBRL = subtotalBRL + deliveryBRL;
 
@@ -1448,9 +2134,12 @@
 
             message += `*🛒 PEDIDO*\n`;
             cart.forEach(item => {
-                message += `${item.quantity}x ${item.name}\n`;
-                message += `R$ ${item.price.toFixed(2).replace('.', ',')} cada\n`;
-                message += `Subtotal: R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
+                message += `${item.quantity}x ${item.name}${item.variationName ? ` (${item.variationName})` : ''}\n`;
+                item.addons.forEach(a => {
+                    message += `   + ${a.name} (R$ ${a.price.toFixed(2).replace('.', ',')})\n`;
+                });
+                if (item.note) message += `   Obs: ${item.note}\n`;
+                message += `   R$ ${item.unitPrice.toFixed(2).replace('.', ',')} cada — Subtotal: R$ ${(item.unitPrice * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
             });
 
             message += `Subtotal: R$ ${subtotalBRL.toFixed(2).replace('.', ',')}\n`;
@@ -1524,6 +2213,74 @@
             btnCheckout.addEventListener('click', checkout);
             btnClear.addEventListener('click', clearCart);
             exportHtmlBtn.addEventListener('click', exportHTML);
+
+            // Busca e categorias
+            document.getElementById('menuSearch').addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                renderProducts();
+            });
+            document.getElementById('addCategoryBtn').addEventListener('click', addCategory);
+            document.getElementById('newCategoryName').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); addCategory(); }
+            });
+
+            // Modal de detalhes do produto
+            document.getElementById('detailClose').addEventListener('click', closeDetailModal);
+            detailModal.addEventListener('click', (e) => { if (e.target === detailModal) closeDetailModal(); });
+            document.getElementById('detailQtyMinus').addEventListener('click', () => changeDetailQty(-1));
+            document.getElementById('detailQtyPlus').addEventListener('click', () => changeDetailQty(1));
+            document.getElementById('detailAddBtn').addEventListener('click', confirmDetailAdd);
+            document.getElementById('detailOptions').addEventListener('change', handleDetailOptionChange);
+
+            // Editores de variações e adicionais (admin)
+            const variationsEditor = document.getElementById('variationsEditor');
+            variationsEditor.addEventListener('input', (e) => {
+                const i = parseInt(e.target.dataset.vi, 10);
+                if (!Number.isNaN(i) && editingVariations[i]) editingVariations[i][e.target.dataset.field] = e.target.value;
+            });
+            variationsEditor.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-remove-variation]');
+                if (!btn) return;
+                editingVariations.splice(parseInt(btn.dataset.removeVariation, 10), 1);
+                renderVariationsEditor();
+            });
+            document.getElementById('addVariationBtn').addEventListener('click', () => {
+                editingVariations.push({ name: '', price: '' });
+                renderVariationsEditor();
+            });
+
+            const groupsEditor = document.getElementById('addonGroupsEditor');
+            groupsEditor.addEventListener('input', (e) => {
+                const gi = parseInt(e.target.dataset.gi, 10);
+                if (Number.isNaN(gi) || !editingAddonGroups[gi]) return;
+                const field = e.target.dataset.field;
+                if (e.target.dataset.oi !== undefined) {
+                    const oi = parseInt(e.target.dataset.oi, 10);
+                    if (editingAddonGroups[gi].options[oi]) editingAddonGroups[gi].options[oi][field] = e.target.value;
+                } else {
+                    editingAddonGroups[gi][field] = e.target.value;
+                }
+            });
+            groupsEditor.addEventListener('click', (e) => {
+                const removeGroup = e.target.closest('[data-remove-group]');
+                const removeOption = e.target.closest('[data-remove-option]');
+                const addOption = e.target.closest('[data-add-option]');
+                if (removeGroup) {
+                    editingAddonGroups.splice(parseInt(removeGroup.dataset.removeGroup, 10), 1);
+                    renderAddonGroupsEditor();
+                } else if (removeOption) {
+                    const [gi, oi] = removeOption.dataset.removeOption.split(':').map(Number);
+                    if (editingAddonGroups[gi]) { editingAddonGroups[gi].options.splice(oi, 1); renderAddonGroupsEditor(); }
+                } else if (addOption) {
+                    const gi = parseInt(addOption.dataset.addOption, 10);
+                    if (editingAddonGroups[gi]) { editingAddonGroups[gi].options.push({ name: '', price: '' }); renderAddonGroupsEditor(); }
+                }
+            });
+            document.getElementById('addAddonGroupBtn').addEventListener('click', () => {
+                editingAddonGroups.push({ name: '', min: 0, max: 0, options: [{ name: '', price: '' }] });
+                renderAddonGroupsEditor();
+            });
+
             setInterval(updateStoreStatus, 60000);
         }
 
@@ -1537,6 +2294,7 @@
                 exportId: Date.now(),
                 exportedAt: new Date().toISOString(),
                 products: products,
+                categories: categories,
                 settings: settings
             };
 
