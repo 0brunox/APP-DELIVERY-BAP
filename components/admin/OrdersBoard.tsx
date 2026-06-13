@@ -43,6 +43,11 @@ function playChime() {
   }
 }
 
+/** HH:MM local de um timestamp ISO. */
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
 export default function OrdersBoard({
   initialOrders,
   storeId,
@@ -55,6 +60,7 @@ export default function OrdersBoard({
   const [orders, setOrders] = useState<AdminOrder[]>(initialOrders);
   const [filter, setFilter] = useState("active");
   const [busy, setBusy] = useState<string | null>(null);
+  const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [live, setLive] = useState(false);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
   const [soundOn, setSoundOn] = useState(true);
@@ -157,6 +163,18 @@ export default function OrdersBoard({
     setBusy(id);
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o))); // otimista
     await supabase.from("orders").update({ status }).eq("id", id);
+    setBusy(null);
+  }
+
+  // Aceita o pedido e define a previsão de pronto (agora + minutos escolhidos).
+  async function accept(id: string, minutes: number) {
+    setBusy(id);
+    const readyAt = new Date(Date.now() + minutes * 60000).toISOString();
+    setOrders((prev) =>
+      prev.map((o) => (o.id === id ? { ...o, status: "preparing", ready_at: readyAt } : o))
+    );
+    setAcceptingId(null);
+    await supabase.from("orders").update({ status: "preparing", ready_at: readyAt }).eq("id", id);
     setBusy(null);
   }
 
@@ -302,26 +320,74 @@ export default function OrdersBoard({
                   {o.change_for ? ` (troco p/ ${brl(o.change_for)})` : ""}
                   {o.coupon ? ` · 🎟️ ${o.coupon.code}` : ""}
                 </div>
+                {o.ready_at && (o.status === "preparing" || o.status === "ready") && (
+                  <div className="mb-2 text-sm font-semibold text-amber-600">
+                    ⏱️ Fica pronto ~{fmtTime(o.ready_at)}
+                  </div>
+                )}
                 <div className="mb-3 font-bold">Total: {brl(o.total)}</div>
 
-                <div className="flex flex-wrap gap-2">
-                  {!isFinal && nextStatus && (
-                    <button
-                      onClick={() => setStatus(o.id, nextStatus)}
-                      disabled={busy === o.id}
-                      className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700 disabled:opacity-50"
-                    >
-                      → {orderStatusLabel(nextStatus, o.order_type)}
-                    </button>
-                  )}
-                  {!isFinal && (
-                    <button
-                      onClick={() => setStatus(o.id, "cancelled")}
-                      disabled={busy === o.id}
-                      className="rounded-lg border border-red-500 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:bg-red-500 hover:text-white disabled:opacity-50"
-                    >
-                      Cancelar
-                    </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {o.status === "received" ? (
+                    acceptingId === o.id ? (
+                      <>
+                        <span className="text-xs font-semibold text-muted">Fica pronto em:</span>
+                        {[15, 20, 30, 45, 60].map((m) => (
+                          <button
+                            key={m}
+                            onClick={() => accept(o.id, m)}
+                            disabled={busy === o.id}
+                            className="rounded-lg bg-green-600 px-2.5 py-1 text-xs font-bold text-white transition hover:bg-green-700 disabled:opacity-50"
+                          >
+                            {m} min
+                          </button>
+                        ))}
+                        <button
+                          onClick={() => setAcceptingId(null)}
+                          className="px-1.5 py-1 text-xs font-semibold text-muted hover:text-primary"
+                        >
+                          voltar
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setAcceptingId(o.id)}
+                          disabled={busy === o.id}
+                          className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700 disabled:opacity-50"
+                        >
+                          ✅ Aceitar
+                        </button>
+                        <button
+                          onClick={() => setStatus(o.id, "cancelled")}
+                          disabled={busy === o.id}
+                          className="rounded-lg border border-red-500 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:bg-red-500 hover:text-white disabled:opacity-50"
+                        >
+                          ✕ Recusar
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    !isFinal && (
+                      <>
+                        {nextStatus && (
+                          <button
+                            onClick={() => setStatus(o.id, nextStatus)}
+                            disabled={busy === o.id}
+                            className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700 disabled:opacity-50"
+                          >
+                            → {orderStatusLabel(nextStatus, o.order_type)}
+                          </button>
+                        )}
+                        <button
+                          onClick={() => setStatus(o.id, "cancelled")}
+                          disabled={busy === o.id}
+                          className="rounded-lg border border-red-500 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:bg-red-500 hover:text-white disabled:opacity-50"
+                        >
+                          Cancelar
+                        </button>
+                      </>
+                    )
                   )}
                 </div>
               </div>

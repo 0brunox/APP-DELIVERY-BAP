@@ -134,6 +134,7 @@ export interface Order {
   change_for: number | null;
   coupon: { code: string; discount: number } | null;
   schedule_at: string | null;
+  ready_at: string | null;
   subtotal: number;
   delivery_fee: number;
   discount: number;

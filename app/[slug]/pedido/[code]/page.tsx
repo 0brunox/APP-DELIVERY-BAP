@@ -27,6 +27,7 @@ interface TrackedOrder {
   total: number;
   created_at: string;
   schedule_at: string | null;
+  ready_at: string | null;
   items: TrackedItem[];
 }
 
@@ -75,6 +76,7 @@ export default async function TrackPage({
           number={order.number}
           code={order.code}
           initialStatus={order.status}
+          initialReadyAt={order.ready_at}
           orderType={order.order_type}
         />
 
