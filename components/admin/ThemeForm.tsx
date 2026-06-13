@@ -11,12 +11,12 @@ const FONTS = ["Poppins", "Inter", "Montserrat"];
 export default function ThemeForm({ store }: { store: Store }) {
   const router = useRouter();
   const supabase = createClient();
-  const t = store.settings?.theme ?? {};
+  const t = store.settings?.theme;
 
-  const [primary, setPrimary] = useState(t.primary ?? "#f59e0b");
-  const [secondary, setSecondary] = useState(t.secondary ?? "#fbbf24");
-  const [font, setFont] = useState(t.font ?? "Poppins");
-  const [heroBanner, setHeroBanner] = useState(t.heroBanner ?? "");
+  const [primary, setPrimary] = useState(t?.primary ?? "#f59e0b");
+  const [secondary, setSecondary] = useState(t?.secondary ?? "#fbbf24");
+  const [font, setFont] = useState(t?.font ?? "Poppins");
+  const [heroBanner, setHeroBanner] = useState(t?.heroBanner ?? "");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 

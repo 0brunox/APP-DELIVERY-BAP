@@ -49,6 +49,7 @@ function StoreInner({
   zones: DeliveryZone[];
 }) {
   const { count } = useCart();
+  const heroBanner = store.settings?.theme?.heroBanner?.trim();
   const [search, setSearch] = useState("");
   const [selectedCat, setSelectedCat] = useState<string>("all");
   const [detail, setDetail] = useState<Product | null>(null);
@@ -118,7 +119,15 @@ function StoreInner({
       {/* Hero */}
       <section
         className="px-5 py-12 text-white"
-        style={{ background: "linear-gradient(135deg, var(--primary), var(--secondary))" }}
+        style={
+          heroBanner
+            ? {
+                backgroundImage: `linear-gradient(135deg, rgba(0,0,0,.45), rgba(0,0,0,.25)), url('${heroBanner}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : { background: "linear-gradient(135deg, var(--primary), var(--secondary))" }
+        }
       >
         <div className="mx-auto max-w-5xl">
           <h1 className="mb-2 text-3xl font-bold sm:text-4xl">{store.name}</h1>
