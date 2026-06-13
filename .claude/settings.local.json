@@ -6,7 +6,9 @@
       "PowerShell(git config user.email \"obrunofast@users.noreply.github.com\")",
       "PowerShell(git add -A)",
       "mcp__Claude_Preview__preview_start",
-      "PowerShell(git add -A; git commit -F \"$env:TEMP\\\\commit-etapa5.txt\"; Remove-Item \"$env:TEMP\\\\commit-etapa5.txt\"; git log --oneline)"
+      "PowerShell(git add -A; git commit -F \"$env:TEMP\\\\commit-etapa5.txt\"; Remove-Item \"$env:TEMP\\\\commit-etapa5.txt\"; git log --oneline)",
+      "PowerShell($env:NEXT_TELEMETRY_DISABLED='1'; npm run build 2>&1 | Out-String)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 40; \"STATUS: $\\($r.StatusCode\\)`nLEN: $\\($r.Content.Length\\)`n\" + \\($r.Content -split \"`n\" | Select-String -Pattern \"Delivery Super App|Supabase|<title\" | Select-Object -First 5 | Out-String\\) } catch { \"ERRO: $\\($_.Exception.Message\\)\" })"
     ]
   }
 }

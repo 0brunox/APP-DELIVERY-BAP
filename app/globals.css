@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Tema da marca (sobrescrito por loja em runtime) ===== */
+:root {
+  --font: "Poppins", sans-serif;
+  --primary: #f59e0b;
+  --primary-dark: #d97706;
+  --secondary: #fbbf24;
+
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --border: #334155;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Acessibilidade: foco visível */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Utilitários de superfície usando as variáveis de tema */
+.surface {
+  background: var(--surface);
+  color: var(--text);
+}
+.surface-2 {
+  background: var(--surface-2);
+}
+.bordered {
+  border: 1px solid var(--border);
+}
+.text-muted {
+  color: var(--text-muted);
+}

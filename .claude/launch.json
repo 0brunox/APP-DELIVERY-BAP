@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "delivery-app",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "http-server", ".", "-p", "8765", "-c-1"],
-      "port": 8765
+      "name": "delivery-next",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
