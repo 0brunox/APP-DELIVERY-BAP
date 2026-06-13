@@ -272,6 +272,13 @@ export default function CheckoutModal({
 
     clear();
     setPlaced({ number: data.number, code: data.code, total: data.total });
+
+    // Avisa o lojista por push (não bloqueia a confirmação se falhar).
+    fetch("/api/push/new-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ storeId: store.id, number: data.number }),
+    }).catch(() => {});
   }
 
   // ===== Tela de confirmação =====

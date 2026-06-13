@@ -8,6 +8,7 @@ import { ORDER_TYPE_LABELS, PAYMENT_LABELS } from "@/lib/constants";
 import { ORDER_FLOW, ORDER_STATUS_COLOR, orderStatusLabel, orderStatusIcon } from "@/lib/orders";
 import type { OrderStatus } from "@/lib/types";
 import type { AdminOrder } from "@/app/admin/page";
+import PushToggle from "./PushToggle";
 
 const FILTERS: { id: string; label: string }[] = [
   { id: "active", label: "Ativos" },
@@ -207,6 +208,7 @@ export default function OrdersBoard({
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <PushToggle storeId={storeId} />
           <span
             className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
               live ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
