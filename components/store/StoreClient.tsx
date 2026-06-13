@@ -1,21 +1,24 @@
 "use client";
 
 import { useMemo, useState, type CSSProperties } from "react";
-import type { Category, Product, Store } from "@/lib/types";
+import type { Category, DeliveryZone, Product, Store } from "@/lib/types";
 import { darkenColor, normalizeText } from "@/lib/format";
 import { CartProvider, useCart } from "./CartContext";
 import ProductCard from "./ProductCard";
 import ProductDetailModal from "./ProductDetailModal";
 import CartSidebar from "./CartSidebar";
+import CheckoutModal from "./CheckoutModal";
 
 export default function StoreClient({
   store,
   products,
   categories,
+  zones,
 }: {
   store: Store;
   products: Product[];
   categories: Category[];
+  zones: DeliveryZone[];
 }) {
   const theme = store.settings?.theme;
   const themeStyle = {
@@ -28,7 +31,7 @@ export default function StoreClient({
   return (
     <CartProvider storeSlug={store.slug}>
       <div style={themeStyle}>
-        <StoreInner store={store} products={products} categories={categories} />
+        <StoreInner store={store} products={products} categories={categories} zones={zones} />
       </div>
     </CartProvider>
   );
@@ -38,16 +41,19 @@ function StoreInner({
   store,
   products,
   categories,
+  zones,
 }: {
   store: Store;
   products: Product[];
   categories: Category[];
+  zones: DeliveryZone[];
 }) {
-  const { count, subtotal } = useCart();
+  const { count } = useCart();
   const [search, setSearch] = useState("");
   const [selectedCat, setSelectedCat] = useState<string>("all");
   const [detail, setDetail] = useState<Product | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   // Agrupa produtos por categoria ativa (+ "Outros"); aplica busca
   const groups = useMemo(() => {
@@ -76,10 +82,8 @@ function StoreInner({
   const visibleGroups = searching || selectedCat === "all" ? groups : groups.filter((g) => g.id === selectedCat);
 
   function handleCheckout() {
-    // Checkout completo chega na sub-etapa 6C.
-    alert(
-      `🚧 Checkout completo (endereço, pagamento, cupom) chega na sub-etapa 6C.\n\nSeu carrinho tem ${count} item(ns) — subtotal ${subtotal.toFixed(2)}.`
-    );
+    setCartOpen(false);
+    setCheckoutOpen(true);
   }
 
   return (
@@ -181,6 +185,9 @@ function StoreInner({
 
       {detail && <ProductDetailModal product={detail} onClose={() => setDetail(null)} />}
       <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} onCheckout={handleCheckout} />
+      {checkoutOpen && (
+        <CheckoutModal store={store} zones={zones} onClose={() => setCheckoutOpen(false)} />
+      )}
     </>
   );
 }

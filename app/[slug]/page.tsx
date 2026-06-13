@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
-import type { Category, Product, Store } from "@/lib/types";
+import type { Category, DeliveryZone, Product, Store } from "@/lib/types";
 import SetupNotice from "@/components/SetupNotice";
 import StoreClient from "@/components/store/StoreClient";
 
@@ -14,15 +14,17 @@ async function loadStore(slug: string) {
     .maybeSingle();
   if (!store) return null;
 
-  const [{ data: products }, { data: categories }] = await Promise.all([
+  const [{ data: products }, { data: categories }, { data: zones }] = await Promise.all([
     supabase.from("products").select("*").eq("store_id", store.id).order("position"),
     supabase.from("categories").select("*").eq("store_id", store.id).order("position"),
+    supabase.from("delivery_zones").select("*").eq("store_id", store.id),
   ]);
 
   return {
     store: store as Store,
     products: (products ?? []) as Product[],
     categories: (categories ?? []) as Category[],
+    zones: (zones ?? []) as DeliveryZone[],
   };
 }
 
@@ -63,6 +65,11 @@ export default async function StorePage({
   }
 
   return (
-    <StoreClient store={data.store} products={data.products} categories={data.categories} />
+    <StoreClient
+      store={data.store}
+      products={data.products}
+      categories={data.categories}
+      zones={data.zones}
+    />
   );
 }
