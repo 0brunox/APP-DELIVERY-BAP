@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import SetupNotice from "@/components/SetupNotice";
 import SignOutButton from "@/components/admin/SignOutButton";
+import AdminTabs from "@/components/admin/AdminTabs";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   if (!isSupabaseConfigured()) return <SetupNotice />;
@@ -23,6 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <SignOutButton />
           </div>
         </div>
+        <AdminTabs />
       </header>
       <main className="mx-auto max-w-5xl px-5 py-6">{children}</main>
     </div>
