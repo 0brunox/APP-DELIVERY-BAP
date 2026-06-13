@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Store, StoreSettings } from "@/lib/types";
+import ImageUpload from "./ImageUpload";
 
 export default function SettingsForm({ store }: { store: Store }) {
   const router = useRouter();
@@ -75,7 +76,7 @@ export default function SettingsForm({ store }: { store: Store }) {
         <Field label="Endereço (slug)"><input className={`${inp} opacity-60`} value={`/${store.slug}`} readOnly title="O endereço é definido na criação da loja." /></Field>
       </div>
       <Field label="Subtítulo"><input className={inp} value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Delivery rápido e saboroso!" /></Field>
-      <Field label="URL do logo (opcional)"><input className={inp} value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://..." /></Field>
+      <Field label="Logo da loja (opcional)"><ImageUpload value={logoUrl} onChange={setLogoUrl} storeId={store.id} /></Field>
 
       <h3 className="mb-2 mt-5 font-bold">🛵 Entrega</h3>
       <Field label="Tipos de pedido">

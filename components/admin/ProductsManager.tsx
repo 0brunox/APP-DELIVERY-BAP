@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { brl } from "@/lib/format";
 import { BADGES } from "@/lib/constants";
 import type { Category, Product } from "@/lib/types";
+import ImageUpload from "./ImageUpload";
 
 interface VarRow { name: string; price: string }
 interface OptRow { name: string; price: string }
@@ -207,7 +208,7 @@ export default function ProductsManager({
                 <Field label="Preço R$ *"><input type="number" step="0.01" min="0" className={inp} value={editor.price} onChange={(e) => upd({ price: e.target.value })} /></Field>
                 <Field label="Promo R$"><input type="number" step="0.01" min="0" className={inp} value={editor.promo_price} onChange={(e) => upd({ promo_price: e.target.value })} /></Field>
               </div>
-              <Field label="URL da imagem"><input className={inp} value={editor.image} onChange={(e) => upd({ image: e.target.value })} placeholder="https://..." /></Field>
+              <Field label="Imagem"><ImageUpload value={editor.image} onChange={(url) => upd({ image: url })} storeId={storeId} /></Field>
 
               <Field label="Selos">
                 <div className="flex flex-wrap gap-3">
