@@ -5,6 +5,7 @@ import CreateStoreForm from "@/components/admin/CreateStoreForm";
 import SettingsForm from "@/components/admin/SettingsForm";
 import ZonesManager from "@/components/admin/ZonesManager";
 import CouponsManager from "@/components/admin/CouponsManager";
+import ImportBackup from "@/components/admin/ImportBackup";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function ConfigPage() {
       <SettingsForm store={store} />
       <ZonesManager storeId={store.id} initialZones={(zones ?? []) as DeliveryZone[]} />
       <CouponsManager storeId={store.id} initialCoupons={(coupons ?? []) as Coupon[]} />
+      <ImportBackup store={store} />
     </div>
   );
 }
