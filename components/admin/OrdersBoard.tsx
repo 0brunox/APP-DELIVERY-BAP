@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { brl } from "@/lib/format";
@@ -16,26 +16,157 @@ const FILTERS: { id: string; label: string }[] = [
   { id: "cancelled", label: "Cancelados" },
 ];
 
-export default function OrdersBoard({ initialOrders }: { initialOrders: AdminOrder[] }) {
+/** Toca um "ding-dong" curto via Web Audio (sem precisar de arquivo de áudio). */
+function playChime() {
+  try {
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AC) return;
+    const ctx = new AC();
+    const now = ctx.currentTime;
+    [880, 1175].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const t = now + i * 0.18;
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      osc.start(t);
+      osc.stop(t + 0.24);
+    });
+    setTimeout(() => ctx.close(), 800);
+  } catch {
+    // Áudio bloqueado pelo navegador até a primeira interação — ignorado.
+  }
+}
+
+export default function OrdersBoard({
+  initialOrders,
+  storeId,
+}: {
+  initialOrders: AdminOrder[];
+  storeId: string;
+}) {
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(() => createClient());
+  const [orders, setOrders] = useState<AdminOrder[]>(initialOrders);
   const [filter, setFilter] = useState("active");
   const [busy, setBusy] = useState<string | null>(null);
+  const [live, setLive] = useState(false);
+  const [newIds, setNewIds] = useState<Set<string>>(new Set());
+  const [soundOn, setSoundOn] = useState(true);
+  const soundRef = useRef(true);
+
+  // Preferência de som (persistida no navegador).
+  useEffect(() => {
+    const saved = localStorage.getItem("ordersSound");
+    if (saved !== null) {
+      const on = saved === "1";
+      setSoundOn(on);
+      soundRef.current = on;
+    }
+  }, []);
+
+  function toggleSound() {
+    const on = !soundOn;
+    setSoundOn(on);
+    soundRef.current = on;
+    localStorage.setItem("ordersSound", on ? "1" : "0");
+    if (on) playChime(); // o clique também "destrava" o áudio do navegador
+  }
+
+  // Mantém a lista em sincronia quando o servidor recarrega (botão Atualizar / navegação).
+  useEffect(() => {
+    setOrders(initialOrders);
+  }, [initialOrders]);
+
+  // Atualiza o título da aba quando chega pedido novo (visível em segundo plano).
+  useEffect(() => {
+    document.title = newIds.size > 0 ? `(${newIds.size}) 🔔 Pedidos` : "Pedidos · Painel";
+  }, [newIds]);
+
+  // === Realtime: assina mudanças nos pedidos desta loja ===
+  useEffect(() => {
+    let active = true;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    (async () => {
+      // Garante que o Realtime use o token do lojista (RLS) antes de assinar.
+      const { data } = await supabase.auth.getSession();
+      if (data.session) supabase.realtime.setAuth(data.session.access_token);
+      if (!active) return;
+
+      channel = supabase
+        .channel(`orders-${storeId}`)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` },
+          async (payload) => {
+            const id = (payload.new as { id: string }).id;
+            const { data: full } = await supabase
+              .from("orders")
+              .select("*, order_items(*)")
+              .eq("id", id)
+              .maybeSingle();
+            if (!active || !full) return;
+            setOrders((prev) => (prev.some((o) => o.id === id) ? prev : [full as AdminOrder, ...prev]));
+            setNewIds((prev) => new Set(prev).add(id));
+            setTimeout(() => {
+              setNewIds((prev) => {
+                const next = new Set(prev);
+                next.delete(id);
+                return next;
+              });
+            }, 12000);
+            if (soundRef.current) playChime();
+          }
+        )
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` },
+          (payload) => {
+            const row = payload.new as AdminOrder;
+            setOrders((prev) =>
+              prev.map((o) => (o.id === row.id ? { ...o, ...row, order_items: o.order_items } : o))
+            );
+          }
+        )
+        .on(
+          "postgres_changes",
+          { event: "DELETE", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` },
+          (payload) => {
+            const id = (payload.old as { id: string }).id;
+            setOrders((prev) => prev.filter((o) => o.id !== id));
+          }
+        )
+        .subscribe((status) => {
+          if (active) setLive(status === "SUBSCRIBED");
+        });
+    })();
+
+    return () => {
+      active = false;
+      if (channel) supabase.removeChannel(channel);
+    };
+  }, [supabase, storeId]);
 
   async function setStatus(id: string, status: OrderStatus) {
     setBusy(id);
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o))); // otimista
     await supabase.from("orders").update({ status }).eq("id", id);
     setBusy(null);
-    router.refresh();
   }
 
-  const shown = initialOrders.filter((o) => {
+  const shown = orders.filter((o) => {
     if (filter === "active") return o.status !== "completed" && o.status !== "cancelled";
     if (filter === "all") return true;
     return o.status === filter;
   });
 
-  const activeCount = initialOrders.filter(
+  const activeCount = orders.filter(
     (o) => o.status !== "completed" && o.status !== "cancelled"
   ).length;
 
@@ -56,13 +187,41 @@ export default function OrdersBoard({ initialOrders }: { initialOrders: AdminOrd
             </button>
           ))}
         </div>
-        <button
-          onClick={() => router.refresh()}
-          className="ml-auto rounded-lg border-2 border-[var(--border)] px-3 py-1 text-xs font-semibold text-muted transition hover:border-primary hover:text-primary"
-        >
-          ↻ Atualizar
-        </button>
+
+        <div className="ml-auto flex items-center gap-2">
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+              live ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+            }`}
+            title={live ? "Recebendo pedidos em tempo real" : "Conectando ao tempo real..."}
+          >
+            <span className={`h-2 w-2 rounded-full ${live ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`} />
+            {live ? "Ao vivo" : "Conectando"}
+          </span>
+          <button
+            onClick={toggleSound}
+            className="rounded-lg border-2 border-[var(--border)] px-2.5 py-1 text-xs font-semibold text-muted transition hover:border-primary hover:text-primary"
+            title={soundOn ? "Som de novo pedido ligado" : "Som de novo pedido desligado"}
+          >
+            {soundOn ? "🔔 Som" : "🔕 Mudo"}
+          </button>
+          <button
+            onClick={() => router.refresh()}
+            className="rounded-lg border-2 border-[var(--border)] px-3 py-1 text-xs font-semibold text-muted transition hover:border-primary hover:text-primary"
+          >
+            ↻ Atualizar
+          </button>
+        </div>
       </div>
+
+      {newIds.size > 0 && (
+        <button
+          onClick={() => setNewIds(new Set())}
+          className="mb-4 w-full animate-pulse rounded-xl bg-green-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-green-700"
+        >
+          🔔 {newIds.size} novo{newIds.size > 1 ? "s" : ""} pedido{newIds.size > 1 ? "s" : ""} chegou! (clique para dispensar o destaque)
+        </button>
+      )}
 
       {shown.length === 0 ? (
         <div className="surface-2 rounded-xl py-12 text-center text-muted">
@@ -76,15 +235,23 @@ export default function OrdersBoard({ initialOrders }: { initialOrders: AdminOrd
             const isFinal = o.status === "completed" || o.status === "cancelled";
             const nextStatus = ORDER_FLOW[ORDER_FLOW.indexOf(o.status) + 1];
             const customer = o.customer as Record<string, string>;
+            const isNew = newIds.has(o.id);
             return (
               <div
                 key={o.id}
-                className="surface-2 rounded-xl p-4"
+                className={`surface-2 rounded-xl p-4 transition ${
+                  isNew ? "ring-2 ring-green-400 ring-offset-2 ring-offset-[var(--bg)]" : ""
+                }`}
                 style={{ borderLeft: `5px solid ${color}` }}
               >
                 <div className="mb-1 flex items-start justify-between gap-2">
                   <div>
                     <span className="text-lg font-bold">Pedido #{o.number}</span>
+                    {isNew && (
+                      <span className="ml-2 animate-bounce rounded-full bg-green-500 px-2 py-0.5 align-middle text-[10px] font-bold text-white">
+                        NOVO
+                      </span>
+                    )}
                     <div className="text-xs text-muted">
                       {new Date(o.created_at).toLocaleString("pt-BR", {
                         day: "2-digit",

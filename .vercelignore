@@ -1,0 +1,5 @@
+# Arquivos que não precisam ir no upload do deploy pela Vercel CLI.
+.env*.local
+.git
+node_modules
+.next

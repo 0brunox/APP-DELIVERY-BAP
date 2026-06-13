@@ -28,7 +28,7 @@ export default async function AdminPage() {
           /{store.slug} ↗
         </Link>
       </div>
-      <OrdersBoard initialOrders={(orders ?? []) as AdminOrder[]} />
+      <OrdersBoard initialOrders={(orders ?? []) as AdminOrder[]} storeId={store.id} />
     </div>
   );
 }
