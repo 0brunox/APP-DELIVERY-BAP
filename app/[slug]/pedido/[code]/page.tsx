@@ -4,9 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { brl } from "@/lib/format";
 import { ORDER_TYPE_LABELS } from "@/lib/constants";
-import { orderStatusLabel, orderStatusIcon, ORDER_STATUS_COLOR } from "@/lib/orders";
 import type { OrderStatus, OrderType, AddonOption } from "@/lib/types";
-import OrderTimeline from "@/components/store/OrderTimeline";
+import OrderLiveStatus from "@/components/store/OrderLiveStatus";
 import SetupNotice from "@/components/SetupNotice";
 
 export const metadata: Metadata = { title: "Acompanhar pedido" };
@@ -65,8 +64,6 @@ export default async function TrackPage({
     );
   }
 
-  const color = ORDER_STATUS_COLOR[order.status];
-
   return (
     <main className="mx-auto min-h-screen max-w-md px-5 py-8">
       <Link href={`/${store.slug}`} className="text-sm font-semibold text-primary">
@@ -74,20 +71,12 @@ export default async function TrackPage({
       </Link>
 
       <div className="surface bordered mt-4 rounded-2xl p-6">
-        <div className="text-center">
-          <div className="text-sm text-muted">Pedido</div>
-          <div className="text-4xl font-extrabold text-primary">#{order.number}</div>
-          <div
-            className="mx-auto mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold text-white"
-            style={{ background: color }}
-          >
-            {orderStatusIcon(order.status, order.order_type)} {orderStatusLabel(order.status, order.order_type)}
-          </div>
-        </div>
-
-        <div className="surface-2 my-5 rounded-xl p-4">
-          <OrderTimeline status={order.status} orderType={order.order_type} />
-        </div>
+        <OrderLiveStatus
+          number={order.number}
+          code={order.code}
+          initialStatus={order.status}
+          orderType={order.order_type}
+        />
 
         <div className="mb-1 flex justify-between text-sm">
           <span className="text-muted">Tipo</span>
@@ -124,7 +113,7 @@ export default async function TrackPage({
       </div>
 
       <p className="mt-4 text-center text-xs text-muted">
-        Código <span className="font-mono font-semibold">{order.code}</span> · Atualize a página para ver o status mais recente.
+        Código <span className="font-mono font-semibold">{order.code}</span> · Esta página atualiza o status sozinha, em tempo real.
       </p>
     </main>
   );
