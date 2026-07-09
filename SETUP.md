@@ -20,10 +20,21 @@ npm install
 ### 2) Criar o projeto no Supabase
 1. Acesse https://supabase.com e crie um projeto (o free tier serve).
 2. No menu lateral, abra **SQL Editor → New query**.
-3. Cole todo o conteúdo de [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql) e clique **Run**.
-   - Cria as tabelas, as políticas de segurança (RLS), as funções de pedido/cupom
-     (`place_order`, `validate_coupon`, `get_order_by_code`), o bucket de imagens
-     `product-images` e habilita o realtime na tabela `orders`.
+3. Rode as migrations **em ordem**, uma por vez (cole o conteúdo do arquivo e clique **Run**):
+
+   | Arquivo | O que cria |
+   |---------|-----------|
+   | [`0001_init.sql`](supabase/migrations/0001_init.sql) | Tabelas, RLS, `place_order`/`validate_coupon`/`get_order_by_code`, bucket `product-images`, realtime em `orders` |
+   | [`0002_order_status_broadcast.sql`](supabase/migrations/0002_order_status_broadcast.sql) | Status do pedido ao vivo p/ o cliente (broadcast) |
+   | [`0003_prep_time.sql`](supabase/migrations/0003_prep_time.sql) | Tempo de preparo / previsão de pronto |
+   | [`0004_push.sql`](supabase/migrations/0004_push.sql) | Web Push (notificação de novo pedido) |
+   | [`0005_hardening.sql`](supabase/migrations/0005_hardening.sql) | Segurança: preços e taxa recalculados no servidor |
+   | [`0006_couriers.sql`](supabase/migrations/0006_couriers.sql) | Entregadores + rastreamento ao vivo |
+   | [`0007_ai.sql`](supabase/migrations/0007_ai.sql) | IA: limite de uso, itens populares, traduções |
+   | [`0008_platform.sql`](supabase/migrations/0008_platform.sql) | Planos, avaliações, QR de mesa, super-admin da plataforma |
+
+   > ⚠️ Na `0008` há um `insert` que cadastra o **e-mail do admin da plataforma**. Troque
+   > `brunocorreia65@gmail.com` pelo seu e-mail (o mesmo do login) antes de rodar, se for outro.
 
 ### 3) Conectar o app ao Supabase
 1. No Supabase, vá em **Project Settings → API**.
@@ -75,12 +86,21 @@ git push -u origin master
 ### 3) Configurar as variáveis de ambiente
 Em **Settings → Environment Variables**, adicione (marque *Production* e *Preview*):
 
-| Nome | Valor |
-|------|-------|
-| `NEXT_PUBLIC_SUPABASE_URL` | a sua Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | a sua chave pública |
+| Nome | Obrigatória? | Valor |
+|------|:---:|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | a sua Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | a sua chave pública (`sb_publishable_...` ou anon) |
+| `NEXT_PUBLIC_SITE_URL` | recomendada | `https://seu-app.vercel.app` (usado no sitemap e nos QR codes de mesa; sem ela, cai no host da requisição) |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | p/ Web Push | chave pública VAPID |
+| `VAPID_PRIVATE_KEY` | p/ Web Push | chave privada VAPID (**segredo**) |
+| `VAPID_SUBJECT` | p/ Web Push | `mailto:voce@seudominio.com` |
+| `ANTHROPIC_API_KEY` | p/ IA | chave de https://console.anthropic.com (**segredo**) |
+| `AI_MODEL` | opcional | `claude-opus-4-8` (padrão) ou `claude-haiku-4-5` p/ reduzir custo |
+| `AI_DAILY_LIMIT` | opcional | limite diário de chamadas de IA por loja (padrão 300) |
 
-> Não precisa de `NEXT_TELEMETRY_DISABLED` — aquilo é só um contorno do ambiente local (Windows/OneDrive).
+- **Web Push:** gere o par de chaves uma vez com `npx web-push generate-vapid-keys --json`. Sem elas, o app funciona — só não envia notificação de novo pedido.
+- **IA:** sem `ANTHROPIC_API_KEY`, os recursos de IA (garçom virtual, upsell, foto, insights, tradução) ficam ocultos e o resto do app funciona normalmente.
+- Não precisa de `NEXT_TELEMETRY_DISABLED` — aquilo era só um contorno do ambiente local (Windows/OneDrive).
 
 ### 4) Publicar
 Clique **Deploy**. Em ~1 minuto você terá `https://seu-app.vercel.app`.
@@ -101,8 +121,11 @@ Salve. Agora cadastro, confirmação e login funcionam em produção.
 
 ### Banco: mesmo projeto ou um novo?
 - O mais simples é usar o **mesmo** projeto Supabase do desenvolvimento.
-- Para isolar produção, crie **outro** projeto Supabase, rode o `0001_init.sql` nele e use as
-  chaves desse projeto nas variáveis da Vercel.
+- Para isolar produção, crie **outro** projeto Supabase, rode **todas** as migrations
+  (`0001` a `0008`, em ordem) nele e use as chaves desse projeto nas variáveis da Vercel.
+
+> 💡 **Free tier do Supabase pausa** o projeto após ~1 semana sem uso. Para um app em
+> produção de verdade, considere o plano pago (ou mantenha o banco acordado com acessos regulares).
 
 ### Domínio próprio (opcional)
 1. Vercel → **Settings → Domains** → adicione seu domínio e siga as instruções de DNS.
@@ -114,5 +137,7 @@ Cada `git push` para o branch principal dispara um **redeploy automático** na V
 ---
 
 ## Roadmap
-Veja [`ROADMAP.md`](ROADMAP.md) para o plano completo das 12 etapas.
-A **Etapa 6** (virar plataforma na nuvem) está concluída. A seguir: **Etapa 7 — pedidos em tempo real**.
+Veja [`ROADMAP.md`](ROADMAP.md) para o plano completo. **As 12 etapas estão concluídas**:
+plataforma na nuvem, pedidos em tempo real, entregadores + rastreamento, IA (garçom virtual,
+upsell, cadastro por foto, insights, tradução), planos, QR de mesa, avaliações, SEO e
+super-admin. Pagamento é **100% presencial** na maquininha (crédito, débito e PIX) — sem gateway.
