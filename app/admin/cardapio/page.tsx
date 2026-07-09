@@ -1,9 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { getOwnerStore } from "@/lib/admin";
 import type { Category, Product } from "@/lib/types";
+import { aiConfigured } from "@/lib/ai";
 import CreateStoreForm from "@/components/admin/CreateStoreForm";
 import CategoriesManager from "@/components/admin/CategoriesManager";
 import ProductsManager from "@/components/admin/ProductsManager";
+import MenuPhotoImport from "@/components/admin/MenuPhotoImport";
+import TranslateMenu from "@/components/admin/TranslateMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +22,16 @@ export default async function CardapioPage() {
 
   return (
     <div className="space-y-8">
+      {aiConfigured() && (
+        <MenuPhotoImport storeId={store.id} categories={(categories ?? []) as Category[]} />
+      )}
       <CategoriesManager storeId={store.id} initialCategories={(categories ?? []) as Category[]} />
       <ProductsManager
         storeId={store.id}
         initialProducts={(products ?? []) as Product[]}
         categories={(categories ?? []) as Category[]}
       />
+      {aiConfigured() && <TranslateMenu />}
     </div>
   );
 }

@@ -60,12 +60,21 @@ export interface Store {
   created_at: string;
 }
 
+/** Traduções do cardápio geradas por IA: {en: {...}, es: {...}} */
+export interface Translations {
+  en?: { name: string; description?: string };
+  es?: { name: string; description?: string };
+}
+
+export type MenuLang = "pt" | "en" | "es";
+
 export interface Category {
   id: string;
   store_id: string;
   name: string;
   position: number;
   active: boolean;
+  translations?: Translations;
 }
 
 export interface Product {
@@ -83,6 +92,7 @@ export interface Product {
   addon_groups: AddonGroup[];
   position: number;
   created_at: string;
+  translations?: Translations;
 }
 
 export interface Coupon {

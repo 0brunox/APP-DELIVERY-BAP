@@ -2,7 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getOwnerStore } from "@/lib/admin";
 import { brl } from "@/lib/format";
 import type { Order, OrderItem } from "@/lib/types";
+import { aiConfigured } from "@/lib/ai";
 import CreateStoreForm from "@/components/admin/CreateStoreForm";
+import InsightsChat from "@/components/admin/InsightsChat";
 
 export const dynamic = "force-dynamic";
 
@@ -79,6 +81,8 @@ export default async function RelatoriosPage() {
               ))}
             </div>
           </section>
+
+          {aiConfigured() && <InsightsChat />}
         </>
       )}
     </div>

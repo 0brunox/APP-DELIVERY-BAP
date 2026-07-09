@@ -49,6 +49,34 @@ export default function ProductsManager({
   const [editor, setEditor] = useState<EditorState | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [describing, setDescribing] = useState(false);
+
+  // Gera uma descrição apetitosa com IA para o produto em edição.
+  async function generateDescription() {
+    if (!editor?.name.trim() || describing) return;
+    setDescribing(true);
+    try {
+      const res = await fetch("/api/ai/describe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editor.name,
+          category: catName(editor.category_id || null),
+          current: editor.description,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.description) {
+        setEditor((e) => (e ? { ...e, description: data.description } : e));
+      } else if (data.error) {
+        setError(data.error);
+      }
+    } catch {
+      setError("Não foi possível gerar a descrição agora.");
+    } finally {
+      setDescribing(false);
+    }
+  }
 
   const catName = (id: string | null) => categories.find((c) => c.id === id)?.name ?? "Outros";
 
@@ -197,7 +225,20 @@ export default function ProductsManager({
 
             <div className="flex-1 space-y-3 overflow-y-auto p-4">
               <Field label="Nome *"><input className={inp} value={editor.name} onChange={(e) => upd({ name: e.target.value })} /></Field>
-              <Field label="Descrição"><textarea className={inp} rows={2} value={editor.description} onChange={(e) => upd({ description: e.target.value })} /></Field>
+              <Field label="Descrição">
+                <div className="relative">
+                  <textarea className={inp} rows={2} value={editor.description} onChange={(e) => upd({ description: e.target.value })} />
+                  <button
+                    type="button"
+                    onClick={generateDescription}
+                    disabled={describing || !editor.name.trim()}
+                    title="Gerar descrição apetitosa com IA"
+                    className="absolute bottom-2 right-2 rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white transition hover:bg-primary-dark disabled:opacity-40"
+                  >
+                    {describing ? "..." : "✨ IA"}
+                  </button>
+                </div>
+              </Field>
               <Field label="Categoria">
                 <select className={inp} value={editor.category_id} onChange={(e) => upd({ category_id: e.target.value })}>
                   <option value="">Sem categoria (Outros)</option>

@@ -1,16 +1,22 @@
 "use client";
 
-import { brl } from "@/lib/format";
+import { useEffect, useRef, useState } from "react";
+import type { Product } from "@/lib/types";
+import { brl, basePrice } from "@/lib/format";
 import { useCart } from "./CartContext";
 
 export default function CartSidebar({
   open,
   onClose,
   onCheckout,
+  storeId,
+  products = [],
 }: {
   open: boolean;
   onClose: () => void;
   onCheckout: () => void;
+  storeId?: string;
+  products?: Product[];
 }) {
   const { cart, subtotal, updateQty, removeLine, clear } = useCart();
 
@@ -91,6 +97,10 @@ export default function CartSidebar({
           )}
         </div>
 
+        {cart.length > 0 && storeId && (
+          <UpsellSuggestions open={open} storeId={storeId} products={products} />
+        )}
+
         {cart.length > 0 && (
           <div className="surface-2 border-t border-[var(--border)] p-5">
             <div className="mb-3 flex justify-between text-lg font-bold">
@@ -113,5 +123,80 @@ export default function CartSidebar({
         )}
       </aside>
     </>
+  );
+}
+
+/** Sugestões de upsell da IA: "que tal juntar...?" (1 clique para adicionar). */
+function UpsellSuggestions({
+  open,
+  storeId,
+  products,
+}: {
+  open: boolean;
+  storeId: string;
+  products: Product[];
+}) {
+  const { cart, addLine } = useCart();
+  const [suggestions, setSuggestions] = useState<{ product: Product; reason: string }[]>([]);
+  const lastKey = useRef("");
+
+  const cartNames = cart.map((l) => l.name);
+  const key = cartNames.slice().sort().join("|");
+
+  useEffect(() => {
+    if (!open || cart.length === 0 || key === lastKey.current) return;
+    lastKey.current = key;
+    setSuggestions([]);
+    const ctrl = new AbortController();
+    fetch("/api/ai/upsell", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ storeId, cartNames }),
+      signal: ctrl.signal,
+    })
+      .then((r) => (r.ok ? r.json() : { suggestions: [] }))
+      .then((data: { suggestions: { product_id: string; reason: string }[] }) => {
+        const byId = new Map(products.map((p) => [p.id, p]));
+        setSuggestions(
+          (data.suggestions ?? [])
+            .map((s) => ({ product: byId.get(s.product_id)!, reason: s.reason }))
+            .filter((s) => s.product)
+        );
+      })
+      .catch(() => setSuggestions([]));
+    return () => ctrl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, key, storeId]);
+
+  if (suggestions.length === 0) return null;
+
+  return (
+    <div className="border-t border-[var(--border)] px-5 py-3">
+      <div className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">✨ Que tal juntar?</div>
+      <div className="space-y-2">
+        {suggestions.map(({ product, reason }) => (
+          <div key={product.id} className="surface-2 flex items-center gap-2 rounded-xl p-2">
+            {product.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={product.image} alt={product.name} className="h-10 w-10 shrink-0 rounded-lg object-cover" />
+            )}
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-semibold">{product.name}</div>
+              <div className="truncate text-xs text-muted">{reason}</div>
+            </div>
+            <span className="text-sm font-semibold text-primary">{brl(basePrice(product))}</span>
+            <button
+              onClick={() => {
+                addLine(product, null, [], "", 1);
+                setSuggestions((s) => s.filter((x) => x.product.id !== product.id));
+              }}
+              className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white transition hover:bg-primary-dark"
+            >
+              + Add
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

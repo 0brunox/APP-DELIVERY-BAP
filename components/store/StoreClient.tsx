@@ -1,13 +1,28 @@
 "use client";
 
 import { useMemo, useState, type CSSProperties } from "react";
-import type { Category, DeliveryZone, Product, Store } from "@/lib/types";
+import type { Category, DeliveryZone, MenuLang, Product, Store } from "@/lib/types";
 import { darkenColor, normalizeText } from "@/lib/format";
 import { CartProvider, useCart } from "./CartContext";
 import ProductCard from "./ProductCard";
 import ProductDetailModal from "./ProductDetailModal";
 import CartSidebar from "./CartSidebar";
 import CheckoutModal from "./CheckoutModal";
+import WaiterChat from "./WaiterChat";
+
+/** Aplica a tradução de exibição (nome/descrição); preços e adicionais ficam originais. */
+function translateProduct(p: Product, lang: MenuLang): Product {
+  if (lang === "pt") return p;
+  const t = p.translations?.[lang];
+  if (!t?.name) return p;
+  return { ...p, name: t.name, description: t.description ?? p.description };
+}
+
+function translateCategory(c: Category, lang: MenuLang): Category {
+  if (lang === "pt") return c;
+  const t = c.translations?.[lang];
+  return t?.name ? { ...c, name: t.name } : c;
+}
 
 export default function StoreClient({
   store,
@@ -39,8 +54,8 @@ export default function StoreClient({
 
 function StoreInner({
   store,
-  products,
-  categories,
+  products: rawProducts,
+  categories: rawCategories,
   zones,
 }: {
   store: Store;
@@ -55,6 +70,20 @@ function StoreInner({
   const [detail, setDetail] = useState<Product | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [lang, setLang] = useState<MenuLang>("pt");
+
+  const hasTranslations = useMemo(
+    () => rawProducts.some((p) => p.translations?.en?.name),
+    [rawProducts]
+  );
+  const products = useMemo(
+    () => rawProducts.map((p) => translateProduct(p, lang)),
+    [rawProducts, lang]
+  );
+  const categories = useMemo(
+    () => rawCategories.map((c) => translateCategory(c, lang)),
+    [rawCategories, lang]
+  );
 
   // Agrupa produtos por categoria ativa (+ "Outros"); aplica busca
   const groups = useMemo(() => {
@@ -101,6 +130,18 @@ function StoreInner({
             )}
           </div>
           <span className="flex-1 text-lg font-bold text-primary">{store.name}</span>
+          {hasTranslations && (
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value as MenuLang)}
+              aria-label="Idioma do cardápio"
+              className="surface-2 rounded-full border-2 border-[var(--border)] px-2 py-1.5 text-sm font-semibold outline-none"
+            >
+              <option value="pt">🇧🇷 PT</option>
+              <option value="en">🇺🇸 EN</option>
+              <option value="es">🇪🇸 ES</option>
+            </select>
+          )}
           <button
             onClick={() => setCartOpen(true)}
             aria-label="Abrir carrinho"
@@ -193,10 +234,17 @@ function StoreInner({
       </footer>
 
       {detail && <ProductDetailModal product={detail} onClose={() => setDetail(null)} />}
-      <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} onCheckout={handleCheckout} />
+      <CartSidebar
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        onCheckout={handleCheckout}
+        storeId={store.id}
+        products={rawProducts}
+      />
       {checkoutOpen && (
         <CheckoutModal store={store} zones={zones} onClose={() => setCheckoutOpen(false)} />
       )}
+      <WaiterChat storeId={store.id} products={rawProducts} />
     </>
   );
 }
