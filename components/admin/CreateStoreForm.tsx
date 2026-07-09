@@ -9,8 +9,7 @@ const DEFAULT_SETTINGS = {
   deliveryFee: 6,
   minOrderValue: 0,
   orderTypes: { delivery: true, pickup: true, dinein: false },
-  paymentMethods: { pix: true, card: true, cash: true },
-  pix: { keyType: "telefone", key: "", holder: "" },
+  paymentMethods: { pix: true, credit: true, debit: true },
   enableScheduling: false,
   theme: { primary: "#f59e0b", secondary: "#fbbf24", font: "Poppins", heroBanner: "" },
 };

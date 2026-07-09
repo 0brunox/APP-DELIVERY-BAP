@@ -41,7 +41,8 @@ export interface StoreSettings {
   currencySymbol?: string;
   exchangeRates?: { USD: number; EUR: number };
   orderTypes?: { delivery: boolean; pickup: boolean; dinein: boolean };
-  paymentMethods?: { pix: boolean; card: boolean; cash: boolean };
+  /** Pagamento presencial na maquininha; card/cash são legados de lojas antigas. */
+  paymentMethods?: { pix?: boolean; credit?: boolean; debit?: boolean; card?: boolean; cash?: boolean };
   pix?: { keyType: string; key: string; holder: string };
   enableScheduling?: boolean;
   estimatedTime?: { delivery: string; pickup: string };

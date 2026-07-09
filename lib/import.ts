@@ -124,8 +124,9 @@ function mapSettings(s: Dict): StoreSettings {
     orderTypes: s.orderTypes
       ? { delivery: bool(ot.delivery, true), pickup: bool(ot.pickup, true), dinein: bool(ot.dinein, false) }
       : undefined,
+    // Backup legado tinha {pix, card, cash}: "card" vira crédito+débito; dinheiro sai (pagamento é na maquininha).
     paymentMethods: s.paymentMethods
-      ? { pix: bool(pm.pix, true), card: bool(pm.card, true), cash: bool(pm.cash, true) }
+      ? { pix: bool(pm.pix, true), credit: bool(pm.card, true), debit: bool(pm.card, true) }
       : undefined,
     pix: s.pix ? { keyType: str(pix.keyType), key: str(pix.key), holder: str(pix.holder) } : undefined,
     enableScheduling: bool(s.enableScheduling, false),

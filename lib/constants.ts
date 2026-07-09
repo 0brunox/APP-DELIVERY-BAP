@@ -12,7 +12,10 @@ export const ORDER_TYPE_LABELS: Record<string, string> = {
 };
 
 export const PAYMENT_LABELS: Record<string, string> = {
-  pix: "PIX",
+  pix: "PIX (maquininha)",
+  credit: "Crédito (maquininha)",
+  debit: "Débito (maquininha)",
+  // Legado: pedidos antigos gravados antes do pagamento 100% presencial
   card: "Cartão na entrega",
   cash: "Dinheiro",
 };

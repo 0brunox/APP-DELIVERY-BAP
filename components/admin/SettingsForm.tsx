@@ -21,15 +21,11 @@ export default function SettingsForm({ store }: { store: Store }) {
     pickup: s.orderTypes?.pickup ?? true,
     dinein: s.orderTypes?.dinein ?? false,
   });
+  // Pagamento é sempre presencial (maquininha); "card" é o legado que habilitava cartão.
   const [pay, setPay] = useState({
+    credit: s.paymentMethods?.credit ?? s.paymentMethods?.card ?? true,
+    debit: s.paymentMethods?.debit ?? s.paymentMethods?.card ?? true,
     pix: s.paymentMethods?.pix ?? true,
-    card: s.paymentMethods?.card ?? true,
-    cash: s.paymentMethods?.cash ?? true,
-  });
-  const [pix, setPix] = useState({
-    keyType: s.pix?.keyType ?? "telefone",
-    key: s.pix?.key ?? "",
-    holder: s.pix?.holder ?? "",
   });
   const [etaDelivery, setEtaDelivery] = useState(s.estimatedTime?.delivery ?? "");
   const [etaPickup, setEtaPickup] = useState(s.estimatedTime?.pickup ?? "");
@@ -43,7 +39,7 @@ export default function SettingsForm({ store }: { store: Store }) {
     if (!name.trim()) return setMsg({ type: "err", text: "Informe o nome da loja." });
     if (!orderTypes.delivery && !orderTypes.pickup && !orderTypes.dinein)
       return setMsg({ type: "err", text: "Ative pelo menos um tipo de pedido." });
-    if (!pay.pix && !pay.card && !pay.cash)
+    if (!pay.pix && !pay.credit && !pay.debit)
       return setMsg({ type: "err", text: "Ative pelo menos uma forma de pagamento." });
 
     const settings: StoreSettings = {
@@ -54,7 +50,6 @@ export default function SettingsForm({ store }: { store: Store }) {
       minOrderValue: parseFloat(minOrderValue) || 0,
       orderTypes,
       paymentMethods: pay,
-      pix: { keyType: pix.keyType, key: pix.key.trim(), holder: pix.holder.trim() },
       estimatedTime: { delivery: etaDelivery.trim(), pickup: etaPickup.trim() },
       enableScheduling,
     };
@@ -95,27 +90,17 @@ export default function SettingsForm({ store }: { store: Store }) {
         <Field label="Tempo estimado de retirada"><input className={inp} value={etaPickup} onChange={(e) => setEtaPickup(e.target.value)} placeholder="15–25 min" /></Field>
       </div>
 
-      <h3 className="mb-2 mt-5 font-bold">💳 Pagamento</h3>
+      <h3 className="mb-2 mt-5 font-bold">💳 Pagamento (presencial, na maquininha)</h3>
+      <p className="mb-2 text-sm text-muted">
+        O cliente paga ao receber: o entregador leva a maquininha até ele, ou ele paga na loja ao retirar.
+      </p>
       <Field label="Formas aceitas">
         <div className="flex flex-col gap-1.5">
+          <Toggle checked={pay.credit} onChange={(v) => setPay({ ...pay, credit: v })} label="💳 Cartão de crédito" />
+          <Toggle checked={pay.debit} onChange={(v) => setPay({ ...pay, debit: v })} label="💳 Cartão de débito" />
           <Toggle checked={pay.pix} onChange={(v) => setPay({ ...pay, pix: v })} label="📱 PIX" />
-          <Toggle checked={pay.card} onChange={(v) => setPay({ ...pay, card: v })} label="💳 Cartão na entrega" />
-          <Toggle checked={pay.cash} onChange={(v) => setPay({ ...pay, cash: v })} label="💵 Dinheiro" />
         </div>
       </Field>
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Field label="Tipo de chave PIX">
-          <select className={inp} value={pix.keyType} onChange={(e) => setPix({ ...pix, keyType: e.target.value })}>
-            <option value="telefone">Telefone</option>
-            <option value="cpf">CPF</option>
-            <option value="cnpj">CNPJ</option>
-            <option value="email">E-mail</option>
-            <option value="aleatoria">Aleatória</option>
-          </select>
-        </Field>
-        <Field label="Chave PIX"><input className={inp} value={pix.key} onChange={(e) => setPix({ ...pix, key: e.target.value })} /></Field>
-        <Field label="Recebedor (PIX)"><input className={inp} value={pix.holder} onChange={(e) => setPix({ ...pix, holder: e.target.value })} /></Field>
-      </div>
 
       <h3 className="mb-2 mt-5 font-bold">⏰ Agendamento</h3>
       <Toggle checked={enableScheduling} onChange={setEnableScheduling} label="Permitir que o cliente agende o pedido" />

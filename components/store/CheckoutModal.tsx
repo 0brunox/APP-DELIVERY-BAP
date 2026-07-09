@@ -9,7 +9,7 @@ import { useCart } from "./CartContext";
 import OrderTimeline from "./OrderTimeline";
 
 type OrderType = "delivery" | "pickup" | "dinein";
-type Payment = "pix" | "card" | "cash";
+type Payment = "pix" | "credit" | "debit";
 
 interface FormState {
   orderType: OrderType;
@@ -24,7 +24,6 @@ interface FormState {
   zoneId: string;
   neighborhood: string;
   tableNumber: string;
-  changeFor: string;
   scheduleMode: "now" | "later";
   scheduleAt: string;
 }
@@ -42,8 +41,8 @@ const ORDER_TYPE_META: Record<OrderType, { icon: string; label: string }> = {
 };
 const PAYMENT_META: Record<Payment, { icon: string; label: string }> = {
   pix: { icon: "📱", label: "PIX" },
-  card: { icon: "💳", label: "Cartão na entrega" },
-  cash: { icon: "💵", label: "Dinheiro" },
+  credit: { icon: "💳", label: "Cartão de crédito" },
+  debit: { icon: "💳", label: "Cartão de débito" },
 };
 
 export default function CheckoutModal({
@@ -62,9 +61,12 @@ export default function CheckoutModal({
   const enabledTypes = (["delivery", "pickup", "dinein"] as OrderType[]).filter(
     (t) => settings.orderTypes?.[t]
   );
-  const enabledPays = (["pix", "card", "cash"] as Payment[]).filter(
-    (p) => settings.paymentMethods?.[p]
-  );
+  // Lojas antigas podem ter só {pix, card, cash}: "card" habilita crédito e débito.
+  const pm = settings.paymentMethods ?? {};
+  const enabledPays = (["credit", "debit", "pix"] as Payment[]).filter((p) => {
+    if (pm[p] !== undefined) return pm[p];
+    return p === "pix" ? true : (pm.card ?? true);
+  });
 
   const [form, setForm] = useState<FormState>(() => {
     let saved: Partial<FormState> = {};
@@ -75,7 +77,7 @@ export default function CheckoutModal({
     }
     return {
       orderType: enabledTypes[0] ?? "delivery",
-      payment: enabledPays[0] ?? "pix",
+      payment: enabledPays[0] ?? "credit",
       name: saved.name ?? "",
       phone: saved.phone ?? "",
       cep: saved.cep ?? "",
@@ -86,7 +88,6 @@ export default function CheckoutModal({
       zoneId: saved.zoneId ?? "",
       neighborhood: saved.neighborhood ?? "",
       tableNumber: "",
-      changeFor: "",
       scheduleMode: "now",
       scheduleAt: "",
     };
@@ -172,13 +173,6 @@ export default function CheckoutModal({
     setError("");
   }
 
-  function copyPix() {
-    const key = settings.pix?.key;
-    if (key && navigator.clipboard) {
-      navigator.clipboard.writeText(key).catch(() => undefined);
-    }
-  }
-
   async function submit() {
     setError("");
     if (cart.length === 0) return;
@@ -233,7 +227,7 @@ export default function CheckoutModal({
         tableNumber: form.tableNumber,
       },
       payment: form.payment,
-      change_for: form.payment === "cash" ? form.changeFor : "",
+      change_for: "",
       coupon: appliedCoupon ? { code: appliedCoupon.code } : null,
       schedule_at: scheduleAt,
       zone_id: form.orderType === "delivery" ? form.zoneId : "",
@@ -315,12 +309,10 @@ export default function CheckoutModal({
             </div>
           </div>
 
-          {form.payment === "pix" && settings.pix?.key && (
-            <div className="mb-4 rounded-xl border border-green-300 bg-green-50 p-3 text-left text-sm text-green-800">
-              <strong>Pague via PIX</strong> ({settings.pix.keyType})
-              <div className="mt-1 break-all font-mono">{settings.pix.key}</div>
-            </div>
-          )}
+          <div className="mb-4 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3 text-left text-sm text-muted">
+            🤝 <strong>Pagamento na {form.orderType === "delivery" ? "entrega" : "retirada"}:</strong>{" "}
+            {PAYMENT_META[form.payment]?.label ?? form.payment} na maquininha.
+          </div>
 
           <Link
             href={trackUrl}
@@ -470,25 +462,11 @@ export default function CheckoutModal({
               </label>
             ))}
           </div>
-          {form.payment === "pix" && settings.pix?.key && (
-            <div className="mt-2 rounded-xl border border-green-300 bg-green-50 p-3 text-sm text-green-800">
-              <div className="flex items-center justify-between gap-2">
-                <span className="break-all font-mono">{settings.pix.key}</span>
-                <button onClick={copyPix} className="shrink-0 rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white">
-                  Copiar
-                </button>
-              </div>
-            </div>
-          )}
-          {form.payment === "cash" && (
-            <Input
-              value={form.changeFor}
-              onChange={(v) => set("changeFor", v)}
-              placeholder="Troco para quanto? (opcional)"
-              type="number"
-              className="mt-2"
-            />
-          )}
+          <div className="mt-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3 text-sm text-muted">
+            {form.orderType === "delivery"
+              ? "🤝 Você paga na hora da entrega: o entregador leva a maquininha (crédito, débito ou PIX)."
+              : "🤝 Você paga na loja ao receber o pedido, na maquininha (crédito, débito ou PIX)."}
+          </div>
         </Section>
 
         {/* Cupom */}
