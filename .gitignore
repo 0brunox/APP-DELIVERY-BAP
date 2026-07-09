@@ -25,3 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .vercel
+
+# Config local do Claude Code (pode conter tokens) — nunca versionar
+.claude/settings.local.json
