@@ -23,24 +23,39 @@ export async function POST(req: Request) {
   // Sem chaves configuradas, não é erro: só não há push (o pedido já foi gravado).
   if (!configured()) return NextResponse.json({ ok: false, reason: "push-not-configured" });
 
-  let body: { storeId?: string; number?: number };
+  let body: { storeId?: string; code?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
   const storeId = body.storeId;
-  if (!storeId) return NextResponse.json({ ok: false }, { status: 400 });
+  const code = body.code;
+  if (!storeId || !code) return NextResponse.json({ ok: false }, { status: 400 });
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  // Anti-spam: só envia push se o código corresponder a um pedido real,
+  // recém-criado (últimos 10 min) e ainda não aceito pelo lojista.
+  const { data: order } = await supabase.rpc("get_order_by_code", {
+    p_store: storeId,
+    p_code: code,
+  });
+  if (!order || order.status !== "received") {
+    return NextResponse.json({ ok: false }, { status: 403 });
+  }
+  const ageMs = Date.now() - new Date(order.created_at).getTime();
+  if (!Number.isFinite(ageMs) || ageMs > 10 * 60 * 1000) {
+    return NextResponse.json({ ok: false }, { status: 403 });
+  }
 
   webpush.setVapidDetails(
     process.env.VAPID_SUBJECT || "mailto:no-reply@sabor-express.app",
     process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
     process.env.VAPID_PRIVATE_KEY!
-  );
-
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
   const { data: targets } = await supabase.rpc("list_push_targets", {
@@ -51,9 +66,7 @@ export async function POST(req: Request) {
 
   const payload = JSON.stringify({
     title: "🔔 Novo pedido!",
-    body: body.number
-      ? `Pedido #${body.number} chegou. Toque para abrir o painel.`
-      : "Um novo pedido chegou. Toque para abrir o painel.",
+    body: `Pedido #${order.number} chegou. Toque para abrir o painel.`,
     url: "/admin",
     tag: "new-order",
     requireInteraction: true,

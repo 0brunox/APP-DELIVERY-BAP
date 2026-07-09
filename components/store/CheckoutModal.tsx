@@ -210,12 +210,13 @@ export default function CheckoutModal({
     }
 
     setSubmitting(true);
+    // Os preços são recalculados no servidor a partir do product_id.
     const p_items = cart.map((l) => ({
+      product_id: l.productId,
       name: l.name,
       variation_name: l.variationName,
       addons: l.addons,
       note: l.note,
-      unit_price: l.unitPrice,
       quantity: l.quantity,
     }));
     const p_order = {
@@ -235,7 +236,7 @@ export default function CheckoutModal({
       change_for: form.payment === "cash" ? form.changeFor : "",
       coupon: appliedCoupon ? { code: appliedCoupon.code } : null,
       schedule_at: scheduleAt,
-      delivery_fee: fee ?? 0,
+      zone_id: form.orderType === "delivery" ? form.zoneId : "",
     };
 
     const { data, error: rpcError } = await supabase.rpc("place_order", {
@@ -277,7 +278,7 @@ export default function CheckoutModal({
     fetch("/api/push/new-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ storeId: store.id, number: data.number }),
+      body: JSON.stringify({ storeId: store.id, code: data.code }),
     }).catch(() => {});
   }
 

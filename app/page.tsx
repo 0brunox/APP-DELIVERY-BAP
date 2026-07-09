@@ -33,7 +33,7 @@ export default function HomePage() {
         {[
           { icon: "🏪", title: "Cada loja, um link", desc: "meuapp.com/sua-loja com cardápio e tema próprios." },
           { icon: "🧾", title: "Pedidos em tempo real", desc: "Receba e acompanhe pedidos no painel." },
-          { icon: "💳", title: "Pague online (em breve)", desc: "PIX e cartão direto no checkout." },
+          { icon: "💳", title: "Pagamento flexível", desc: "PIX, cartão na entrega ou dinheiro com troco." },
         ].map((f) => (
           <div key={f.title} className="surface bordered rounded-xl p-5">
             <div className="mb-2 text-3xl">{f.icon}</div>
@@ -51,7 +51,7 @@ export default function HomePage() {
           Painel do lojista →
         </Link>
         <p className="mt-3 text-xs text-muted">
-          (login e painel chegam na sub-etapa 6D)
+          Entre com sua conta para gerenciar cardápio, pedidos e aparência da loja.
         </p>
       </div>
     </main>

@@ -49,6 +49,75 @@ function fmtTime(iso: string): string {
   return new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
+/** Link wa.me a partir do telefone salvo (assume DDI 55 quando só há DDD+número). */
+function waLink(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return `https://wa.me/${digits.length <= 11 ? "55" + digits : digits}`;
+}
+
+function esc(s: unknown): string {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}
+
+/** Abre a comanda numa janela própria com CSS de impressora térmica 80mm. */
+function printReceipt(o: AdminOrder) {
+  const customer = o.customer as Record<string, string>;
+  const items = o.order_items
+    .map((it) => {
+      const extras = [
+        it.variation_name ? esc(it.variation_name) : "",
+        ...it.addons.map((a) => `+ ${esc(a.name)}`),
+        it.note ? `Obs: ${esc(it.note)}` : "",
+      ].filter(Boolean);
+      return `<div class="item"><div class="row"><span>${it.quantity}x ${esc(it.name)}</span><span>${brl(it.unit_price * it.quantity)}</span></div>${
+        extras.length ? `<div class="sub">${extras.join("<br>")}</div>` : ""
+      }</div>`;
+    })
+    .join("");
+  const address =
+    o.order_type === "delivery" && customer.street
+      ? `<p>${esc(customer.street)}, ${esc(customer.number)}${customer.complement ? ` - ${esc(customer.complement)}` : ""}<br>${esc(customer.neighborhood ?? "")}${customer.reference ? `<br>Ref: ${esc(customer.reference)}` : ""}</p>`
+      : "";
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Pedido #${o.number}</title><style>
+    @page { size: 80mm auto; margin: 4mm; }
+    body { width: 72mm; margin: 0; font-family: 'Courier New', monospace; font-size: 12px; color: #000; }
+    h1 { font-size: 16px; text-align: center; margin: 0 0 2px; }
+    .center { text-align: center; }
+    hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
+    .row { display: flex; justify-content: space-between; gap: 8px; }
+    .item { margin-bottom: 4px; }
+    .sub { padding-left: 12px; font-size: 11px; }
+    .total { font-size: 14px; font-weight: bold; }
+    p { margin: 2px 0; }
+  </style></head><body>
+    <h1>PEDIDO #${o.number}</h1>
+    <p class="center">${new Date(o.created_at).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}</p>
+    <p class="center">${esc(ORDER_TYPE_LABELS[o.order_type])}${o.order_type === "dinein" && customer.tableNumber ? ` - Mesa ${esc(customer.tableNumber)}` : ""}${o.schedule_at ? `<br>Agendado: ${esc(o.schedule_at)}` : ""}</p>
+    <hr>
+    <p><strong>${esc(customer.name)}</strong><br>Tel: ${esc(customer.phone)}</p>
+    ${address}
+    <hr>
+    ${items}
+    <hr>
+    <div class="row"><span>Subtotal</span><span>${brl(o.subtotal)}</span></div>
+    ${o.discount > 0 ? `<div class="row"><span>Desconto${o.coupon ? ` (${esc(o.coupon.code)})` : ""}</span><span>-${brl(o.discount)}</span></div>` : ""}
+    ${o.order_type === "delivery" ? `<div class="row"><span>Entrega</span><span>${brl(o.delivery_fee)}</span></div>` : ""}
+    <div class="row total"><span>TOTAL</span><span>${brl(o.total)}</span></div>
+    <hr>
+    <p>Pagamento: ${esc(PAYMENT_LABELS[o.payment] ?? o.payment)}${o.change_for ? ` (troco p/ ${brl(o.change_for)})` : ""}</p>
+    <p class="center">Obrigado pela preferência!</p>
+  </body></html>`;
+  const win = window.open("", "_blank", "width=340,height=600");
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => {
+    win.print();
+    win.close();
+  }, 250);
+}
+
 export default function OrdersBoard({
   initialOrders,
   storeId,
@@ -296,7 +365,16 @@ export default function OrdersBoard({
                 </span>
 
                 <div className="mb-2 text-sm">
-                  <strong>{customer.name}</strong> · 📱 {customer.phone}
+                  <strong>{customer.name}</strong> ·{" "}
+                  <a
+                    href={waLink(customer.phone ?? "")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-green-600 hover:underline"
+                    title="Chamar no WhatsApp"
+                  >
+                    📱 {customer.phone}
+                  </a>
                   {o.order_type === "delivery" && customer.street && (
                     <div className="text-muted">
                       📍 {customer.street}, {customer.number}
@@ -330,6 +408,13 @@ export default function OrdersBoard({
                 <div className="mb-3 font-bold">Total: {brl(o.total)}</div>
 
                 <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => printReceipt(o)}
+                    className="rounded-lg border-2 border-[var(--border)] px-2.5 py-1 text-xs font-semibold text-muted transition hover:border-primary hover:text-primary"
+                    title="Imprimir comanda (80mm)"
+                  >
+                    🖨️ Comanda
+                  </button>
                   {o.status === "received" ? (
                     acceptingId === o.id ? (
                       <>
