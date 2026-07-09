@@ -15,25 +15,17 @@ export default function HomePage() {
         </p>
       </div>
 
-      <div
-        className={`mb-8 rounded-xl border p-4 text-sm ${
-          configured
-            ? "border-green-300 bg-green-50 text-green-800"
-            : "border-amber-300 bg-amber-50 text-amber-800"
-        }`}
-      >
-        {configured ? (
-          <>✅ Supabase conectado. Acesse a loja pelo slug, ex.: <code>/sabor-express</code></>
-        ) : (
-          <>⚠️ Supabase ainda não configurado. Veja o arquivo <code>SETUP.md</code> para conectar.</>
-        )}
-      </div>
+      {!configured && (
+        <div className="mb-8 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+          ⚠️ Supabase ainda não configurado. Veja o arquivo <code>SETUP.md</code> para conectar.
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           { icon: "🏪", title: "Cada loja, um link", desc: "meuapp.com/sua-loja com cardápio e tema próprios." },
           { icon: "🧾", title: "Pedidos em tempo real", desc: "Receba e acompanhe pedidos no painel." },
-          { icon: "💳", title: "Pagamento flexível", desc: "PIX, cartão na entrega ou dinheiro com troco." },
+          { icon: "💳", title: "Pagamento na maquininha", desc: "Crédito, débito ou PIX na entrega ou retirada." },
         ].map((f) => (
           <div key={f.title} className="surface bordered rounded-xl p-5">
             <div className="mb-2 text-3xl">{f.icon}</div>

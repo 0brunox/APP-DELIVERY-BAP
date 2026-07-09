@@ -31,10 +31,18 @@ export default async function AdminPage() {
 
   return (
     <div>
-      <div className="mb-5">
-        <h1 className="text-2xl font-bold">{store.name}</h1>
-        <Link href={`/${store.slug}`} target="_blank" className="text-sm font-semibold text-primary">
-          /{store.slug} ↗
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">{store.name}</h1>
+          <Link href={`/${store.slug}`} target="_blank" className="text-sm font-semibold text-primary">
+            /{store.slug} ↗
+          </Link>
+        </div>
+        <Link
+          href="/admin/cozinha"
+          className="shrink-0 rounded-xl bg-neutral-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-neutral-700"
+        >
+          👨‍🍳 Modo cozinha
         </Link>
       </div>
       <PlanBanner storeId={store.id} />
