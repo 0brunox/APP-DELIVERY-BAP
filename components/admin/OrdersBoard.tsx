@@ -121,9 +121,11 @@ function printReceipt(o: AdminOrder) {
 export default function OrdersBoard({
   initialOrders,
   storeId,
+  couriers = [],
 }: {
   initialOrders: AdminOrder[];
   storeId: string;
+  couriers?: { id: string; name: string }[];
 }) {
   const router = useRouter();
   const [supabase] = useState(() => createClient());
@@ -234,6 +236,14 @@ export default function OrdersBoard({
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o))); // otimista
     await supabase.from("orders").update({ status }).eq("id", id);
     setBusy(null);
+  }
+
+  // Atribui (ou remove) o entregador de um pedido de entrega.
+  async function assignCourier(id: string, courierId: string) {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === id ? { ...o, courier_id: courierId || null } : o))
+    );
+    await supabase.from("orders").update({ courier_id: courierId || null }).eq("id", id);
   }
 
   // Aceita o pedido e define a previsão de pronto (agora + minutos escolhidos).
@@ -403,6 +413,29 @@ export default function OrdersBoard({
                 {o.ready_at && (o.status === "preparing" || o.status === "ready") && (
                   <div className="mb-2 text-sm font-semibold text-amber-600">
                     ⏱️ Fica pronto ~{fmtTime(o.ready_at)}
+                  </div>
+                )}
+                {o.order_type === "delivery" && couriers.length > 0 && !isFinal && (
+                  <div className="mb-2 flex items-center gap-2 text-sm">
+                    <span>🛵</span>
+                    <select
+                      value={o.courier_id ?? ""}
+                      onChange={(e) => assignCourier(o.id, e.target.value)}
+                      className="surface rounded-lg border-2 border-[var(--border)] px-2 py-1 text-xs font-semibold outline-none focus:border-primary"
+                      title="Atribuir entregador"
+                    >
+                      <option value="">Sem entregador</option>
+                      {couriers.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {o.order_type === "delivery" && o.courier_id && isFinal && (
+                  <div className="mb-2 text-sm text-muted">
+                    🛵 {couriers.find((c) => c.id === o.courier_id)?.name ?? "Entregador"}
                   </div>
                 )}
                 <div className="mb-3 font-bold">Total: {brl(o.total)}</div>

@@ -140,5 +140,20 @@ export interface Order {
   delivery_fee: number;
   discount: number;
   total: number;
+  courier_id: string | null;
+  delivered_at: string | null;
+  created_at: string;
+}
+
+export interface Courier {
+  id: string;
+  store_id: string;
+  name: string;
+  phone: string;
+  token: string;
+  active: boolean;
+  last_lat: number | null;
+  last_lng: number | null;
+  location_at: string | null;
   created_at: string;
 }

@@ -14,11 +14,19 @@ export default async function AdminPage() {
   if (!store) return <CreateStoreForm />;
 
   const supabase = await createClient();
-  const { data: orders } = await supabase
-    .from("orders")
-    .select("*, order_items(*)")
-    .eq("store_id", store.id)
-    .order("created_at", { ascending: false });
+  const [{ data: orders }, { data: couriers }] = await Promise.all([
+    supabase
+      .from("orders")
+      .select("*, order_items(*)")
+      .eq("store_id", store.id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("couriers")
+      .select("id, name")
+      .eq("store_id", store.id)
+      .eq("active", true)
+      .order("name"),
+  ]);
 
   return (
     <div>
@@ -28,7 +36,11 @@ export default async function AdminPage() {
           /{store.slug} ↗
         </Link>
       </div>
-      <OrdersBoard initialOrders={(orders ?? []) as AdminOrder[]} storeId={store.id} />
+      <OrdersBoard
+        initialOrders={(orders ?? []) as AdminOrder[]}
+        storeId={store.id}
+        couriers={(couriers ?? []) as { id: string; name: string }[]}
+      />
     </div>
   );
 }

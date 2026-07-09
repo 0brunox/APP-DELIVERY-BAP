@@ -6,6 +6,7 @@ import { brl } from "@/lib/format";
 import { ORDER_TYPE_LABELS } from "@/lib/constants";
 import type { OrderStatus, OrderType, AddonOption } from "@/lib/types";
 import OrderLiveStatus from "@/components/store/OrderLiveStatus";
+import CourierLiveMap, { type TrackedCourier } from "@/components/store/CourierLiveMap";
 import SetupNotice from "@/components/SetupNotice";
 
 export const metadata: Metadata = { title: "Acompanhar pedido" };
@@ -28,6 +29,8 @@ interface TrackedOrder {
   created_at: string;
   schedule_at: string | null;
   ready_at: string | null;
+  customer: Record<string, string>;
+  courier: TrackedCourier | null;
   items: TrackedItem[];
 }
 
@@ -79,6 +82,16 @@ export default async function TrackPage({
           initialReadyAt={order.ready_at}
           orderType={order.order_type}
         />
+
+        {order.order_type === "delivery" &&
+          order.courier &&
+          (order.status === "preparing" || order.status === "ready") && (
+            <CourierLiveMap
+              code={order.code}
+              courier={order.courier}
+              customer={order.customer ?? {}}
+            />
+          )}
 
         <div className="mb-1 flex justify-between text-sm">
           <span className="text-muted">Tipo</span>
