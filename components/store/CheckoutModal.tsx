@@ -49,10 +49,12 @@ export default function CheckoutModal({
   store,
   zones,
   onClose,
+  initialTable,
 }: {
   store: Store;
   zones: DeliveryZone[];
   onClose: () => void;
+  initialTable?: string;
 }) {
   const { cart, subtotal, clear } = useCart();
   const settings = store.settings ?? {};
@@ -76,7 +78,7 @@ export default function CheckoutModal({
       /* ignora */
     }
     return {
-      orderType: enabledTypes[0] ?? "delivery",
+      orderType: initialTable ? "dinein" : enabledTypes[0] ?? "delivery",
       payment: enabledPays[0] ?? "credit",
       name: saved.name ?? "",
       phone: saved.phone ?? "",
@@ -87,7 +89,7 @@ export default function CheckoutModal({
       reference: saved.reference ?? "",
       zoneId: saved.zoneId ?? "",
       neighborhood: saved.neighborhood ?? "",
-      tableNumber: "",
+      tableNumber: initialTable ?? "",
       scheduleMode: "now",
       scheduleAt: "",
     };
@@ -241,7 +243,14 @@ export default function CheckoutModal({
     setSubmitting(false);
 
     if (rpcError || !data?.code) {
-      setError("Não foi possível registrar o pedido. Tente novamente.");
+      const m = rpcError?.message ?? "";
+      if (m.includes("LOJA_SUSPENSA")) {
+        setError("Esta loja não está aceitando pedidos no momento.");
+      } else if (m.includes("LIMITE_PLANO_PEDIDOS")) {
+        setError("A loja atingiu o limite de pedidos deste mês. Tente novamente mais tarde.");
+      } else {
+        setError("Não foi possível registrar o pedido. Tente novamente.");
+      }
       return;
     }
 

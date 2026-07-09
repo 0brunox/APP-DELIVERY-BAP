@@ -165,7 +165,14 @@ export default function ProductsManager({
       : await supabase.from("products").insert({ ...payload, position: initialProducts.length });
     setBusy(false);
 
-    if (res.error) return setError("Não foi possível salvar o produto.");
+    if (res.error) {
+      if (res.error.message?.includes("LIMITE_PLANO_PRODUTOS")) {
+        return setError(
+          "Você atingiu o limite de produtos do plano Free. Faça upgrade para o Pro para cadastrar mais."
+        );
+      }
+      return setError("Não foi possível salvar o produto.");
+    }
     setEditor(null);
     router.refresh();
   }

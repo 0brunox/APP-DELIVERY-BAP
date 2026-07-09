@@ -4,6 +4,7 @@ import { getOwnerStore } from "@/lib/admin";
 import type { Order, OrderItem } from "@/lib/types";
 import CreateStoreForm from "@/components/admin/CreateStoreForm";
 import OrdersBoard from "@/components/admin/OrdersBoard";
+import PlanBanner from "@/components/admin/PlanBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,7 @@ export default async function AdminPage() {
           /{store.slug} ↗
         </Link>
       </div>
+      <PlanBanner storeId={store.id} />
       <OrdersBoard
         initialOrders={(orders ?? []) as AdminOrder[]}
         storeId={store.id}

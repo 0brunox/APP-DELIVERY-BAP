@@ -7,6 +7,8 @@ const TABS = [
   { href: "/admin", label: "📦 Pedidos" },
   { href: "/admin/cardapio", label: "🍔 Cardápio" },
   { href: "/admin/entregadores", label: "🛵 Entregadores" },
+  { href: "/admin/mesas", label: "🍽️ Mesas" },
+  { href: "/admin/avaliacoes", label: "⭐ Avaliações" },
   { href: "/admin/config", label: "⚙️ Config" },
   { href: "/admin/aparencia", label: "🎨 Aparência" },
   { href: "/admin/relatorios", label: "📊 Relatórios" },

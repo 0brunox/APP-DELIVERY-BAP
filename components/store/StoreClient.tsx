@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type CSSProperties } from "react";
-import type { Category, DeliveryZone, MenuLang, Product, Store } from "@/lib/types";
+import type { Category, DeliveryZone, MenuLang, Product, Store, StoreRating } from "@/lib/types";
 import { darkenColor, normalizeText } from "@/lib/format";
 import { CartProvider, useCart } from "./CartContext";
 import ProductCard from "./ProductCard";
@@ -29,11 +29,15 @@ export default function StoreClient({
   products,
   categories,
   zones,
+  rating,
+  initialTable,
 }: {
   store: Store;
   products: Product[];
   categories: Category[];
   zones: DeliveryZone[];
+  rating?: StoreRating;
+  initialTable?: string;
 }) {
   const theme = store.settings?.theme;
   const themeStyle = {
@@ -46,7 +50,14 @@ export default function StoreClient({
   return (
     <CartProvider storeSlug={store.slug}>
       <div style={themeStyle}>
-        <StoreInner store={store} products={products} categories={categories} zones={zones} />
+        <StoreInner
+          store={store}
+          products={products}
+          categories={categories}
+          zones={zones}
+          rating={rating}
+          initialTable={initialTable}
+        />
       </div>
     </CartProvider>
   );
@@ -57,11 +68,15 @@ function StoreInner({
   products: rawProducts,
   categories: rawCategories,
   zones,
+  rating,
+  initialTable,
 }: {
   store: Store;
   products: Product[];
   categories: Category[];
   zones: DeliveryZone[];
+  rating?: StoreRating;
+  initialTable?: string;
 }) {
   const { count } = useCart();
   const heroBanner = store.settings?.theme?.heroBanner?.trim();
@@ -175,6 +190,17 @@ function StoreInner({
           <p className="max-w-xl opacity-95">
             {store.settings?.subtitle ?? "Delivery rápido e saboroso. Peça agora!"}
           </p>
+          {rating && rating.count > 0 && (
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold backdrop-blur">
+              ⭐ {rating.avg.toFixed(1)}
+              <span className="opacity-90">({rating.count} avaliaç{rating.count > 1 ? "ões" : "ão"})</span>
+            </div>
+          )}
+          {initialTable && (
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/25 px-3 py-1 text-sm font-bold backdrop-blur">
+              🍽️ Mesa {initialTable} · pedido sem taxa de entrega
+            </div>
+          )}
         </div>
       </section>
 
@@ -242,7 +268,12 @@ function StoreInner({
         products={rawProducts}
       />
       {checkoutOpen && (
-        <CheckoutModal store={store} zones={zones} onClose={() => setCheckoutOpen(false)} />
+        <CheckoutModal
+          store={store}
+          zones={zones}
+          initialTable={initialTable}
+          onClose={() => setCheckoutOpen(false)}
+        />
       )}
       <WaiterChat storeId={store.id} products={rawProducts} />
     </>

@@ -7,6 +7,7 @@ import { ORDER_TYPE_LABELS } from "@/lib/constants";
 import type { OrderStatus, OrderType, AddonOption } from "@/lib/types";
 import OrderLiveStatus from "@/components/store/OrderLiveStatus";
 import CourierLiveMap, { type TrackedCourier } from "@/components/store/CourierLiveMap";
+import ReviewForm from "@/components/store/ReviewForm";
 import SetupNotice from "@/components/SetupNotice";
 
 export const metadata: Metadata = { title: "Acompanhar pedido" };
@@ -125,6 +126,8 @@ export default async function TrackPage({
           <span>Total</span>
           <span>{brl(order.total)}</span>
         </div>
+
+        <ReviewForm storeId={store.id} code={order.code} status={order.status} />
       </div>
 
       <p className="mt-4 text-center text-xs text-muted">

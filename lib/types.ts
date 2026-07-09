@@ -57,7 +57,34 @@ export interface Store {
   name: string;
   settings: StoreSettings;
   order_counter: number;
+  plan: "free" | "pro";
+  plan_since: string | null;
+  active: boolean;
   created_at: string;
+}
+
+export interface StoreRating {
+  avg: number;
+  count: number;
+}
+
+export interface Review {
+  id: string;
+  store_id: string;
+  order_code: string;
+  rating: number;
+  comment: string;
+  author: string;
+  approved: boolean;
+  created_at: string;
+}
+
+export interface PlanUsage {
+  plan: "free" | "pro";
+  products: number;
+  products_limit: number | null;
+  orders_month: number;
+  orders_limit: number | null;
 }
 
 /** Traduções do cardápio geradas por IA: {en: {...}, es: {...}} */
