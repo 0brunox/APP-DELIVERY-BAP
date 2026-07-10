@@ -143,7 +143,23 @@ Sem essas variáveis, o app funciona normalmente e o Pro é ativado **manualment
 
 ### Domínio próprio (opcional)
 1. Vercel → **Settings → Domains** → adicione seu domínio e siga as instruções de DNS.
-2. Atualize o **Site URL** e os **Redirect URLs** no Supabase para o novo domínio.
+2. Siga o checklist abaixo ("Trocando/adicionando um domínio") para atualizar Supabase, variáveis e webhook.
+
+### ⚠️ Trocando ou adicionando um domínio — checklist
+Sempre que o domínio mudar (ex.: comprou `seumenu.app` e conectou na Vercel), atualize 3 lugares:
+
+1. **Supabase → Authentication → URL Configuration**
+   - **Site URL:** `https://seumenu.app`
+   - **Redirect URLs:** adicione `https://seumenu.app/**` (pode manter a URL antiga da Vercel também, `https://app-delivery-bap.vercel.app/**`, durante a transição)
+   - Sem isso, o link de confirmação de e-mail e o magic link do login do cliente continuam apontando para o domínio antigo.
+
+2. **Vercel → Environment Variables → `NEXT_PUBLIC_SITE_URL`**
+   - Atualize para `https://seumenu.app` — usada no **sitemap** e nos **QR codes de mesa**.
+   - Depois de mudar, faça **Redeploy** (variável nova só vale no próximo deploy).
+
+3. **Mercado Pago → sua aplicação → Webhooks** (se a cobrança do Pro estiver ativa)
+   - Atualize a URL para `https://seumenu.app/api/mp/webhook`.
+   - Pode manter a URL antiga cadastrada também, sem problema.
 
 ### Atualizações depois do deploy
 Cada `git push` para o branch principal dispara um **redeploy automático** na Vercel.
