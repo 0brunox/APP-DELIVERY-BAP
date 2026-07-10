@@ -5,10 +5,11 @@ import { createClient as createSupabase } from "@supabase/supabase-js";
 import type { Product } from "./types";
 
 /**
- * Modelo padrão: Claude Opus 4.8 (o mais capaz).
- * Para reduzir custo, defina AI_MODEL=claude-haiku-4-5 no ambiente.
+ * Modelo padrão: Claude Haiku 4.5 (o mais barato e rápido).
+ * Para mais qualidade nas tarefas pesadas (foto do cardápio, insights),
+ * defina AI_MODEL=claude-sonnet-5 ou AI_MODEL=claude-opus-4-8 no ambiente.
  */
-export const AI_MODEL = process.env.AI_MODEL || "claude-opus-4-8";
+export const AI_MODEL = process.env.AI_MODEL || "claude-haiku-4-5";
 
 /** Limite diário de chamadas de IA por loja (todas as features somadas). */
 export const AI_DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 300);

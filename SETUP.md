@@ -95,7 +95,7 @@ Em **Settings → Environment Variables**, adicione (marque *Production* e *Prev
 | `VAPID_PRIVATE_KEY` | p/ Web Push | chave privada VAPID (**segredo**) |
 | `VAPID_SUBJECT` | p/ Web Push | `mailto:voce@seudominio.com` |
 | `ANTHROPIC_API_KEY` | p/ IA | chave de https://console.anthropic.com (**segredo**) |
-| `AI_MODEL` | opcional | `claude-opus-4-8` (padrão) ou `claude-haiku-4-5` p/ reduzir custo |
+| `AI_MODEL` | opcional | `claude-haiku-4-5` (padrão, mais barato); use `claude-sonnet-5` ou `claude-opus-4-8` p/ mais qualidade |
 | `AI_DAILY_LIMIT` | opcional | limite diário de chamadas de IA por loja (padrão 300) |
 
 - **Web Push:** gere o par de chaves uma vez com `npx web-push generate-vapid-keys --json`. Sem elas, o app funciona — só não envia notificação de novo pedido.
