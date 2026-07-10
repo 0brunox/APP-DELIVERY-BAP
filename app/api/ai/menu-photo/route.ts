@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getOwnerStore } from "@/lib/admin";
-import { AI_ERRORS, AI_MODEL, aiConfigured, anthropic, checkAiLimit, textOf } from "@/lib/ai";
+import { AI_ERRORS, AI_MODEL, aiConfigured, aiThinking, anthropic, checkAiLimit, textOf } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     const response = await anthropic().messages.create({
       model: AI_MODEL,
       max_tokens: 8000,
-      thinking: { type: "adaptive" },
+      ...aiThinking(),
       output_config: { format: { type: "json_schema", schema: SCHEMA } },
       messages: [
         {

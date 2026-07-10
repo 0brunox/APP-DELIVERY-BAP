@@ -13,6 +13,17 @@ export const AI_MODEL = process.env.AI_MODEL || "claude-opus-4-8";
 /** Limite diário de chamadas de IA por loja (todas as features somadas). */
 export const AI_DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 300);
 
+/**
+ * "adaptive thinking" só existe na família 4.6+ (Opus 4.6/4.7/4.8, Sonnet 5/4.6,
+ * Fable/Mythos 5). Modelos mais baratos como o Haiku 4.5 não aceitam — enviar o
+ * parâmetro dá erro 400. Este helper devolve `{ thinking }` só quando é seguro,
+ * para poder espalhar (`...aiThinking()`) na chamada sem quebrar no Haiku.
+ */
+export function aiThinking(): { thinking?: { type: "adaptive" } } {
+  const supports = /(opus-4-(6|7|8)|sonnet-(5|4-6)|fable-5|mythos-5)/.test(AI_MODEL);
+  return supports ? { thinking: { type: "adaptive" } } : {};
+}
+
 export function aiConfigured(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);
 }

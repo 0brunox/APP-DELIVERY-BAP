@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getOwnerStore } from "@/lib/admin";
-import { AI_ERRORS, AI_MODEL, aiConfigured, anthropic, checkAiLimit, textOf } from "@/lib/ai";
+import { AI_ERRORS, AI_MODEL, aiConfigured, aiThinking, anthropic, checkAiLimit, textOf } from "@/lib/ai";
 import type { Order, OrderItem } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
     const response = await anthropic().messages.create({
       model: AI_MODEL,
       max_tokens: 1200,
-      thinking: { type: "adaptive" },
+      ...aiThinking(),
       system: [
         {
           type: "text",
