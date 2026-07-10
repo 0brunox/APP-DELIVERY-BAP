@@ -96,6 +96,9 @@ Em **Settings → Environment Variables**, adicione (marque *Production* e *Prev
 | `VAPID_SUBJECT` | p/ Web Push | `mailto:voce@seudominio.com` |
 | `ANTHROPIC_API_KEY` | p/ IA | chave de https://console.anthropic.com (**segredo**) |
 | `AI_MODEL` | opcional | `claude-haiku-4-5` (padrão, mais barato); use `claude-sonnet-5` ou `claude-opus-4-8` p/ mais qualidade |
+| `MP_ACCESS_TOKEN` | p/ cobrança Pro | Access Token da sua conta Mercado Pago (**segredo**) |
+| `SUPABASE_SERVICE_ROLE_KEY` | p/ cobrança Pro | Service role key do Supabase (**segredo**, usada só pelo webhook) |
+| `MP_PRO_PRICE` | opcional | preço mensal do Pro em reais (padrão `49.90`) |
 | `AI_DAILY_LIMIT` | opcional | limite diário de chamadas de IA por loja (padrão 300) |
 
 - **Web Push:** gere o par de chaves uma vez com `npx web-push generate-vapid-keys --json`. Sem elas, o app funciona — só não envia notificação de novo pedido.
@@ -126,6 +129,17 @@ Salve. Agora cadastro, confirmação e login funcionam em produção.
 
 > 💡 **Free tier do Supabase pausa** o projeto após ~1 semana sem uso. Para um app em
 > produção de verdade, considere o plano pago (ou mantenha o banco acordado com acessos regulares).
+
+### Cobrança do plano Pro (Mercado Pago Assinaturas) — opcional
+Ativa o botão "Assinar Pro" no painel do lojista (Config). Você (plataforma) recebe o dinheiro.
+1. Em https://www.mercadopago.com.br/developers → **Suas integrações**, crie uma aplicação.
+2. Copie o **Access Token** para a variável `MP_ACCESS_TOKEN` na Vercel.
+3. Copie a **service_role key** (Supabase → Project Settings → API) para `SUPABASE_SERVICE_ROLE_KEY`.
+4. Em **Webhooks** da sua aplicação MP, cadastre a URL `https://seu-app.vercel.app/api/mp/webhook`, tópico **Assinaturas**.
+5. (Opcional) defina `MP_PRO_PRICE` (padrão R$ 49,90/mês). Rode a migration `0010_billing.sql`.
+6. Teste primeiro com **credenciais de teste** e usuários de teste do Mercado Pago (sandbox) antes de usar as de produção.
+
+Sem essas variáveis, o app funciona normalmente e o Pro é ativado **manualmente** por você no painel da plataforma (`/admin/plataforma`).
 
 ### Domínio próprio (opcional)
 1. Vercel → **Settings → Domains** → adicione seu domínio e siga as instruções de DNS.

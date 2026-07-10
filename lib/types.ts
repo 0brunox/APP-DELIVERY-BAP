@@ -60,6 +60,7 @@ export interface Store {
   plan: "free" | "pro";
   plan_since: string | null;
   active: boolean;
+  mp_preapproval_id?: string | null;
   created_at: string;
 }
 
