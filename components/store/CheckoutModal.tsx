@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { DeliveryZone, Store } from "@/lib/types";
 import { brl } from "@/lib/format";
 import { createClient } from "@/lib/supabase/client";
+import { addLocalOrder } from "@/lib/localOrders";
 import { useCart } from "./CartContext";
 import OrderTimeline from "./OrderTimeline";
 
@@ -273,6 +274,15 @@ export default function CheckoutModal({
     } catch {
       /* ignora */
     }
+
+    // Guarda no histórico local (permite reencontrar o acompanhamento mesmo sem login).
+    addLocalOrder(store.slug, {
+      code: data.code,
+      number: data.number,
+      total: data.total,
+      orderType: form.orderType,
+      createdAt: new Date().toISOString(),
+    });
 
     clear();
     setPlaced({ number: data.number, code: data.code, total: data.total });

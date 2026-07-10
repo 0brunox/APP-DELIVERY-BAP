@@ -9,6 +9,7 @@ import ProductDetailModal from "./ProductDetailModal";
 import CartSidebar from "./CartSidebar";
 import CheckoutModal from "./CheckoutModal";
 import WaiterChat from "./WaiterChat";
+import AccountModal from "./AccountModal";
 
 /** Aplica a tradução de exibição (nome/descrição); preços e adicionais ficam originais. */
 function translateProduct(p: Product, lang: MenuLang): Product {
@@ -85,6 +86,7 @@ function StoreInner({
   const [detail, setDetail] = useState<Product | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const [lang, setLang] = useState<MenuLang>("pt");
 
   const hasTranslations = useMemo(
@@ -157,6 +159,14 @@ function StoreInner({
               <option value="es">🇪🇸 ES</option>
             </select>
           )}
+          <button
+            onClick={() => setAccountOpen(true)}
+            aria-label="Meus pedidos e conta"
+            title="Meus pedidos"
+            className="surface-2 flex h-11 w-11 items-center justify-center rounded-full text-xl transition hover:bg-primary hover:text-white"
+          >
+            👤
+          </button>
           <button
             onClick={() => setCartOpen(true)}
             aria-label="Abrir carrinho"
@@ -276,6 +286,9 @@ function StoreInner({
         />
       )}
       <WaiterChat storeId={store.id} products={rawProducts} />
+      {accountOpen && (
+        <AccountModal storeId={store.id} slug={store.slug} onClose={() => setAccountOpen(false)} />
+      )}
     </>
   );
 }
