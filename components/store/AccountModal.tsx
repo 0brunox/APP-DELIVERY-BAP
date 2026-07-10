@@ -6,7 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { brl } from "@/lib/format";
 import { getLocalOrders, type LocalOrder } from "@/lib/localOrders";
 import { orderStatusLabel, orderStatusIcon, ORDER_STATUS_COLOR } from "@/lib/orders";
-import type { OrderStatus, OrderType } from "@/lib/types";
+import type { AddonOption, OrderStatus, OrderType, Product } from "@/lib/types";
+import { useCart } from "./CartContext";
 
 interface HistoryOrder extends LocalOrder {
   status?: OrderStatus;
@@ -18,16 +19,60 @@ type Method = "password" | "magic";
 export default function AccountModal({
   storeId,
   slug,
+  products,
   onClose,
+  onRepeated,
 }: {
   storeId: string;
   slug: string;
+  products: Product[];
   onClose: () => void;
+  onRepeated: () => void;
 }) {
   const supabase = useMemo(() => createClient(), []);
+  const { addLine } = useCart();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<HistoryOrder[]>([]);
+  const [repeating, setRepeating] = useState<string | null>(null);
+  const [repeatMsg, setRepeatMsg] = useState("");
+
+  // Recria o carrinho com os itens de um pedido, casando pelo cardápio atual.
+  async function repeat(code: string) {
+    setRepeating(code);
+    setRepeatMsg("");
+    const { data } = await supabase.rpc("get_order_by_code", { p_store: storeId, p_code: code });
+    const items = (data?.items ?? []) as {
+      name: string;
+      variation_name: string | null;
+      addons: AddonOption[];
+      note: string;
+      quantity: number;
+    }[];
+
+    let added = 0;
+    for (const it of items) {
+      const product = products.find((p) => p.name.toLowerCase() === String(it.name).toLowerCase());
+      if (!product) continue;
+      const variationName =
+        it.variation_name && product.variations.some((v) => v.name === it.variation_name)
+          ? it.variation_name
+          : null;
+      const opts = product.addon_groups.flatMap((g) => g.options);
+      const addons = (it.addons ?? [])
+        .map((a) => opts.find((o) => o.name === a.name))
+        .filter((o): o is AddonOption => Boolean(o));
+      addLine(product, variationName, addons, it.note ?? "", Math.max(1, it.quantity || 1));
+      added++;
+    }
+
+    setRepeating(null);
+    if (added === 0) {
+      setRepeatMsg("Os itens deste pedido não estão mais disponíveis no cardápio.");
+      return;
+    }
+    onRepeated();
+  }
 
   // Carrega sessão + histórico (servidor, se logado) mesclado com o local.
   useEffect(() => {
@@ -107,7 +152,10 @@ export default function AccountModal({
               />
             )}
 
-            <OrderHistory slug={slug} orders={orders} />
+            {repeatMsg && (
+              <p className="mb-3 rounded-lg bg-amber-50 p-2.5 text-sm font-semibold text-amber-800">{repeatMsg}</p>
+            )}
+            <OrderHistory slug={slug} orders={orders} onRepeat={repeat} repeating={repeating} />
           </>
         )}
       </div>
@@ -223,7 +271,17 @@ function AuthPanel({ onAuthed }: { onAuthed: (email: string) => void }) {
   );
 }
 
-function OrderHistory({ slug, orders }: { slug: string; orders: HistoryOrder[] }) {
+function OrderHistory({
+  slug,
+  orders,
+  onRepeat,
+  repeating,
+}: {
+  slug: string;
+  orders: HistoryOrder[];
+  onRepeat: (code: string) => void;
+  repeating: string | null;
+}) {
   if (orders.length === 0) {
     return (
       <div className="py-8 text-center text-muted">
@@ -237,29 +295,42 @@ function OrderHistory({ slug, orders }: { slug: string; orders: HistoryOrder[] }
       <div className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Seus pedidos</div>
       <div className="space-y-2">
         {orders.map((o) => (
-          <Link
-            key={o.code}
-            href={`/${slug}/pedido/${o.code}`}
-            className="surface-2 flex items-center justify-between gap-2 rounded-xl p-3 transition hover:ring-2 hover:ring-primary"
-          >
-            <div>
-              <div className="font-bold">Pedido #{o.number}</div>
-              <div className="text-xs text-muted">
-                {new Date(o.createdAt).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+          <div key={o.code} className="surface-2 rounded-xl p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <div className="font-bold">Pedido #{o.number}</div>
+                <div className="text-xs text-muted">
+                  {new Date(o.createdAt).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                </div>
+              </div>
+              <div className="text-right">
+                {o.status && (
+                  <span
+                    className="mb-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold text-white"
+                    style={{ background: ORDER_STATUS_COLOR[o.status] }}
+                  >
+                    {orderStatusIcon(o.status, o.orderType as OrderType)} {orderStatusLabel(o.status, o.orderType as OrderType)}
+                  </span>
+                )}
+                <div className="text-sm font-semibold">{brl(o.total)}</div>
               </div>
             </div>
-            <div className="text-right">
-              {o.status && (
-                <span
-                  className="mb-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold text-white"
-                  style={{ background: ORDER_STATUS_COLOR[o.status] }}
-                >
-                  {orderStatusIcon(o.status, o.orderType as OrderType)} {orderStatusLabel(o.status, o.orderType as OrderType)}
-                </span>
-              )}
-              <div className="text-sm font-semibold">{brl(o.total)}</div>
+            <div className="mt-2 flex gap-2">
+              <Link
+                href={`/${slug}/pedido/${o.code}`}
+                className="flex-1 rounded-lg border-2 border-[var(--border)] py-1.5 text-center text-xs font-semibold text-muted transition hover:border-primary hover:text-primary"
+              >
+                📦 Acompanhar
+              </Link>
+              <button
+                onClick={() => onRepeat(o.code)}
+                disabled={repeating === o.code}
+                className="flex-1 rounded-lg bg-primary py-1.5 text-center text-xs font-bold text-white transition hover:bg-primary-dark disabled:opacity-60"
+              >
+                {repeating === o.code ? "Adicionando..." : "🔁 Repetir pedido"}
+              </button>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

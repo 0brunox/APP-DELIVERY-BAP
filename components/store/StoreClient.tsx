@@ -287,7 +287,16 @@ function StoreInner({
       )}
       <WaiterChat storeId={store.id} products={rawProducts} />
       {accountOpen && (
-        <AccountModal storeId={store.id} slug={store.slug} onClose={() => setAccountOpen(false)} />
+        <AccountModal
+          storeId={store.id}
+          slug={store.slug}
+          products={rawProducts}
+          onClose={() => setAccountOpen(false)}
+          onRepeated={() => {
+            setAccountOpen(false);
+            setCartOpen(true);
+          }}
+        />
       )}
     </>
   );
