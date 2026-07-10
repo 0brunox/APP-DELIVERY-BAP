@@ -1,23 +1,23 @@
 import { NextResponse } from "next/server";
-import { getPreapproval, mpConfigured, serviceConfigured, supabaseService } from "@/lib/mp";
+import {
+  getAuthorizedPaymentPreapprovalId,
+  getPreapproval,
+  mpConfigured,
+  serviceConfigured,
+  supabaseService,
+} from "@/lib/mp";
 
 export const runtime = "nodejs";
 
 /**
- * Webhook do Mercado Pago. Recebe a notificação, LÊ a assinatura direto na API
- * do MP (fonte da verdade, autenticada com o nosso token) e ajusta o plano da
- * loja. Como só agimos sobre dados buscados no MP com a nossa credencial, uma
- * notificação forjada não consegue nos fazer marcar Pro sem uma assinatura real.
- *
- * Configure a URL deste endpoint no painel do Mercado Pago
- * (Suas integrações -> Webhooks), tópico "Assinaturas".
+ * Webhook do Mercado Pago. Lê a assinatura direto na API do MP (fonte da
+ * verdade, autenticada com o nosso token) e ajusta o plano da loja.
+ * Logs com prefixo [mp/webhook] aparecem nos Runtime Logs da Vercel.
  */
 export async function POST(req: Request) {
-  // Sempre responde 200 para o MP não reenfileirar indefinidamente.
   const ok = () => NextResponse.json({ ok: true });
-  if (!mpConfigured() || !serviceConfigured()) return ok();
 
-  // O id da assinatura pode vir no corpo ou na query, dependendo do evento.
+  // Identifica o evento (corpo JSON ou query, dependendo do formato do MP).
   let type = "";
   let id = "";
   try {
@@ -31,29 +31,58 @@ export async function POST(req: Request) {
   type = type || url.searchParams.get("type") || url.searchParams.get("topic") || "";
   id = id || url.searchParams.get("data.id") || url.searchParams.get("id") || "";
 
-  // Só tratamos eventos de assinatura (preapproval).
-  if (!id || !type.includes("preapproval")) return ok();
+  console.log(`[mp/webhook] recebido type="${type}" id="${id}"`);
 
-  const pre = await getPreapproval(id);
+  if (!mpConfigured()) {
+    console.warn("[mp/webhook] MP_ACCESS_TOKEN ausente — ignorando");
+    return ok();
+  }
+  if (!serviceConfigured()) {
+    console.warn("[mp/webhook] SUPABASE_SERVICE_ROLE_KEY ausente — não dá para atualizar o plano");
+    return ok();
+  }
+  if (!id) return ok();
+
+  // Descobre o id da assinatura (preapproval). Alguns eventos trazem um id de
+  // pagamento; nesse caso resolvemos o preapproval a partir dele.
+  let preapprovalId = id;
+  if (!type.includes("preapproval")) {
+    if (type.includes("payment")) {
+      const resolved = await getAuthorizedPaymentPreapprovalId(id);
+      if (!resolved) {
+        console.log("[mp/webhook] pagamento sem preapproval vinculado — ignorando");
+        return ok();
+      }
+      preapprovalId = resolved;
+    } else {
+      console.log(`[mp/webhook] tipo "${type}" não tratado — ignorando`);
+      return ok();
+    }
+  }
+
+  const pre = await getPreapproval(preapprovalId);
+  console.log(`[mp/webhook] preapproval status="${pre?.status}" loja="${pre?.external_reference}"`);
   if (!pre?.external_reference) return ok();
 
   const supabase = supabaseService();
   const storeId = pre.external_reference;
 
   if (pre.status === "authorized") {
-    // Ativa o Pro (marca plan_since se ainda não era Pro).
+    // Sobe para Pro. Faz o update do plano SEPARADO do mp_preapproval_id, para
+    // que uma coluna ausente (0010 não aplicada) não impeça a ativação.
     const { data: store } = await supabase.from("stores").select("plan").eq("id", storeId).maybeSingle();
-    await supabase
-      .from("stores")
-      .update({
-        plan: "pro",
-        mp_preapproval_id: id,
-        ...(store?.plan !== "pro" ? { plan_since: new Date().toISOString() } : {}),
-      })
-      .eq("id", storeId);
+    const patch: Record<string, unknown> = { plan: "pro" };
+    if (store?.plan !== "pro") patch.plan_since = new Date().toISOString();
+    const { error } = await supabase.from("stores").update(patch).eq("id", storeId);
+    if (error) console.error(`[mp/webhook] erro ao ativar Pro: ${error.message}`);
+    else console.log(`[mp/webhook] loja ${storeId} -> PRO`);
+
+    const r = await supabase.from("stores").update({ mp_preapproval_id: preapprovalId }).eq("id", storeId);
+    if (r.error) console.warn(`[mp/webhook] mp_preapproval_id não salvo (rode a 0010): ${r.error.message}`);
   } else if (pre.status === "cancelled" || pre.status === "paused") {
-    // Assinatura encerrada/pausada -> volta para Free.
-    await supabase.from("stores").update({ plan: "free" }).eq("id", storeId);
+    const { error } = await supabase.from("stores").update({ plan: "free" }).eq("id", storeId);
+    if (error) console.error(`[mp/webhook] erro ao voltar para Free: ${error.message}`);
+    else console.log(`[mp/webhook] loja ${storeId} -> FREE (${pre.status})`);
   }
 
   return ok();

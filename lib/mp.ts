@@ -81,6 +81,16 @@ export async function getPreapproval(id: string): Promise<Preapproval | null> {
   return (await res.json()) as Preapproval;
 }
 
+/** Lê um pagamento autorizado de assinatura -> devolve o preapproval_id vinculado. */
+export async function getAuthorizedPaymentPreapprovalId(id: string): Promise<string | null> {
+  const res = await fetch(`${MP_API}/authorized_payments/${id}`, {
+    headers: { Authorization: `Bearer ${mpToken()}` },
+  });
+  if (!res.ok) return null;
+  const data = (await res.json()) as { preapproval_id?: string };
+  return data.preapproval_id ?? null;
+}
+
 /** Cancela uma assinatura. */
 export async function cancelPreapproval(id: string): Promise<boolean> {
   const res = await fetch(`${MP_API}/preapproval/${id}`, {
