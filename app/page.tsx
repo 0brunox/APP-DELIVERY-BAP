@@ -35,7 +35,7 @@ export default function HomePage() {
       {/* Hero */}
       <section
         className="px-6 py-20 text-center text-white sm:py-28"
-        style={{ background: "linear-gradient(135deg, var(--primary), var(--secondary))" }}
+        style={{ background: "linear-gradient(135deg, #e11d48, #fb7185)" }}
       >
         <div className="mx-auto max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-semibold backdrop-blur">
@@ -51,7 +51,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/login"
-              className="w-full rounded-full bg-white px-8 py-3.5 text-base font-bold text-[var(--primary)] shadow-lg transition hover:scale-[1.02] sm:w-auto"
+              className="w-full rounded-full bg-white px-8 py-3.5 text-base font-bold text-[#e11d48] shadow-lg transition hover:scale-[1.02] sm:w-auto"
             >
               🚀 Cadastre a sua Loja
             </Link>
@@ -74,7 +74,7 @@ export default function HomePage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div key={f.title} className="surface bordered rounded-2xl p-5 transition hover:border-primary">
+            <div key={f.title} className="surface bordered rounded-2xl p-5 transition hover:border-[#fb7185]">
               <div className="mb-2 text-3xl">{f.icon}</div>
               <h3 className="mb-1 font-bold">{f.title}</h3>
               <p className="text-sm text-muted">{f.desc}</p>
@@ -93,7 +93,7 @@ export default function HomePage() {
           <div className="grid gap-6 sm:grid-cols-3">
             {STEPS.map((s) => (
               <div key={s.n} className="text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-extrabold text-white">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-xl font-extrabold text-white" style={{ background: "#e11d48" }}>
                   {s.n}
                 </div>
                 <h3 className="mb-1 font-bold">{s.title}</h3>
@@ -112,13 +112,14 @@ export default function HomePage() {
         </p>
         <Link
           href="/login"
-          className="inline-block rounded-full bg-primary px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-primary-dark"
+          className="inline-block rounded-full px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:brightness-95"
+          style={{ background: "#e11d48" }}
         >
           🚀 Cadastre a sua Loja
         </Link>
         <p className="mt-4 text-sm text-muted">
           Já tem uma conta?{" "}
-          <Link href="/admin" className="font-semibold text-primary hover:underline">
+          <Link href="/admin" className="font-semibold text-[#e11d48] hover:underline">
             Acesse o painel
           </Link>
         </p>
