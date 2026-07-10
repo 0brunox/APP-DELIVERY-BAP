@@ -4,6 +4,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Delivery Super App",
   description: "Plataforma de delivery — monte sua loja e receba pedidos de forma rápida e fácil.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
