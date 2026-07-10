@@ -6,7 +6,6 @@ import CreateStoreForm from "@/components/admin/CreateStoreForm";
 import CategoriesManager from "@/components/admin/CategoriesManager";
 import ProductsManager from "@/components/admin/ProductsManager";
 import MenuPhotoImport from "@/components/admin/MenuPhotoImport";
-import TranslateMenu from "@/components/admin/TranslateMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +30,6 @@ export default async function CardapioPage() {
         initialProducts={(products ?? []) as Product[]}
         categories={(categories ?? []) as Category[]}
       />
-      {aiConfigured() && <TranslateMenu />}
     </div>
   );
 }

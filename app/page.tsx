@@ -6,7 +6,7 @@ const FEATURES = [
   { icon: "🧾", title: "Pedidos em tempo real", desc: "Receba pedidos no painel com som de campainha e acompanhe cada um ao vivo." },
   { icon: "👨‍🍳", title: "Modo Cozinha (KDS)", desc: "Tela cheia para a cozinha, com pedidos em colunas e fonte grande." },
   { icon: "🛵", title: "Entregadores + rastreamento", desc: "Seus motoboys recebem as entregas por um link e o cliente acompanha no mapa ao vivo." },
-  { icon: "🤖", title: "Garçom virtual com IA", desc: "O cliente conversa e a IA monta o carrinho. Você ainda cadastra produtos por foto." },
+  { icon: "🤖", title: "IA que ajuda a vender", desc: "Sugestões inteligentes no carrinho e cadastro do cardápio por foto, com IA." },
   { icon: "🍽️", title: "QR code de mesa", desc: "Imprima QRs numerados: o cliente pede pela mesa, sem taxa de entrega." },
   { icon: "⭐", title: "Avaliações", desc: "Receba notas e comentários dos clientes, com selo de média na sua loja." },
   { icon: "📊", title: "Relatórios de vendas", desc: "Faturamento, ticket médio, itens mais vendidos e um chat que responde sobre suas vendas." },
