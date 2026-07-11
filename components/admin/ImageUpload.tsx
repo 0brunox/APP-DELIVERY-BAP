@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage } from "@/lib/imageCompress";
 
-const MAX_MB = 5;
+const MAX_MB = 20;
 const inp = "surface w-full rounded-lg border-2 border-[var(--border)] p-2 text-sm outline-none focus:border-primary";
 
 /**
@@ -37,11 +38,13 @@ export default function ImageUpload({
       return;
     }
     setBusy(true);
-    const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    // Redimensiona/comprime no navegador para não lotar o Storage nem deixar a loja lenta.
+    const upload = await compressImage(file);
+    const ext = (upload.name.split(".").pop() ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
     const path = `${storeId}/${crypto.randomUUID()}.${ext}`;
     const { error } = await supabase.storage
       .from("product-images")
-      .upload(path, file, { cacheControl: "3600", upsert: false });
+      .upload(path, upload, { cacheControl: "3600", upsert: false });
     if (error) {
       setBusy(false);
       setErr(`Falha no upload: ${error.message}`);
