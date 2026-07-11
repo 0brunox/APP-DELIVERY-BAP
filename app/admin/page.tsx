@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getOwnerStore } from "@/lib/admin";
 import type { Order, OrderItem } from "@/lib/types";
@@ -6,8 +7,19 @@ import CreateStoreForm from "@/components/admin/CreateStoreForm";
 import OrdersBoard from "@/components/admin/OrdersBoard";
 import PlanBanner from "@/components/admin/PlanBanner";
 import SetupChecklist, { type SetupStep } from "@/components/admin/SetupChecklist";
+import StoreLinkCard from "@/components/admin/StoreLinkCard";
 
 export const dynamic = "force-dynamic";
+
+/** URL pública base (usa o host da requisição; respeita proxy da Vercel). */
+async function baseUrl(): Promise<string> {
+  const env = process.env.NEXT_PUBLIC_SITE_URL;
+  if (env) return env.replace(/\/$/, "");
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
+  return `${proto}://${host}`;
+}
 
 export type AdminOrder = Order & { order_items: OrderItem[] };
 
@@ -32,6 +44,8 @@ export default async function AdminPage() {
       supabase.from("products").select("id", { count: "exact", head: true }).eq("store_id", store.id),
       supabase.from("delivery_zones").select("id", { count: "exact", head: true }).eq("store_id", store.id),
     ]);
+
+  const storeUrl = `${await baseUrl()}/${store.slug}`;
 
   const s = store.settings ?? {};
   const deliveryOn = s.orderTypes?.delivery ?? true;
@@ -73,9 +87,6 @@ export default async function AdminPage() {
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">{store.name}</h1>
-          <Link href={`/${store.slug}`} target="_blank" className="text-sm font-semibold text-primary">
-            /{store.slug} ↗
-          </Link>
         </div>
         <Link
           href="/admin/cozinha"
@@ -84,6 +95,7 @@ export default async function AdminPage() {
           👨‍🍳 Modo cozinha
         </Link>
       </div>
+      <StoreLinkCard url={storeUrl} />
       <SetupChecklist steps={steps} storeSlug={store.slug} />
       <PlanBanner storeId={store.id} />
       <OrdersBoard
