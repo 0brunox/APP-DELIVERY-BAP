@@ -34,9 +34,17 @@ export default function HomePage() {
 
       {/* Hero */}
       <section
-        className="px-6 py-20 text-center text-white sm:py-28"
+        className="px-6 pb-20 pt-4 text-center text-white sm:pb-28"
         style={{ background: "linear-gradient(135deg, #e11d48, #fb7185)" }}
       >
+        <div className="mx-auto mb-12 flex max-w-5xl justify-end text-sm sm:mb-20">
+          <p className="opacity-95">
+            Já tem uma conta?{" "}
+            <Link href="/admin" className="font-bold underline-offset-2 hover:underline">
+              Acesse o painel
+            </Link>
+          </p>
+        </div>
         <div className="mx-auto max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-semibold backdrop-blur">
             🍔 Delivery Super App
