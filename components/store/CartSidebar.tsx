@@ -11,12 +11,15 @@ export default function CartSidebar({
   onCheckout,
   storeId,
   products = [],
+  closedNotice,
 }: {
   open: boolean;
   onClose: () => void;
   onCheckout: () => void;
   storeId?: string;
   products?: Product[];
+  /** Loja fechada: mostra o aviso e bloqueia o checkout. */
+  closedNotice?: string;
 }) {
   const { cart, subtotal, updateQty, removeLine, clear } = useCart();
 
@@ -107,11 +110,17 @@ export default function CartSidebar({
               <span>Subtotal</span>
               <span>{brl(subtotal)}</span>
             </div>
+            {closedNotice && (
+              <p className="mb-2 rounded-lg bg-red-50 p-2.5 text-center text-sm font-semibold text-red-600">
+                {closedNotice}
+              </p>
+            )}
             <button
               onClick={onCheckout}
-              className="mb-2 w-full rounded-xl bg-whatsapp py-3 font-semibold text-white transition hover:brightness-95"
+              disabled={Boolean(closedNotice)}
+              className="mb-2 w-full rounded-xl bg-whatsapp py-3 font-semibold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-neutral-400"
             >
-              Finalizar pedido
+              {closedNotice ? "Loja fechada" : "Finalizar pedido"}
             </button>
             <button
               onClick={clear}

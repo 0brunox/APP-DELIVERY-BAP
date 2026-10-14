@@ -32,6 +32,9 @@ npm install
    | [`0006_couriers.sql`](supabase/migrations/0006_couriers.sql) | Entregadores + rastreamento ao vivo |
    | [`0007_ai.sql`](supabase/migrations/0007_ai.sql) | IA: limite de uso, itens populares, traduções |
    | [`0008_platform.sql`](supabase/migrations/0008_platform.sql) | Planos, avaliações, QR de mesa, super-admin da plataforma |
+   | [`0009_customer_accounts.sql`](supabase/migrations/0009_customer_accounts.sql) | Conta do cliente (histórico de pedidos) |
+   | [`0010_billing.sql`](supabase/migrations/0010_billing.sql) | Assinatura Pro via Mercado Pago |
+   | [`0011_store_hours.sql`](supabase/migrations/0011_store_hours.sql) | Horário de funcionamento + botão abrir/fechar loja (bloqueia pedidos com a loja fechada) |
 
    > ⚠️ Na `0008` há um `insert` que cadastra o **e-mail do admin da plataforma**. Troque
    > `brunocorreia65@gmail.com` pelo seu e-mail (o mesmo do login) antes de rodar, se for outro.

@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { Category, DeliveryZone, Product, Store, StoreRating } from "@/lib/types";
 import { darkenColor, normalizeText } from "@/lib/format";
+import { DAY_KEYS, DAY_LABELS, DEFAULT_TZ, formatWhen, storeStatus, usesSchedule } from "@/lib/storeHours";
 import { CartProvider, useCart } from "./CartContext";
 import ProductCard from "./ProductCard";
 import ProductDetailModal from "./ProductDetailModal";
@@ -73,6 +74,23 @@ function StoreInner({
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
 
+  // Aberto/fechado: reavalia a cada minuto (o banco também bloqueia o pedido).
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  const tz = store.settings?.timezone || DEFAULT_TZ;
+  const status = storeStatus(store, now);
+  const changeAt = status.until ? formatWhen(status.until, tz, now) : null;
+  const closedNotice = status.open ? undefined : changeAt ? `Loja fechada — abre ${changeAt}.` : "Loja fechada no momento.";
+  const weekHours = usesSchedule(store.settings ?? {})
+    ? [...DAY_KEYS.slice(1), DAY_KEYS[0]].map((d) => {
+        const day = store.settings?.schedule?.[d];
+        return { label: DAY_LABELS[d], hours: day?.enabled ? `${day.open} às ${day.close}` : "Fechado" };
+      })
+    : null;
+
   // Agrupa produtos por categoria ativa (+ "Outros"); aplica busca
   const groups = useMemo(() => {
     const term = search.trim() ? normalizeText(search) : "";
@@ -100,6 +118,7 @@ function StoreInner({
   const visibleGroups = searching || selectedCat === "all" ? groups : groups.filter((g) => g.id === selectedCat);
 
   function handleCheckout() {
+    if (!status.open) return;
     setCartOpen(false);
     setCheckoutOpen(true);
   }
@@ -159,8 +178,21 @@ function StoreInner({
           <p className="max-w-xl opacity-95">
             {store.settings?.subtitle ?? "Delivery rápido e saboroso. Peça agora!"}
           </p>
+          <div
+            suppressHydrationWarning
+            className={`mr-2 mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold backdrop-blur ${
+              status.open ? "bg-green-600/80" : "bg-red-600/85"
+            }`}
+          >
+            {status.open ? "🟢 Aberto agora" : "🔴 Fechado"}
+            {changeAt && (
+              <span className="font-medium opacity-90">
+                · {status.open ? "fecha" : "abre"} {changeAt}
+              </span>
+            )}
+          </div>
           {rating && rating.count > 0 && (
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold backdrop-blur">
+            <div className="mr-2 mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold backdrop-blur">
               ⭐ {rating.avg.toFixed(1)}
               <span className="opacity-90">({rating.count} avaliaç{rating.count > 1 ? "ões" : "ão"})</span>
             </div>
@@ -170,11 +202,31 @@ function StoreInner({
               🍽️ Mesa {initialTable} · pedido sem taxa de entrega
             </div>
           )}
+          {weekHours && (
+            <details className="mt-3 max-w-xs text-sm">
+              <summary className="cursor-pointer font-semibold opacity-95">🕐 Horários de funcionamento</summary>
+              <ul className="mt-2 space-y-0.5 rounded-xl bg-black/25 p-3 backdrop-blur">
+                {weekHours.map((d) => (
+                  <li key={d.label} className="flex justify-between gap-4">
+                    <span>{d.label}</span>
+                    <span className="font-semibold">{d.hours}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
         </div>
       </section>
 
       {/* Cardápio */}
       <main className="mx-auto max-w-5xl px-5 py-8">
+        {!status.open && (
+          <div className="mb-6 rounded-xl border-2 border-red-300 bg-red-50 p-4 text-center text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
+            <strong>Estamos fechados agora.</strong>{" "}
+            {changeAt ? `Voltamos a receber pedidos ${changeAt}.` : "Volte mais tarde para fazer seu pedido."} Fique à
+            vontade para ver o cardápio.
+          </div>
+        )}
         {/* Toolbar: busca + categorias */}
         <div className="surface sticky top-[64px] z-20 -mx-5 mb-6 px-5 py-3">
           <input
@@ -235,6 +287,7 @@ function StoreInner({
         onCheckout={handleCheckout}
         storeId={store.id}
         products={products}
+        closedNotice={closedNotice}
       />
       {checkoutOpen && (
         <CheckoutModal

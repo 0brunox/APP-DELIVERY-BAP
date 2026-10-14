@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import type { Store, StoreSettings } from "@/lib/types";
+import type { DaySchedule, Store, StoreSettings } from "@/lib/types";
 import ImageUpload from "./ImageUpload";
+import HoursEditor from "./HoursEditor";
+import { DAY_KEYS, DEFAULT_DAY, DEFAULT_TZ, type DayKey } from "@/lib/storeHours";
 
 export default function SettingsForm({ store }: { store: Store }) {
   const router = useRouter();
@@ -30,6 +32,11 @@ export default function SettingsForm({ store }: { store: Store }) {
   const [etaDelivery, setEtaDelivery] = useState(s.estimatedTime?.delivery ?? "");
   const [etaPickup, setEtaPickup] = useState(s.estimatedTime?.pickup ?? "");
   const [enableScheduling, setEnableScheduling] = useState(s.enableScheduling ?? false);
+  const [useSchedule, setUseSchedule] = useState(s.useSchedule ?? Boolean(s.schedule));
+  const [schedule, setSchedule] = useState(
+    () => Object.fromEntries(DAY_KEYS.map((d) => [d, { ...DEFAULT_DAY, ...s.schedule?.[d] }])) as Record<DayKey, DaySchedule>
+  );
+  const [timezone, setTimezone] = useState(s.timezone ?? DEFAULT_TZ);
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
@@ -41,6 +48,13 @@ export default function SettingsForm({ store }: { store: Store }) {
       return setMsg({ type: "err", text: "Ative pelo menos um tipo de pedido." });
     if (!pay.pix && !pay.credit && !pay.debit)
       return setMsg({ type: "err", text: "Ative pelo menos uma forma de pagamento." });
+    if (useSchedule) {
+      const days = Object.values(schedule).filter((d) => d.enabled);
+      if (days.length === 0)
+        return setMsg({ type: "err", text: "Ative pelo menos um dia no horário de funcionamento (ou desligue o horário automático)." });
+      if (days.some((d) => !d.open || !d.close))
+        return setMsg({ type: "err", text: "Preencha abertura e fechamento de todos os dias ativos." });
+    }
 
     const settings: StoreSettings = {
       ...s,
@@ -52,6 +66,9 @@ export default function SettingsForm({ store }: { store: Store }) {
       paymentMethods: pay,
       estimatedTime: { delivery: etaDelivery.trim(), pickup: etaPickup.trim() },
       enableScheduling,
+      useSchedule,
+      schedule,
+      timezone,
     };
 
     setSaving(true);
@@ -72,6 +89,16 @@ export default function SettingsForm({ store }: { store: Store }) {
       </div>
       <Field label="Subtítulo"><input className={inp} value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Delivery rápido e saboroso!" /></Field>
       <Field label="Logo da loja (opcional)"><ImageUpload value={logoUrl} onChange={setLogoUrl} storeId={store.id} /></Field>
+
+      <h3 className="mb-2 mt-5 font-bold">🕐 Horário de funcionamento</h3>
+      <HoursEditor
+        enabled={useSchedule}
+        onEnabledChange={setUseSchedule}
+        schedule={schedule}
+        onScheduleChange={setSchedule}
+        timezone={timezone}
+        onTimezoneChange={setTimezone}
+      />
 
       <h3 className="mb-2 mt-5 font-bold">🛵 Entrega</h3>
       <Field label="Tipos de pedido">

@@ -48,6 +48,10 @@ export interface StoreSettings {
   estimatedTime?: { delivery: string; pickup: string };
   theme?: StoreTheme;
   schedule?: Record<string, DaySchedule>;
+  /** Abre/fecha sozinha pelo `schedule` (sem a chave: vale se houver schedule). */
+  useSchedule?: boolean;
+  /** Fuso IANA da loja (padrão America/Sao_Paulo). */
+  timezone?: string;
 }
 
 export interface Store {
@@ -61,6 +65,9 @@ export interface Store {
   plan_since: string | null;
   active: boolean;
   mp_preapproval_id?: string | null;
+  /** Botão abrir/fechar do painel: força o estado até `open_override_until`. */
+  open_override?: boolean | null;
+  open_override_until?: string | null;
   created_at: string;
 }
 

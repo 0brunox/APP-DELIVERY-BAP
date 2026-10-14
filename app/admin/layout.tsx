@@ -4,6 +4,8 @@ import { isSupabaseConfigured } from "@/lib/env";
 import SetupNotice from "@/components/SetupNotice";
 import SignOutButton from "@/components/admin/SignOutButton";
 import AdminTabs from "@/components/admin/AdminTabs";
+import StoreStatusToggle from "@/components/admin/StoreStatusToggle";
+import { getOwnerStore } from "@/lib/admin";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   if (!isSupabaseConfigured()) return <SetupNotice />;
@@ -14,20 +16,27 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: isAdmin } = await supabase.rpc("is_platform_admin");
+  const [{ data: isAdmin }, store] = await Promise.all([
+    supabase.rpc("is_platform_admin"),
+    getOwnerStore(),
+  ]);
 
   return (
     <div className="min-h-screen">
       <header className="surface sticky top-0 z-30 border-b border-[var(--border)]">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
-          <span className="font-bold text-primary">⚙️ Painel do Lojista</span>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="hidden font-bold text-primary sm:inline">⚙️ Painel do Lojista</span>
+            <span className="font-bold text-primary sm:hidden">⚙️ Painel</span>
+            {store && <StoreStatusToggle store={store} />}
+          </div>
           <div className="flex items-center gap-3 text-sm">
             {isAdmin && (
               <a href="/admin/plataforma" className="font-semibold text-primary hover:underline">
                 🛡️ Plataforma
               </a>
             )}
-            <span className="hidden text-muted sm:inline">{user.email}</span>
+            <span className="hidden text-muted md:inline">{user.email}</span>
             <SignOutButton />
           </div>
         </div>

@@ -245,7 +245,9 @@ export default function CheckoutModal({
 
     if (rpcError || !data?.code) {
       const m = rpcError?.message ?? "";
-      if (m.includes("LOJA_SUSPENSA")) {
+      if (m.includes("LOJA_FECHADA")) {
+        setError("A loja acabou de fechar e não está aceitando pedidos agora.");
+      } else if (m.includes("LOJA_SUSPENSA")) {
         setError("Esta loja não está aceitando pedidos no momento.");
       } else if (m.includes("LIMITE_PLANO_PEDIDOS")) {
         setError("A loja atingiu o limite de pedidos deste mês. Tente novamente mais tarde.");
